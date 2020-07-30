@@ -8,12 +8,15 @@ import pandas as pd
 import numpy as np
 import networkx as nx
 import csv
+# import matplotlib.pyplot as plt
 
 from sklearn.cluster import Birch
 from sklearn import preprocessing
 
 
 smoothing_window = 12
+
+# 返回的 anomalies 直接就把可能的错误列出来了：['front-end_carts', 'front-end_orders', 'orders_carts', 'orders_payment', 'orders_shipping']
 
 # Anomaly Detection
 def birch_ad_with_smoothing(latency_df, threshold):
@@ -22,28 +25,67 @@ def birch_ad_with_smoothing(latency_df, threshold):
     # output: anomalous service invocation
     
     anomalies = []
+    count = 1
     for svc, latency in latency_df.iteritems():
         # No anomaly detection in db
         if svc != 'timestamp' and 'Unnamed' not in svc and 'rabbitmq' not in svc and 'db' not in svc:
+            count = count + 1
+
+            # 这段代码对 latency 的影响好像几乎可以不计
+            # 
+            # latency 片段是这样：（取前3行，共30行）
+            # 
+            # Name: front-end_user, dtype: float64
+            # 0      12.101140
+            # 1       7.617647
+            # 2      11.812500
+            # 3      17.202381
+            # 
             latency = latency.rolling(window=smoothing_window, min_periods=1).mean()
+            
+            # x 就是把 latency 中 Name、dtype 等信息抹掉，并转为一个 array 形式的数据
             x = np.array(latency)
             x = np.where(np.isnan(x), 0, x)
+
+            # normalize 就是归一化，不然都是100，1k的话计算起来太麻烦
             normalized_x = preprocessing.normalize([x])
+
+            # reshape 这个操作可以百度一下，看看就清楚了
+            # 简单来说就是 把[x, y ,z] 这样的数据转为：
+            # [x,
+            #  y,
+            #  z]
 
             X = normalized_x.reshape(-1,1)
 
 #            threshold = 0.05
 
+            # 所以聚类的对象是什么？应该不是每一行，而是整体
+            # 聚类的结果分为几类，如果某一行都是一种类型，表示没有异常，如果有多种类型，说明有 anomaly
             brc = Birch(branching_factor=50, n_clusters=None, threshold=threshold, compute_labels=True)
             brc.fit(X)
             brc.predict(X)
 
             labels = brc.labels_
+            
 #            centroids = brc.subcluster_centers_
+
+            # np.unique 的作用是去除数组中重复的元素
+
             n_clusters = np.unique(labels).size
+            print(svc + ': ' + str(n_clusters))
+            print(labels)
+            # print(n_clusters)
             if n_clusters > 1:
                 anomalies.append(svc)
+    print(count)
+    print(anomalies)
     return anomalies
+
+# 读取 source 和 destination 的 scv file
+# 最后把 source 的 df 拼接到 destination 的后面
+# 并不是拼接到后面，而是 source + destination 就是某个服务的相应时间
+# 实际看了一下数据我才知道
 
 def rt_invocations(faults_name):
     # retrieve the response time of each invocation from data collection
@@ -52,15 +94,22 @@ def rt_invocations(faults_name):
     
     latency_filename = faults_name + '_latency_source_50.csv'  # inbound
     latency_df_source = pd.read_csv(latency_filename) 
+    # print('source')
+    # print(latency_df_source)
     latency_df_source['unknown_front-end'] = 0
     
     latency_filename = faults_name + '_latency_destination_50.csv' # outbound
     latency_df_destination = pd.read_csv(latency_filename) 
-    
+    # print('destination')
+    # print(latency_df_destination)
     latency_df = latency_df_destination.add(latency_df_source)    
-
+    # latency_df.to_csv('all.csv',index=None)
+    # print('result')
+    # print(latency_df)
     return latency_df
 
+# 这里是通过 mpg.scv 构建有向图，用的工具是networkx工具包，
+# 那么我有一个问题，就是 mpg.svc 是怎么得到的？
 
 def attributed_graph(faults_name):
     # build the attributed graph 
@@ -69,7 +118,8 @@ def attributed_graph(faults_name):
 
     filename = faults_name + '_mpg.csv'
     df = pd.read_csv(filename)
-    
+    print(df)
+
     DG = nx.DiGraph()    
     for index, row in df.iterrows():
         source = row['source']
@@ -83,15 +133,16 @@ def attributed_graph(faults_name):
         else:
             DG.nodes[node]['type'] = 'service'
 #    
-#    print(DG.nodes(data=True))
+    print(DG.nodes(data=True))
+    print(DG.edges(data=True))
             
-#    plt.figure(figsize=(9,9))
-#    nx.draw(DG, with_labels=True, font_weight='bold')
-#    pos = nx.spring_layout(DG)
-#    nx.draw(DG, pos, with_labels=True, cmap = plt.get_cmap('jet'), node_size=1500, arrows=True, )
-#    labels = nx.get_edge_attributes(DG,'weight')
-#    nx.draw_networkx_edge_labels(DG,pos,edge_labels=labels)
-#    plt.show()
+    # plt.figure(figsize=(9,9))
+    # nx.draw(DG, with_labels=True, font_weight='bold')
+    # pos = nx.spring_layout(DG)
+    # nx.draw(DG, pos, with_labels=True, cmap = plt.get_cmap('jet'), node_size=1500, arrows=True, )
+    # labels = nx.get_edge_attributes(DG,'weight')
+    # nx.draw_networkx_edge_labels(DG,pos,edge_labels=labels)
+    # plt.show()
                 
     return DG 
 
@@ -150,7 +201,6 @@ def svc_personalization(svc, anomaly_graph, baseline_df, faults_name):
     personalization = edges_weight_avg * max_corr
 
     return personalization, metric
-
 
 
 def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
@@ -231,7 +281,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 #        print(node, personalization[node])
 
     anomaly_graph = anomaly_graph.reverse(copy=True)
-#
+
     edges = list(anomaly_graph.edges(data=True))
 
     for u, v, d in edges:
@@ -250,9 +300,10 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 ##    personalization['shipping'] = 2
 #    print('Personalization:', personalization)
 
+    # personalized pagerank 体现在这里
+    # 那么重点中的重点就是这个 anomaly_graph 另外这个 nx 工具包里的 PPR 的输入输出分别是什么
 
-
-    anomaly_score = nx.pagerank(anomaly_graph, alpha=0.85, personalization=personalization, max_iter=10000)
+    anomaly_score = nx.pagerank(anomaly_graph, alpha=0.85, personalization=personalization, max_iter=1000)
 
     anomaly_score = sorted(anomaly_score.items(), key=lambda x: x[1], reverse=True)
 
@@ -276,63 +327,67 @@ if __name__ == '__main__':
     ad_threshold = 0.045  
     
     
-    folders = ['1', '2', '3', '4', '5']
-    faults_type = ['svc_latency', 'service_cpu', 'service_memory'] #, 'service_memory', 'svc_latency'
-#    faults_type = ['svc_latency', 'service_cpu']
-    targets = ['front-end', 'catalogue', 'orders', 'user', 'carts', 'payment', 'shipping']
-        
-    for folder in folders:
-        for fault_type in faults_type:
-            for target in targets:
-                if target == 'front-end' and fault_type != 'svc_latency':
-                    #'skip front-end for service_cpu and service_memory'
-                    continue 
-                print('target:', target, ' fault_type:', fault_type)
-                
-                # prefix of csv files 
-                faults_name = '../faults/' + folder + '/' + fault_type + '_' + target
-                
-                latency_df = rt_invocations(faults_name)
-                
-                if (target == 'payment' or target  == 'shipping') and fault_type != 'svc_latency':
-                    threshold = 0.02
-                else:
-                    threshold = ad_threshold   
-                
-                # anomaly detection on response time of service invocation
-                anomalies = birch_ad_with_smoothing(latency_df, threshold)
-#                print(anomalies)
-                
-                # get the anomalous service
-                anomaly_nodes = []
-                for anomaly in anomalies:
-                    edge = anomaly.split('_')
-                    anomaly_nodes.append(edge[1])
-                
-                anomaly_nodes = set(anomaly_nodes)
-                
+#     folders = ['1', '2', '3', '4', '5']
+#     faults_type = ['svc_latency', 'service_cpu', 'service_memory'] #, 'service_memory', 'svc_latency'
+# #    faults_type = ['svc_latency', 'service_cpu']
+#     faults_type = ['1']
+    targets = ['front-end', 'catalogue', 'orders', 'user', 'carts', 'payment', 'shipping', 'unknown']
+       
+#     if target == 'front-end' and fault_type != 'svc_latency':
+#                 #'skip front-end for service_cpu and service_memory'
+#                 continue 
+#     print('target:', target, ' fault_type:', fault_type)
+    
+    # prefix of csv files 
+    # faults_name = '../faults/' + fault_type + '_' + target
+    
+    faults_name = './faults/1/svc_latency/catalogue'
+    # faults_name = './faults/1'
+    latency_df = rt_invocations(faults_name)
+
+    print(latency_df)
+    
+    # if (target == 'payment' or target  == 'shipping') and fault_type != 'svc_latency':
+    #     threshold = 0.02
+    # else:
+    #     threshold = ad_threshold   
+    
+    # anomaly detection on response time of service invocation
+    anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
+    print(anomalies)
+    
+    # get the anomalous service
+    anomaly_nodes = []
+    for anomaly in anomalies:
+        edge = anomaly.split('_')
+        anomaly_nodes.append(edge[1])
+    
+    anomaly_nodes = set(anomaly_nodes)
+    
 #                print(anomaly_nodes)
-                
-                # construct attributed graph
-                DG = attributed_graph(faults_name)
+    
+    # construct attributed graph
+    DG = attributed_graph(faults_name)
 
-               
-                anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
-                print(anomaly_score)
+    print(DG)
+    
+    anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
 
-                
-                anomaly_score_new = []
-                for anomaly_target in anomaly_score:
-#                        print(anomaly_target[0])
-                    if anomaly_target[0] in targets:
-                        anomaly_score_new.append(anomaly_target)
+    print('anomaly_score:')
 
-                num = print_rank(anomaly_score_new, target)
+    for rank in sorted(anomaly_score, key=lambda x: x[1], reverse=True):
+        print(rank)
 
-                
+    # anomaly_score_new = []
+    # for anomaly_target in anomaly_score:
+    #     print(anomaly_target[0])
+    #     anomaly_score_new.append(anomaly_target)
 
-                filename = 'MicroRCA_results.csv'                    
-                with open(filename,'a') as f:
-                    writer = csv.writer(f)
-                    writer.writerow([folder, target, fault_type, num, anomaly_score_new[:num], anomaly_nodes]) 
+    # for target in targets:
+    #     num = print_rank(anomaly_score_new, target)
 
+    filename = 'MicroRCA_results.csv'                    
+    with open(filename,'a') as f:
+        writer = csv.writer(f)
+        writer.writerow(['folder', 'catalogue', 'svc_latency', anomaly_score]) 
+            

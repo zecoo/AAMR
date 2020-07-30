@@ -12,7 +12,7 @@ import numpy as np
 #import matplotlib.pyplot as plt
 import networkx as nx
 import argparse
-#import csv
+import csv
 
 from sklearn.cluster import Birch
 from sklearn import preprocessing
@@ -25,10 +25,11 @@ smoothing_window = 12
 
 # kubectl get nodes -o wide | awk -F ' ' '{print $1 " : " $6":9100"}'
 node_dict = {
-                'kubernetes-minion-group-103j' : '10.166.0.21:9100',
-                'kubernetes-minion-group-k2nz' : '10.166.15.235:9100',
-                'kubernetes-minion-group-kvcr' : '10.166.0.13:9100',
-                'kubernetes-minion-group-r23j' : '10.166.0.14:9100',
+                # 'kubernetes-minion-group-103j' : '10.166.0.21:9100',
+                # 'kubernetes-minion-group-k2nz' : '10.166.15.235:9100',
+                # 'kubernetes-minion-group-kvcr' : '10.166.0.13:9100',
+                # 'kubernetes-minion-group-r23j' : '10.166.0.14:9100',
+                'iz8vbhflpp3tuw05qfowaxz' : '39.100.0.61:9100'
         }
 
 
@@ -38,29 +39,38 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
 
     latency_df = pd.DataFrame()
 
+    # print(start_time)
+    # print(end_time)
 
     response = requests.get(prom_url,
                             params={'query': 'histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", destination_workload_namespace=\"sock-shop\"}[1m])) by (destination_workload, source_workload, le))',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
+    # results 长这个样子：
+    # [{'metric': {'destination_workload': 'orders-db', 'source_workload': 'orders'}, 'value': [1594888889.714, '0.03426666666666667']}, 
+    # 解读：value 的第一个值表示当前时间，第二个值表示真正的 value 也就是这一长串 promQL 的 value
     results = response.json()['data']['result']
+
+    # print(results)
 
     for result in results:
         dest_svc = result['metric']['destination_workload']
         src_svc = result['metric']['source_workload']
         name = src_svc + '_' + dest_svc
+
+        # print(name)
+
         values = result['values']
 
         values = list(zip(*values))
-        if 'timestamp' not in latency_df:
-            timestamp = values[0]
-            latency_df['timestamp'] = timestamp
-            latency_df['timestamp'] = latency_df['timestamp'].astype('datetime64[s]')
+        # if 'timestamp' not in latency_df:
+        #     timestamp = values[0]
+        #     latency_df['timestamp'] = timestamp
+        #     latency_df['timestamp'] = latency_df['timestamp'].astype('datetime64[s]')
         metric = values[1]
         latency_df[name] = pd.Series(metric)
         latency_df[name] = latency_df[name].astype('float64')  * 1000
-
 
     response = requests.get(prom_url,
                             params={'query': 'sum(irate(istio_tcp_sent_bytes_total{reporter=\"source\"}[1m])) by (destination_workload, source_workload) / 1000',
@@ -77,16 +87,21 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
         values = result['values']
 
         values = list(zip(*values))
-        if 'timestamp' not in latency_df:
-            timestamp = values[0]
-            latency_df['timestamp'] = timestamp
-            latency_df['timestamp'] = latency_df['timestamp'].astype('datetime64[s]')
+        # if 'timestamp' not in latency_df:
+        #     timestamp = values[0]
+        #     latency_df['timestamp'] = timestamp
+        #     latency_df['timestamp'] = latency_df['timestamp'].astype('datetime64[s]')
         metric = values[1]
         latency_df[name] = pd.Series(metric)
         latency_df[name] = latency_df[name].astype('float64').rolling(window=smoothing_window, min_periods=1).mean()
 
+    # 这里 df.toscv 写入 scv 文件
     filename = faults_name + '_latency_source_50.csv'
-    latency_df.set_index('timestamp')
+    # latency_df.set_index('timestamp')
+
+    print('latency_df:')
+    # print(latency_df)
+
     latency_df.to_csv(filename)
     return latency_df
 
@@ -94,7 +109,6 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
 def latency_destination_50(prom_url, start_time, end_time, faults_name):
 
     latency_df = pd.DataFrame()
-
 
     response = requests.get(prom_url,
                             params={'query': 'histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", destination_workload_namespace=\"sock-shop\"}[1m])) by (destination_workload, source_workload, le))',
@@ -110,10 +124,10 @@ def latency_destination_50(prom_url, start_time, end_time, faults_name):
         values = result['values']
 
         values = list(zip(*values))
-        if 'timestamp' not in latency_df:
-            timestamp = values[0]
-            latency_df['timestamp'] = timestamp
-            latency_df['timestamp'] = latency_df['timestamp'].astype('datetime64[s]')
+        # if 'timestamp' not in latency_df:
+        #     timestamp = values[0]
+        #     latency_df['timestamp'] = timestamp
+        #     latency_df['timestamp'] = latency_df['timestamp'].astype('datetime64[s]')
         metric = values[1]
         latency_df[name] = pd.Series(metric)
         latency_df[name] = latency_df[name].astype('float64')  * 1000
@@ -134,34 +148,38 @@ def latency_destination_50(prom_url, start_time, end_time, faults_name):
         values = result['values']
 
         values = list(zip(*values))
-        if 'timestamp' not in latency_df:
-            timestamp = values[0]
-            latency_df['timestamp'] = timestamp
-            latency_df['timestamp'] = latency_df['timestamp'].astype('datetime64[s]')
+        # if 'timestamp' not in latency_df:
+        #     timestamp = values[0]
+        #     latency_df['timestamp'] = timestamp
+        #     latency_df['timestamp'] = latency_df['timestamp'].astype('datetime64[s]')
         metric = values[1]
         latency_df[name] = pd.Series(metric)
         latency_df[name] = latency_df[name].astype('float64').rolling(window=smoothing_window, min_periods=1).mean()
 
     filename = faults_name + '_latency_destination_50.csv'
-    latency_df.set_index('timestamp')
+    # latency_df.set_index('timestamp')
     latency_df.to_csv(filename)
     return latency_df
 
+# 获取 CPU mem network 等系统层面的 metric
+# 但是感觉后面没有用到系统层面的 scv 文件啊
 def svc_metrics(prom_url, start_time, end_time, faults_name):
     response = requests.get(prom_url,
-                            params={'query': 'sum(rate(container_cpu_usage_seconds_total{namespace="sock-shop", container_name!~\'POD|istio-proxy|\'}[1m])) by (pod_name, instance, container)',
+                            params={'query': 'sum(rate(container_cpu_usage_seconds_total{namespace="sock-shop", container_name!~\'POD|istio-proxy|\'}[1m])) by (pod_name, instance, container_name)',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
     results = response.json()['data']['result']
 
+    # print(results)
+
     for result in results:
         df = pd.DataFrame()
-        svc = result['metric']['container']
+        svc = result['metric']['container_name']
         pod_name = result['metric']['pod_name']
         nodename = result['metric']['instance']
 
-#        print(svc)
+        # print(svc)
         values = result['values']
 
         values = list(zip(*values))
@@ -173,9 +191,9 @@ def svc_metrics(prom_url, start_time, end_time, faults_name):
         df['ctn_cpu'] = metric
         df['ctn_cpu'] = df['ctn_cpu'].astype('float64')
 
-        df['ctn_network'] = ctn_network(start_time, end_time, pod_name)
+        df['ctn_network'] = ctn_network(prom_url, start_time, end_time, pod_name)
         df['ctn_network'] = df['ctn_network'].astype('float64')
-        df['ctn_memory'] = ctn_memory(start_time, end_time, pod_name)
+        df['ctn_memory'] = ctn_memory(prom_url, start_time, end_time, pod_name)
         df['ctn_memory'] = df['ctn_memory'].astype('float64')
 
 #        response = requests.get('http://localhost:9090/api/v1/query',
@@ -185,25 +203,26 @@ def svc_metrics(prom_url, start_time, end_time, faults_name):
 #
 #        print(results)
 #
-#
 #        instance = results[0]['metric']['instance']
         instance = node_dict[nodename]
 
-        df_node_cpu = node_cpu(start_time, end_time, instance)
+        # 这里用到了各种的系统层面 metric 
+        df_node_cpu = node_cpu(prom_url, start_time, end_time, instance)
+
+        # print(df_node_cpu)
         df = pd.merge(df, df_node_cpu, how='left', on='timestamp')
 
-
-        df_node_network = node_network(start_time, end_time, instance)
+        df_node_network = node_network(prom_url, start_time, end_time, instance)
         df = pd.merge(df, df_node_network, how='left', on='timestamp')
 
-        df_node_memory = node_memory(start_time, end_time, instance)
+        df_node_memory = node_memory(prom_url, start_time, end_time, instance)
         df = pd.merge(df, df_node_memory, how='left', on='timestamp')
     
-
         filename = faults_name + '_' + svc + '.csv'
         df.set_index('timestamp')
         df.to_csv(filename)
 
+# ctn: container
 def ctn_network(prom_url, start_time, end_time, pod_name):
     response = requests.get(prom_url,
                             params={'query': 'sum(rate(container_network_transmit_packets_total{namespace="sock-shop", pod_name="%s"}[1m])) / 1000 * sum(rate(container_network_transmit_packets_total{namespace="sock-shop", pod_name="%s"}[1m])) / 1000' % (pod_name, pod_name),
@@ -236,7 +255,7 @@ def ctn_memory(prom_url, start_time, end_time, pod_name):
 
 def node_network(prom_url, start_time, end_time, instance):
     response = requests.get(prom_url,
-                            params={'query': 'rate(node_network_transmit_packets{device="eth0", instance="%s"}[1m]) / 1000' % instance,
+                            params={'query': 'rate(node_network_transmit_packets_total{device="eth0", instance="%s"}[1m]) / 1000' % instance,
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -254,11 +273,13 @@ def node_network(prom_url, start_time, end_time, instance):
 
 def node_cpu(prom_url, start_time, end_time, instance):
     response = requests.get(prom_url,
-                            params={'query': 'sum(rate(node_cpu{mode != "idle",  mode!= "iowait", mode!~"^(?:guest.*)$", instance="%s" }[1m])) / count(node_cpu{mode="system", instance="%s"})' % (instance, instance),
+                            params={'query': 'sum(rate(node_cpu_seconds_total{mode != "idle",  mode!= "iowait", mode!~"^(?:guest.*)$", instance="%s" }[1m])) / count(node_cpu_seconds_total{mode="system", instance="%s"})' % (instance, instance),
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
     results = response.json()['data']['result']
+
+    # print(results)
     values = results[0]['values']
     values = list(zip(*values))
 #    metric = values[1]
@@ -274,7 +295,7 @@ def node_cpu(prom_url, start_time, end_time, instance):
 
 def node_memory(prom_url, start_time, end_time, instance):
     response = requests.get(prom_url,
-                            params={'query': '1 - sum(node_memory_MemAvailable{instance="%s"}) / sum(node_memory_MemTotal{instance="%s"})' % (instance, instance),
+                            params={'query': '1 - sum(node_memory_MemAvailable_bytes{instance="%s"}) / sum(node_memory_MemTotal_bytes{instance="%s"})' % (instance, instance),
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -293,13 +314,18 @@ def node_memory(prom_url, start_time, end_time, instance):
     return df
 
 # Create Graph
+# mpg.scv 的构造过程
+
 def mpg(prom_url, faults_name):
     DG = nx.DiGraph()
     df = pd.DataFrame(columns=['source', 'destination'])
     response = requests.get(prom_url,
                             params={'query': 'sum(istio_tcp_received_bytes_total) by (source_workload, destination_workload)'
                                     })
+    
     results = response.json()['data']['result']
+
+    # print(results)
 
     for result in results:
         metric = result['metric']
@@ -309,8 +335,8 @@ def mpg(prom_url, faults_name):
         df = df.append({'source':source, 'destination': destination}, ignore_index=True)
         DG.add_edge(source, destination)
         
-        DG.node[source]['type'] = 'service'
-        DG.node[destination]['type'] = 'service'
+        DG.nodes[source]['type'] = 'service'
+        DG.nodes[destination]['type'] = 'service'
 
     response = requests.get(prom_url,
                             params={'query': 'sum(istio_requests_total{destination_workload_namespace=\'sock-shop\'}) by (source_workload, destination_workload)'
@@ -326,8 +352,8 @@ def mpg(prom_url, faults_name):
         df = df.append({'source':source, 'destination': destination}, ignore_index=True)
         DG.add_edge(source, destination)
         
-        DG.node[source]['type'] = 'service'
-        DG.node[destination]['type'] = 'service'
+        DG.nodes[source]['type'] = 'service'
+        DG.nodes[destination]['type'] = 'service'
 
     response = requests.get(prom_url,
                             params={'query': 'sum(container_cpu_usage_seconds_total{namespace="sock-shop", container_name!~\'POD|istio-proxy\'}) by (instance, container)'
@@ -362,7 +388,10 @@ def birch_ad_with_smoothing(latency_df, threshold):
         if svc != 'timestamp' and 'Unnamed' not in svc and 'rabbitmq' not in svc and 'db' not in svc:
             latency = latency.rolling(window=smoothing_window, min_periods=1).mean()
             x = np.array(latency)
+
+            print(x)
             x = np.where(np.isnan(x), 0, x)
+
             normalized_x = preprocessing.normalize([x])
 
             X = normalized_x.reshape(-1,1)
@@ -408,6 +437,7 @@ def node_weight(svc, anomaly_graph, baseline_df, faults_name):
 
 def svc_personalization(svc, anomaly_graph, baseline_df, faults_name):
 
+    # 这里用了系统层面 metric 
     filename = faults_name + '_' + svc + '.csv'
     df = pd.read_csv(filename)
     ctn_cols = ['ctn_cpu', 'ctn_network', 'ctn_memory']
@@ -512,6 +542,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 
 
     for node in nodes:
+        # 这里用到了 系统层面的 metric
         max_corr, col = svc_personalization(node, anomaly_graph, baseline_df, faults_name)
         personalization[node] = max_corr / anomaly_graph.degree(node)
 #        print(node, personalization[node])
@@ -536,8 +567,6 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 ##    personalization['shipping'] = 2
 #    print('Personalization:', personalization)
 
-
-
     anomaly_score = nx.pagerank(anomaly_graph, alpha=0.85, personalization=personalization, max_iter=10000)
 
     anomaly_score = sorted(anomaly_score.items(), key=lambda x: x[1], reverse=True)
@@ -546,77 +575,127 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
     return anomaly_score
 
 
-
 def parse_args():
     """Parse the args."""
     parser = argparse.ArgumentParser(
         description='Root cause analysis for microservices')
 
-    parser.add_argument('--folder', type=str, required=False,
+    parser.add_argument('--fault', type=str, required=False,
                         default='1',
                         help='folder name to store csv file')
     
-    parser.add_argument('--length', type=int, required=False,
-                    default=150,
-                    help='length of time series')
+    # 150s 每隔 5s 取一次数据 所以 csv 文件里一共有 30 行
+    # parser.add_argument('--length', type=int, required=False,
+    #                 default=150,
+    #                 help='length of time series')
 
-    parser.add_argument('--url', type=str, required=False,
-                    default='http://localhost:9090/api/v1/query',
-                    help='url of prometheus query')
+    # parser.add_argument('--url', type=str, required=False,
+    #                 default='http://http://39.100.0.61:30598/api/v1/query',
+    #                 help='url of prometheus query')
 
     return parser.parse_args()
 
+if __name__ == "__main__":
 
-if __name__ == '__main__':
     args = parse_args()
-
-    folder = args.folder
-    len_second = args.length
-    prom_url = args.url
-      
-    faults_name = folder
+    faults_name = args.fault
+    len_second = 150
+    prom_url = 'http://39.100.0.61:30598/api/v1/query_range'
+    prom_url_no_range = 'http://39.100.0.61:30598/api/v1/query'
     
     end_time = time.time()
     start_time = end_time - len_second
 
-
     # Tuning parameters
     alpha = 0.55  
-    ad_threshold = 0.045  
+    ad_threshold = 0.045
+
+    # response = requests.get(prom_url,
+    #                         params={'query': 'sum(irate(istio_tcp_sent_bytes_total{reporter=\"source\"}[1m])) by (destination_workload, source_workload) / 1000',
+    #                                 'start': start_time,
+    #                                 'end': end_time,
+    #                                 'step': metric_step})
+    # results = response.json()['data']['result']
+
+    # print(results)
 
     latency_df_source = latency_source_50(prom_url, start_time, end_time, faults_name)
     latency_df_destination = latency_destination_50(prom_url, start_time, end_time, faults_name)
-    latency_df = latency_df_destination.add(latency_df_source) 
-    
-    
+    latency_df = latency_df_destination.add(latency_df_source)
+
+    # print(latency_df)
+
     svc_metrics(prom_url, start_time, end_time, faults_name)
-    
-    DG = mpg(prom_url, faults_name)
+    DG = mpg(prom_url_no_range, faults_name)
 
     # anomaly detection on response time of service invocation
     anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
+
+    print(anomalies)
     
     # get the anomalous service
-    anomaly_nodes = []
-    for anomaly in anomalies:
-        edge = anomaly.split('_')
-        anomaly_nodes.append(edge[1])
+    # anomaly_nodes = []
+    # for anomaly in anomalies:
+    #     edge = anomaly.split('_')
+    #     anomaly_nodes.append(edge[1])
     
-    anomaly_nodes = set(anomaly_nodes)
+    # anomaly_nodes = set(anomaly_nodes)
      
     anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
     print(anomaly_score)
 
-    
     anomaly_score_new = []
     for anomaly_target in anomaly_score:
         node = anomaly_target[0]
-#                        print(anomaly_target[0])
+#       print(anomaly_target[0])
         if DG.nodes[node]['type'] == 'service':
             anomaly_score_new.append(anomaly_target)
     print(anomaly_score_new)
 
+    filename = 'MicroRCA_results.csv'                    
+    with open(filename,'a') as f:
+        writer = csv.writer(f)
+        writer.writerow([time.time(), 'catalogue', 'svc_latency', anomaly_score_new])
+
+# if __name__ == '__main__':
+#     args = parse_args()
+
+#     folder = args.folder
+#     len_second = args.length
+#     prom_url = args.url
+    
+#     faults_name = folder
+    
+#     end_time = time.time()
+#     start_time = end_time - len_second
 
 
+#     # Tuning parameters
+#     alpha = 0.55  
+#     ad_threshold = 0.045  
 
+#     latency_df_source = latency_source_50(prom_url, start_time, end_time, faults_name)
+#     latency_df_destination = latency_destination_50(prom_url, start_time, end_time, faults_name)
+#     latency_df = latency_df_destination.add(latency_df_source) 
+    
+    
+#     svc_metrics(prom_url, start_time, end_time, faults_name)
+    
+#     DG = mpg(prom_url, faults_name)
+
+#     # anomaly detection on response time of service invocation
+#     anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
+    
+#     # get the anomalous service
+#     anomaly_nodes = []
+#     for anomaly in anomalies:
+#         edge = anomaly.split('_')
+#         anomaly_nodes.append(edge[1])
+    
+#     anomaly_nodes = set(anomaly_nodes)
+     
+#     anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
+#     print(anomaly_score)
+
+    
 

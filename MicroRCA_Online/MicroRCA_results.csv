@@ -1,0 +1,2 @@
+1596016468.318578,catalogue,svc_latency,"[('carts', 0.2916483057719497), ('orders', 0.270429626420171), ('user', 0.2644911905689423), ('front-end', 0.18902821998830382), ('carts-db', 0.0), ('catalogue-db', 0.0), ('user-db', 0.0), ('catalogue', -0.015597342749366345)]"
+1596016515.580884,catalogue,svc_latency,[]
