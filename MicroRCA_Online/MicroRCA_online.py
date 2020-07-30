@@ -389,7 +389,7 @@ def birch_ad_with_smoothing(latency_df, threshold):
             latency = latency.rolling(window=smoothing_window, min_periods=1).mean()
             x = np.array(latency)
 
-            print(x)
+            # print(x)
             x = np.where(np.isnan(x), 0, x)
 
             normalized_x = preprocessing.normalize([x])
