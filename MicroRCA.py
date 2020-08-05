@@ -73,13 +73,9 @@ def birch_ad_with_smoothing(latency_df, threshold):
             # np.unique 的作用是去除数组中重复的元素
 
             n_clusters = np.unique(labels).size
-            print(svc + ': ' + str(n_clusters))
-            print(labels)
             # print(n_clusters)
             if n_clusters > 1:
                 anomalies.append(svc)
-    print(count)
-    print(anomalies)
     return anomalies
 
 # 读取 source 和 destination 的 scv file
@@ -118,7 +114,6 @@ def attributed_graph(faults_name):
 
     filename = faults_name + '_mpg.csv'
     df = pd.read_csv(filename)
-    print(df)
 
     DG = nx.DiGraph()    
     for index, row in df.iterrows():
@@ -133,8 +128,7 @@ def attributed_graph(faults_name):
         else:
             DG.nodes[node]['type'] = 'service'
 #    
-    print(DG.nodes(data=True))
-    print(DG.edges(data=True))
+    print('\nDG.nodes: ', DG.nodes(data=True))
             
     # plt.figure(figsize=(9,9))
     # nx.draw(DG, with_labels=True, font_weight='bold')
@@ -303,6 +297,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
     # personalized pagerank 体现在这里
     # 那么重点中的重点就是这个 anomaly_graph 另外这个 nx 工具包里的 PPR 的输入输出分别是什么
 
+    print('\npersonalization: ', personalization)
     anomaly_score = nx.pagerank(anomaly_graph, alpha=0.85, personalization=personalization, max_iter=1000)
 
     anomaly_score = sorted(anomaly_score.items(), key=lambda x: x[1], reverse=True)
@@ -341,11 +336,9 @@ if __name__ == '__main__':
     # prefix of csv files 
     # faults_name = '../faults/' + fault_type + '_' + target
     
-    faults_name = './faults/1/svc_latency/catalogue'
-    # faults_name = './faults/1'
+    # faults_name = './faults/1/svc_latency/catalogue'
+    faults_name = './MicroRCA_Online/carts'
     latency_df = rt_invocations(faults_name)
-
-    print(latency_df)
     
     # if (target == 'payment' or target  == 'shipping') and fault_type != 'svc_latency':
     #     threshold = 0.02
@@ -354,7 +347,7 @@ if __name__ == '__main__':
     
     # anomaly detection on response time of service invocation
     anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
-    print(anomalies)
+    print('\nanomalies:', anomalies)
     
     # get the anomalous service
     anomaly_nodes = []
@@ -369,11 +362,11 @@ if __name__ == '__main__':
     # construct attributed graph
     DG = attributed_graph(faults_name)
 
-    print(DG)
+    print('\nDG: ', DG)
     
     anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
 
-    print('anomaly_score:')
+    print('\nanomaly_score:')
 
     for rank in sorted(anomaly_score, key=lambda x: x[1], reverse=True):
         print(rank)
@@ -386,8 +379,8 @@ if __name__ == '__main__':
     # for target in targets:
     #     num = print_rank(anomaly_score_new, target)
 
-    filename = 'MicroRCA_results.csv'                    
-    with open(filename,'a') as f:
-        writer = csv.writer(f)
-        writer.writerow(['folder', 'catalogue', 'svc_latency', anomaly_score]) 
+    # filename = 'MicroRCA_results.csv'                    
+    # with open(filename,'a') as f:
+    #     writer = csv.writer(f)
+    #     writer.writerow(['folder', 'catalogue', 'svc_latency', anomaly_score]) 
             
