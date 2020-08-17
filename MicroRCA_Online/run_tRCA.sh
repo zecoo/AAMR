@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-MS='catalogue'
+MS='carts'
 
 kubectl apply -f /root/zik/microservices-demo/zik-test/$MS-delay.yaml
 

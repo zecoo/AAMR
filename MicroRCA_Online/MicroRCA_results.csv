@@ -27,4 +27,13 @@
 1596613900,user,svc_latency,"[('front-end', 0.37925734759385926), ('user', 0.3491143856942063), ('orders', 0.2716282667119344), ('user-db', 0.0), ('payment', 0.0), ('orders-db', 0.0), ('shipping', 0.0), ('carts', 0.0)]",,,
 1596613912,user,svc_latency,"[('user', 0.39202339867273595), ('front-end', 0.36940025535936627), ('orders', 0.2385763459678979), ('user-db', 0.0), ('orders-db', 0.0), ('shipping', 0.0), ('carts', 0.0), ('payment', 0.0)]",,,
 1596613924,user,svc_latency,"[('user', 0.4447023842642355), ('front-end', 0.3572974469350709), ('orders', 0.19800016880069377), ('carts', 0.0), ('orders-db', 0.0), ('payment', 0.0), ('shipping', 0.0), ('user-db', 0.0)]",,,
-1596613936,user,svc_latency,"[('user', 0.4999363560799367), ('front-end', 0.34460780774542976), ('orders', 0.1554558361746332), ('orders-db', 0.0), ('payment', 0.0), ('shipping', 0.0), ('carts', 0.0), ('user-db', 0.0)]",,,
+1596613936,user,svc_latency,"[('user', 0.4999363560799367), ('front-end', 0.34460780774542976), ('orders', 0.1554558361746332), ('orders-db', 0.0), ('payment', 0.0), ('shipping', 0.0), ('carts', 0.0), ('user-db', 0.0)]",,,1597643438.4655676,catalogue,svc_latency,[]
+1597643452.5700772,catalogue,svc_latency,[]
+1597643466.4912674,catalogue,svc_latency,[]
+1597643480.4587066,catalogue,svc_latency,[]
+1597643494.4464834,catalogue,svc_latency,[]
+1597643508.3605928,catalogue,svc_latency,[]
+1597643522.2749112,catalogue,svc_latency,[]
+1597643536.2240922,catalogue,svc_latency,[]
+1597643550.0582628,catalogue,svc_latency,[]
+1597643563.890269,catalogue,svc_latency,[]
