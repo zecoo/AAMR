@@ -375,6 +375,37 @@ def mpg(prom_url, faults_name):
     df.to_csv(filename)
     return DG
 
+def attributed_graph(faults_name):
+    # build the attributed graph 
+    # input: prefix of the file
+    # output: attributed graph
+
+    filename = faults_name + '_mpg.csv'
+    df = pd.read_csv(filename)
+
+    DG = nx.DiGraph()    
+    for index, row in df.iterrows():
+        source = row['source']
+        destination = row['destination']
+        if 'rabbitmq' not in source and 'rabbitmq' not in destination and 'db' not in destination and 'db' not in source:
+            DG.add_edge(source, destination)
+
+    for node in DG.nodes():
+        if 'kubernetes' in node: 
+            DG.nodes[node]['type'] = 'host'
+        else:
+            DG.nodes[node]['type'] = 'service'
+            
+    # plt.figure(figsize=(9,9))
+    # nx.draw(DG, with_labels=True, font_weight='bold')
+    # pos = nx.spring_layout(DG)
+    # nx.draw(DG, pos, with_labels=True, cmap = plt.get_cmap('jet'), node_size=1500, arrows=True, )
+    # labels = nx.get_edge_attributes(DG,'weight')
+    # nx.draw_networkx_edge_labels(DG,pos,edge_labels=labels)
+    # plt.show()
+                
+    return DG 
+
 
 # Anomaly Detection
 def birch_ad_with_smoothing(latency_df, threshold):
