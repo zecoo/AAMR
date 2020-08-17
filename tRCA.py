@@ -99,7 +99,7 @@ def rt_invocations(faults_name):
     # print('destination')
     # print(latency_df_destination)
     latency_df = latency_df_destination.add(latency_df_source)    
-    # latency_df.to_csv('all.csv',index=None)
+    latency_df.to_csv('%s_latency.csv'%faults_name, index=None)
     # print('result')
     # print(latency_df)
     return latency_df
@@ -127,9 +127,6 @@ def attributed_graph(faults_name):
             DG.nodes[node]['type'] = 'host'
         else:
             DG.nodes[node]['type'] = 'service'
-#    
-    print('\nDG.nodes: ', DG.nodes(data=True))
-    print('\nDG.edges: ', DG.edges(data=True))
             
     # plt.figure(figsize=(9,9))
     # nx.draw(DG, with_labels=True, font_weight='bold')
@@ -197,6 +194,69 @@ def svc_personalization(svc, anomaly_graph, baseline_df, faults_name):
 
     return personalization, metric
 
+def calc_score(faults_name):
+    
+    fault = faults_name.replace('./MicroRCA_Online/','')
+
+    latency_filename = faults_name + '_latency_source_50.csv'  # inbound
+    latency_df_source = pd.read_csv(latency_filename)
+
+    latency_filename = faults_name + '_latency_destination_50.csv' # outbound
+    latency_df_destination = pd.read_csv(latency_filename) 
+
+    latency_df_source.loc['all'] = latency_df_source.apply(lambda x:x.sum())
+
+    latency_df_destination.loc['all'] = latency_df_destination.apply(lambda x:x.sum())
+
+    df_data = pd.DataFrame(columns=['svc', 'ratio'])
+    df_data = latency_df_source.loc['all'] / latency_df_destination.loc['all']
+
+    ratio = df_data.to_dict()
+    scores = {}
+
+    for key in list(ratio.keys()):
+        if 'db' in key or 'rabbitmq' in key or 'Unnamed' in key:
+            del ratio[key]
+        else:
+            svc_name = key.split('_')[1]
+            ratio.update({svc_name: ratio.pop(key)})
+    
+    print('\nratio: ', ratio)
+
+    DG = attributed_graph(faults_name)
+
+    print('\ndegree: ', DG.degree)
+    up = pd.DataFrame(ratio, index=[0]).T
+    down  = pd.DataFrame(dict(DG.degree), index=[0]).T
+    score = (up / down).dropna().to_dict()
+    score = score[0]
+
+    print('\nscore:', score)
+
+    score_list = []
+    for svc in score:
+        item = (svc, score[svc])
+        score_list.append(score[svc])
+
+    score_arr = np.array(score_list)
+
+    print(score_arr)
+
+    z_score = []
+    for x in score_arr:
+        x = float(x - score_arr.mean())/score_arr.std() + 0.3
+        z_score.append(x)
+    
+    print('\nz_score: ', z_score)
+
+    n = 0
+    for svc in score:
+        score.update({svc: z_score[n]})
+        n = n + 1
+
+    print('\nnew score: ',score)
+
+    return score
 
 def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
     # Get the anomalous subgraph and rank the anomalous services
@@ -299,6 +359,9 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
     # 那么重点中的重点就是这个 anomaly_graph 另外这个 nx 工具包里的 PPR 的输入输出分别是什么
 
     print('\nanomaly graph: ', anomaly_graph.adj)
+
+    personalization = calc_score(faults_name)
+    print('\npersonalization: ', personalization)
     
     anomaly_score = nx.pagerank(anomaly_graph, alpha=0.85, personalization=personalization, max_iter=1000)
 
@@ -339,9 +402,10 @@ if __name__ == '__main__':
     # faults_name = '../faults/' + fault_type + '_' + target
     
     # faults_name = './faults/1/svc_latency/catalogue'
-    faults_name = './MicroRCA_Online/carts'
+    
+    faults_name = './MicroRCA_Online/catalogue'
     latency_df = rt_invocations(faults_name)
-
+    
     # if (target == 'payment' or target  == 'shipping') and fault_type != 'svc_latency':
     #     threshold = 0.02
     # else:

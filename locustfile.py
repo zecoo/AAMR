@@ -22,6 +22,7 @@ class httpUser(HttpUser):
     item_id = category_item["id"]
     self.client.get("/")
     self.client.get("/login", headers={"Authorization":"Basic %s" % auth_header})
+    self.client.get("/customers")
     self.client.get("/category.html")
     self.client.get("/detail.html?id={}".format(item_id))
     self.client.delete("/cart")
