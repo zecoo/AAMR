@@ -700,7 +700,7 @@ if __name__ == "__main__":
     # anomaly detection on response time of service invocation
     anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
 
-    print('\nanomalies: 'anomalies)
+    print('\nanomalies: ', anomalies)
     
     # get the anomalous service
     # anomaly_nodes = []
@@ -711,7 +711,7 @@ if __name__ == "__main__":
     # anomaly_nodes = set(anomaly_nodes)
      
     anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
-    print('\nanomaly_score: 'anomaly_score)
+    print('\nanomaly_score: ', anomaly_score)
 
     anomaly_score_new = []
     for anomaly_target in anomaly_score:
