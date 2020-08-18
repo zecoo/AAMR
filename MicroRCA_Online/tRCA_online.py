@@ -13,6 +13,7 @@ import numpy as np
 import networkx as nx
 import argparse
 import csv
+import itertools
 
 from sklearn.cluster import Birch
 from sklearn import preprocessing
@@ -468,7 +469,7 @@ def node_weight(svc, anomaly_graph, baseline_df, faults_name):
 
 def calc_score(faults_name):
     
-    # fault = faults_name.replace('./MicroRCA_Online/','')
+    fault = faults_name.replace('./MicroRCA_Online/','')
 
     latency_filename = faults_name + '_latency_source_50.csv'  # inbound
     latency_df_source = pd.read_csv(latency_filename)
@@ -476,35 +477,58 @@ def calc_score(faults_name):
     latency_filename = faults_name + '_latency_destination_50.csv' # outbound
     latency_df_destination = pd.read_csv(latency_filename) 
 
+    # 加和 source
     latency_df_source.loc['all'] = latency_df_source.apply(lambda x:x.sum())
 
+    # 加和 destination
     latency_df_destination.loc['all'] = latency_df_destination.apply(lambda x:x.sum())
 
     df_data = pd.DataFrame(columns=['svc', 'ratio'])
+    # ratio 就是 source / destination
     df_data = latency_df_source.loc['all'] / latency_df_destination.loc['all']
 
+    df_data.to_csv('%s_latency_ratio.csv'%faults_name, index=[0])
+    # print('\ndf_data: ', df_data)
+
     ratio = df_data.to_dict()
+    trace_based_ratio = {}
     scores = {}
 
-    for key in list(ratio.keys()):
-        if 'db' in key or 'rabbitmq' in key or 'Unnamed' in key:
-            del ratio[key]
-        else:
-            svc_name = key.split('_')[1]
-            ratio.update({svc_name: ratio.pop(key)})
-    
-    print('\nratio: ', ratio)
+    # print('\nindex: ')
+    index  = df_data.index.values
 
     DG = attributed_graph(faults_name)
 
+    # print('\nkeys: ')
+
+    # 将 ratio 对应到具体的服务
+    for key in list(ratio.keys()):
+        if 'db' in key or 'rabbitmq' in key or 'Unnamed' in key:
+            continue
+        else:
+            svc_name = key.split('_')[1]
+            trace_based_ratio.update({svc_name: ratio[key]})
+    
+    print('\ntrace_based_ratio: ', trace_based_ratio)
+
+    # 添加 trace 信息
+    # print('\nget trace: ')
+    for path in nx.all_simple_paths(DG, source='front-end', target=fault):
+        for i in list(itertools.combinations(path, 2)):
+            single_trace = i[0] + '_' + i[1]
+            if single_trace in index and fault not in single_trace:
+                trace_based_ratio[fault] = trace_based_ratio[fault] + ratio[single_trace]
+
+    # 获取邻居个数
     print('\ndegree: ', DG.degree)
-    up = pd.DataFrame(ratio, index=[0]).T
+    up = pd.DataFrame(trace_based_ratio, index=[0]).T
     down  = pd.DataFrame(dict(DG.degree), index=[0]).T
     score = (up / down).dropna().to_dict()
     score = score[0]
 
     print('\nscore:', score)
 
+    # score 和 服务 进行对应
     score_list = []
     for svc in score:
         item = (svc, score[svc])
@@ -514,19 +538,20 @@ def calc_score(faults_name):
 
     print(score_arr)
 
+    # 归一化处理
     z_score = []
     for x in score_arr:
-        x = float(x - score_arr.mean())/score_arr.std() + 0.3
+        x = float(x - score_arr.mean())/score_arr.std() + 0.5
         z_score.append(x)
     
-    print('\nz_score: ', z_score)
+    # print('\nz_score: ', z_score)
 
     n = 0
     for svc in score:
         score.update({svc: z_score[n]})
         n = n + 1
 
-    print('\nnew score: ',score)
+    # print('\nnew score: ',score)
 
     return score
 
@@ -575,81 +600,6 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
     #   alpha: weight of the anomalous edge
     # output:
     #   anomalous scores 
-    
-    # Get reported anomalous nodes
-    edges = []
-    nodes = []
-#    print(DG.nodes())
-    baseline_df = pd.DataFrame()
-    edge_df = {}
-    for anomaly in anomalies:
-        edge = anomaly.split('_')
-        edges.append(tuple(edge))
-#        nodes.append(edge[0])
-        svc = edge[1]
-        nodes.append(svc)
-        baseline_df[svc] = latency_df[anomaly]
-        edge_df[svc] = anomaly
-
-#    print('edge df:', edge_df)
-    nodes = set(nodes)
-#    print(nodes)
-
-    personalization = {}
-    for node in DG.nodes():
-        if node in nodes:
-            personalization[node] = 0
-
-    # Get the subgraph of anomaly
-    anomaly_graph = nx.DiGraph()
-    for node in nodes:
-#        print(node)
-        for u, v, data in DG.in_edges(node, data=True):
-            edge = (u,v)
-#            print(edge)
-            if edge in edges:
-                data = alpha
-            else:
-                normal_edge = u + '_' + v
-                data = baseline_df[v].corr(latency_df[normal_edge])
-
-            data = round(data, 3)
-            anomaly_graph.add_edge(u,v, weight=data)
-            anomaly_graph.nodes[u]['type'] = DG.nodes[u]['type']
-            anomaly_graph.nodes[v]['type'] = DG.nodes[v]['type']
-
-       # Set personalization with container resource usage
-        for u, v, data in DG.out_edges(node, data=True):
-            edge = (u,v)
-            if edge in edges:
-                data = alpha
-            else:
-
-                if DG.nodes[v]['type'] == 'host':
-                    data, col = node_weight(u, anomaly_graph, baseline_df, faults_name)
-                else:
-                    normal_edge = u + '_' + v
-                    data = baseline_df[u].corr(latency_df[normal_edge])
-            data = round(data, 3)
-            anomaly_graph.add_edge(u,v, weight=data)
-            anomaly_graph.nodes[u]['type'] = DG.nodes[u]['type']
-            anomaly_graph.nodes[v]['type'] = DG.nodes[v]['type']
-
-
-    for node in nodes:
-        # 这里用到了 系统层面的 metric
-        max_corr, col = svc_personalization(node, anomaly_graph, baseline_df, faults_name)
-        personalization[node] = max_corr / anomaly_graph.degree(node)
-#        print(node, personalization[node])
-
-    anomaly_graph = anomaly_graph.reverse(copy=True)
-#
-    edges = list(anomaly_graph.edges(data=True))
-
-    for u, v, d in edges:
-        if anomaly_graph.nodes[node]['type'] == 'host':
-            anomaly_graph.remove_edge(u,v)
-            anomaly_graph.add_edge(v,u,weight=d['weight'])
 
 #    plt.figure(figsize=(9,9))
 ##    nx.draw(DG, with_labels=True, font_weight='bold')
@@ -662,12 +612,12 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 ##    personalization['shipping'] = 2
 #    print('Personalization:', personalization)
 
-    print('\nanomaly graph: ', anomaly_graph.adj)
+    # print('\nanomaly graph: ', anomaly_graph.adj)
 
     personalization = calc_score(faults_name)
     print('\npersonalization: ', personalization)
 
-    anomaly_score = nx.pagerank(anomaly_graph, alpha=0.85, personalization=personalization, max_iter=10000)
+    anomaly_score = nx.pagerank(DG, alpha=0.85, personalization=personalization, max_iter=10000)
 
     anomaly_score = sorted(anomaly_score.items(), key=lambda x: x[1], reverse=True)
 

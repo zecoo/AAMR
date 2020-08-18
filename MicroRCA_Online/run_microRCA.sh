@@ -1,6 +1,9 @@
 #!/bin/bash 
 
-MS='user'
+select MS in 'user' 'carts' 'catalogue'
+do
+    break
+done
 
 kubectl apply -f /root/zik/microservices-demo/zik-test/$MS-delay.yaml
 

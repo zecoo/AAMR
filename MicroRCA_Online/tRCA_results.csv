@@ -7,37 +7,25 @@
 1597642375,user,svc_latency,"[('user', 2.234207210384228), ('front-end', 1.9541542935042968), ('orders', 1.1819043285324546), ('orders-db', 0.0), ('user-db', 0.0), ('payment', -0.21762448194516618), ('shipping', -0.28676785721505066), ('carts', -0.42782628772840325)]"
 1597642387,user,svc_latency,"[('user', 2.0304585302066873), ('front-end', 1.7527930764029573), ('orders', 1.0468830582452227), ('user-db', 0.0), ('orders-db', 0.0), ('payment', -0.21322178064204902), ('shipping', -0.27191475244787655), ('carts', -0.3793921135639946)]"
 1597642399,user,svc_latency,"[('user', 1.874312987048019), ('front-end', 1.5901080330144164), ('orders', 0.933561663660609), ('orders-db', 0.0), ('user-db', 0.0), ('payment', -0.20690249705979832), ('shipping', -0.2527291014803515), ('carts', -0.33851946230460883)]"
-1597642411,user,svc_latency,"[('user', 1.7104645473320417), ('front-end', 1.412458014657851), ('orders', 0.8064858250180105), ('user-db', 0.0), ('orders-db', 0.0), ('payment', -0.19925673005811073), ('shipping', -0.22350596296412806), ('carts', -0.29132985722165317)]"1597643373.250674,carts,svc_latency,[]
-1597643436.3564215,carts,svc_latency,[]
-1597643450.5277927,carts,svc_latency,[]
-1597643464.5498745,carts,svc_latency,[]
-1597643478.442887,carts,svc_latency,[]
-1597643492.4410558,carts,svc_latency,[]
-1597643506.4197195,carts,svc_latency,[]
-1597643520.2899442,carts,svc_latency,[]
-1597643534.2654848,carts,svc_latency,[]
-1597643548.1777673,carts,svc_latency,[]
-1597643561.9993505,carts,svc_latency,[]
-1597643591.6694121,catalogue,svc_latency,[]
-1597643603.789532,catalogue,svc_latency,[]
-1597643615.8939672,catalogue,svc_latency,"[('catalogue-db', 0.0), ('front-end', -0.008103724851404384), ('catalogue', -0.009535300266830353)]"
-1597643628.0087357,catalogue,svc_latency,"[('catalogue-db', 0.0), ('front-end', -0.0037838728804445326), ('catalogue', -0.00445162971011687)]"
-1597643640.1146595,catalogue,svc_latency,"[('catalogue-db', 0.0), ('front-end', -0.0020771534510440797), ('catalogue', -0.0024432326504803584)]"
-1597643652.150264,catalogue,svc_latency,"[('catalogue-db', 0.0), ('front-end', -0.0007092366959598602), ('catalogue', -0.0008343775131008868)]"
-1597643664.2141452,catalogue,svc_latency,"[('catalogue', 0.0013502615471761186), ('front-end', 0.0011477873798167513), ('catalogue-db', 0.0)]"
-1597643676.2633576,catalogue,svc_latency,"[('catalogue', 0.0025526662228110442), ('front-end', 0.0021701989096810505), ('catalogue-db', 0.0)]"
-1597644032.330218,catalogue,svc_latency,[]
-1597644044.388877,catalogue,svc_latency,[]
-1597644056.5315175,catalogue,svc_latency,"[('catalogue', 0.6153020788964099), ('front-end', 0.5230055071488147), ('catalogue-db', 0.0)]"
-1597644068.763041,catalogue,svc_latency,"[('catalogue', 5.7055192585281755), ('front-end', 4.849692436837784), ('catalogue-db', 0.0)]"
-1597644080.95228,catalogue,svc_latency,"[('catalogue', 21.04087167750846), ('front-end', 17.884742008748844), ('catalogue-db', 0.0)]"
-1597644297.4606879,carts,svc_latency,"[('catalogue', 2.2117683311836447), ('front-end', 1.8800041808321228), ('catalogue-db', 0.0)]"
-1597644309.609484,carts,svc_latency,"[('catalogue', 0.05071981375449741), ('front-end', 0.043111714544037144), ('catalogue-db', 0.0)]"
-1597644321.8123047,carts,svc_latency,"[('carts', 1.3499381324771855), ('front-end', 0.9687736988913157), ('orders', 0.29282428185278414), ('payment', 0.03383752380860556), ('carts-db', 0.0), ('orders-db', 0.0), ('shipping', -0.02281477359591156), ('user', -0.2065797166310614)]"
-1597644333.957005,carts,svc_latency,"[('carts', 1.0100440432869717), ('front-end', 0.6731226205377532), ('orders', 0.2868896300180885), ('carts-db', 0.0), ('orders-db', 0.0), ('payment', -0.044839399449939636), ('shipping', -0.05993380502202955), ('user', -0.11125693791799822)]"
-1597644346.1745458,carts,svc_latency,"[('carts', 0.9750572996169096), ('front-end', 0.642991932233598), ('orders', 0.26893521560864153), ('orders-db', 0.0), ('carts-db', 0.0), ('payment', -0.053907819939150683), ('shipping', -0.06475047482801845), ('user', -0.09917747781524829)]"
-1597644358.3535004,carts,svc_latency,"[('carts', 0.9591553977522259), ('front-end', 0.6296842209084021), ('orders', 0.2612299468020552), ('carts-db', 0.0), ('orders-db', 0.0), ('payment', -0.061481519172019584), ('shipping', -0.06797443664710662), ('user', -0.09326129570262884)]"
-1597644370.4731662,carts,svc_latency,"[('carts', 0.9538539729463087), ('front-end', 0.6254223382073308), ('orders', 0.2588667267469183), ('orders-db', 0.0), ('carts-db', 0.0), ('payment', -0.065006605548389), ('shipping', -0.06999908616489676), ('user', -0.09110793590078481)]"
-1597644382.564292,carts,svc_latency,"[('carts', 0.9472369147318669), ('front-end', 0.6198070530893641), ('orders', 0.25556906918171196), ('carts-db', 0.0), ('orders-db', 0.0), ('payment', -0.06663533761551865), ('shipping', -0.07097715100443666), ('user', -0.08882701536549376)]"
-1597644394.6652424,carts,svc_latency,"[('carts', 0.9307701587706252), ('front-end', 0.6052679195532202), ('orders', 0.24669759679109204), ('orders-db', 0.0), ('carts-db', 0.0), ('payment', -0.06585097713049465), ('shipping', -0.07029333618235159), ('user', -0.08390491992854007)]"
-1597644406.925078,carts,svc_latency,"[('carts', 0.9342910732219004), ('front-end', 0.6088195958138165), ('orders', 0.2491153520731834), ('orders-db', 0.0), ('carts-db', 0.0), ('payment', -0.06956559072567282), ('shipping', -0.07268481990082137), ('user', -0.08443501853410282)]"
+1597642411,user,svc_latency,"[('user', 1.7104645473320417), ('front-end', 1.412458014657851), ('orders', 0.8064858250180105), ('user-db', 0.0), ('orders-db', 0.0), ('payment', -0.19925673005811073), ('shipping', -0.22350596296412806), ('carts', -0.29132985722165317)]1597643373.250674"
+1597643616,catalogue,svc_latency,"[('catalogue-db', 0.0), ('front-end', -0.008103724851404384), ('catalogue', -0.009535300266830353)]"
+1597643628,catalogue,svc_latency,"[('catalogue-db', 0.0), ('front-end', -0.0037838728804445326), ('catalogue', -0.00445162971011687)]"
+1597643640,catalogue,svc_latency,"[('catalogue-db', 0.0), ('front-end', -0.0020771534510440797), ('catalogue', -0.0024432326504803584)]"
+1597643652,catalogue,svc_latency,"[('catalogue-db', 0.0), ('front-end', -0.0007092366959598602), ('catalogue', -0.0008343775131008868)]"
+1597643664,catalogue,svc_latency,"[('catalogue', 0.0013502615471761186), ('front-end', 0.0011477873798167513), ('catalogue-db', 0.0)]"
+1597643676,catalogue,svc_latency,"[('catalogue', 0.0025526662228110442), ('front-end', 0.0021701989096810505), ('catalogue-db', 0.0)]"
+1597644032,catalogue,svc_latency,[]
+1597644044,catalogue,svc_latency,[]
+1597644057,catalogue,svc_latency,"[('catalogue', 0.6153020788964099), ('front-end', 0.5230055071488147), ('catalogue-db', 0.0)]"
+1597644069,catalogue,svc_latency,"[('catalogue', 5.7055192585281755), ('front-end', 4.849692436837784), ('catalogue-db', 0.0)]"
+1597644081,catalogue,svc_latency,"[('catalogue', 21.04087167750846), ('front-end', 17.884742008748844), ('catalogue-db', 0.0)]"
+1597644297,carts,svc_latency,"[('catalogue', 2.2117683311836447), ('front-end', 1.8800041808321228), ('catalogue-db', 0.0)]"
+1597644310,carts,svc_latency,"[('catalogue', 0.05071981375449741), ('front-end', 0.043111714544037144), ('catalogue-db', 0.0)]"
+1597644322,carts,svc_latency,"[('carts', 1.3499381324771855), ('front-end', 0.9687736988913157), ('orders', 0.29282428185278414), ('payment', 0.03383752380860556), ('carts-db', 0.0), ('orders-db', 0.0), ('shipping', -0.02281477359591156), ('user', -0.2065797166310614)]"
+1597644334,carts,svc_latency,"[('carts', 1.0100440432869717), ('front-end', 0.6731226205377532), ('orders', 0.2868896300180885), ('carts-db', 0.0), ('orders-db', 0.0), ('payment', -0.044839399449939636), ('shipping', -0.05993380502202955), ('user', -0.11125693791799822)]"
+1597644346,carts,svc_latency,"[('carts', 0.9750572996169096), ('front-end', 0.642991932233598), ('orders', 0.26893521560864153), ('orders-db', 0.0), ('carts-db', 0.0), ('payment', -0.053907819939150683), ('shipping', -0.06475047482801845), ('user', -0.09917747781524829)]"
+1597644358,carts,svc_latency,"[('carts', 0.9591553977522259), ('front-end', 0.6296842209084021), ('orders', 0.2612299468020552), ('carts-db', 0.0), ('orders-db', 0.0), ('payment', -0.061481519172019584), ('shipping', -0.06797443664710662), ('user', -0.09326129570262884)]"
+1597644370,carts,svc_latency,"[('carts', 0.9538539729463087), ('front-end', 0.6254223382073308), ('orders', 0.2588667267469183), ('orders-db', 0.0), ('carts-db', 0.0), ('payment', -0.065006605548389), ('shipping', -0.06999908616489676), ('user', -0.09110793590078481)]"
+1597644383,carts,svc_latency,"[('carts', 0.9472369147318669), ('front-end', 0.6198070530893641), ('orders', 0.25556906918171196), ('carts-db', 0.0), ('orders-db', 0.0), ('payment', -0.06663533761551865), ('shipping', -0.07097715100443666), ('user', -0.08882701536549376)]"
+1597644395,carts,svc_latency,"[('carts', 0.9307701587706252), ('front-end', 0.6052679195532202), ('orders', 0.24669759679109204), ('orders-db', 0.0), ('carts-db', 0.0), ('payment', -0.06585097713049465), ('shipping', -0.07029333618235159), ('user', -0.08390491992854007)]"
+1597644407,carts,svc_latency,"[('carts', 0.9342910732219004), ('front-end', 0.6088195958138165), ('orders', 0.2491153520731834), ('orders-db', 0.0), ('carts-db', 0.0), ('payment', -0.06956559072567282), ('shipping', -0.07268481990082137), ('user', -0.08443501853410282)]"
