@@ -656,7 +656,7 @@ if __name__ == "__main__":
     with open(filename,'a') as f:
         writer = csv.writer(f)
         localtime = time.asctime( time.localtime(time.time()) )
-        writer.writerow([localtime, 'catalogue', 'svc_latency', anomaly_score_new])
+        writer.writerow([localtime, faults_name, 'svc_latency', anomaly_score_new])
 
 # if __name__ == '__main__':
 #     args = parse_args()

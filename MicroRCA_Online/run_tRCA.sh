@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-for MS in 'user' 'carts' 'catalogue'
+for MS in 'user' 'carts' 'catalogue' 'order'
 do
   kubectl apply -f /root/zik/microservices-demo/zik-test/$MS-delay.yaml
 
