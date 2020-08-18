@@ -655,7 +655,8 @@ if __name__ == "__main__":
     filename = 'MicroRCA_results.csv'                    
     with open(filename,'a') as f:
         writer = csv.writer(f)
-        writer.writerow([time.time(), 'catalogue', 'svc_latency', anomaly_score_new])
+        localtime = time.asctime( time.localtime(time.time()) )
+        writer.writerow([localtime, 'catalogue', 'svc_latency', anomaly_score_new])
 
 # if __name__ == '__main__':
 #     args = parse_args()
