@@ -216,10 +216,12 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 #    print(DG.nodes())
     baseline_df = pd.DataFrame()
     edge_df = {}
+    # 下面这段代码的含义？
     for anomaly in anomalies:
         edge = anomaly.split('_')
         edges.append(tuple(edge))
 #        nodes.append(edge[0])
+        # svc 就是 front-end_carts 的后面 carts
         svc = edge[1]
         nodes.append(svc)
         baseline_df[svc] = latency_df[anomaly]
@@ -299,6 +301,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
     # 那么重点中的重点就是这个 anomaly_graph 另外这个 nx 工具包里的 PPR 的输入输出分别是什么
 
     print('\nanomaly graph: ', anomaly_graph.adj)
+    print('\npersonalization: ', personalization)
     
     anomaly_score = nx.pagerank(anomaly_graph, alpha=0.85, personalization=personalization, max_iter=1000)
 
@@ -306,6 +309,28 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 
 #    return anomaly_graph
     return anomaly_score
+
+def calc_sim(faults_name):
+    fault = faults_name.replace('./Online/data/','')
+
+    latency_filename = faults_name + '_latency_source_50.csv'  # inbound
+    latency_df_source = pd.read_csv(latency_filename)
+
+    latency_filename = faults_name + '_latency_destination_50.csv' # outbound
+    latency_df_destination = pd.read_csv(latency_filename) 
+
+    # 这里的 fill_value=0 很关键，把 unknown-fe 的 nan 给替换了
+    latency_df = latency_df_source.add(latency_df_destination, fill_value=0)
+
+    # print('\nlatency_df: ')
+    # print(latency_df)
+    latency_df.to_csv('%s_latency.csv'%fault)
+
+    corr_df = latency_df.corr()
+    # corr_df[corr_df] = np.nan
+    print('\ncorr: ', corr_df)
+
+    corr_df.to_csv('%s_corr.csv'%fault)
 
 def print_rank(anomaly_score, target):
     num = 10
@@ -318,6 +343,10 @@ def print_rank(anomaly_score, target):
 
 
 if __name__ == '__main__':
+    faults_name = './Online/data/carts'
+    calc_sim(faults_name)
+
+def tmp():
     
     # Tuning parameters
     alpha = 0.55  

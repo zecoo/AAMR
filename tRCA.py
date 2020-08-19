@@ -197,7 +197,7 @@ def svc_personalization(svc, anomaly_graph, baseline_df, faults_name):
 
 def calc_score(faults_name):
     
-    fault = faults_name.replace('./MicroRCA_Online/','')
+    fault = faults_name.replace('./Online/data/','')
 
     latency_filename = faults_name + '_latency_source_50.csv'  # inbound
     latency_df_source = pd.read_csv(latency_filename)
@@ -354,7 +354,7 @@ if __name__ == '__main__':
     
     # faults_name = './faults/1/svc_latency/catalogue'
     
-    faults_name = './MicroRCA_Online/user'
+    faults_name = './Online/data/user'
     latency_df = rt_invocations(faults_name)
     
     # if (target == 'payment' or target  == 'shipping') and fault_type != 'svc_latency':
