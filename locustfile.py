@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from random import randint, choice
 import base64
 from locust import HttpUser, task, between
