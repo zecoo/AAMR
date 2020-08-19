@@ -702,11 +702,12 @@ if __name__ == "__main__":
             anomaly_score_new.append(anomaly_target)
     # print(anomaly_score_new)
 
-    filename = './results/tRCA_results.csv'               
+    filename = './results/tRCA_results.csv'   
+    fault = faults_name.replace('./data/', '')            
     with open(filename,'a') as f:
         writer = csv.writer(f)
         localtime = time.asctime( time.localtime(time.time()) )
-        writer.writerow([localtime, faults_name, 'svc_latency', anomaly_score_new])
+        writer.writerow([localtime, fault, 'svc_latency', anomaly_score_new])
 
 # if __name__ == '__main__':
 #     args = parse_args()
