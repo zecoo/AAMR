@@ -26,16 +26,6 @@ Tue Aug 18 16:53:51 2020,catalogue,svc_latency,"[('catalogue', 0.540539893277121
 Tue Aug 18 16:54:01 2020,catalogue,svc_latency,"[('catalogue', 0.5405398932771217), ('front-end', 0.45946010672287846), ('catalogue-db', 0.0)]"
 Tue Aug 18 16:54:10 2020,catalogue,svc_latency,"[('catalogue', 0.5405398932771217), ('front-end', 0.45946010672287846), ('catalogue-db', 0.0)]"
 Tue Aug 18 16:54:21 2020,catalogue,svc_latency,"[('catalogue', 0.5405398932771217), ('front-end', 0.45946010672287846), ('catalogue-db', 0.0)]"
-Tue Aug 18 16:57:01 2020,order,svc_latency,"[('catalogue', 0.5405398932771217), ('front-end', 0.45946010672287846), ('catalogue-db', 0.0)]"
-Tue Aug 18 16:57:11 2020,order,svc_latency,"[('catalogue', 0.5405398932771217), ('front-end', 0.45946010672287846), ('catalogue-db', 0.0)]"
-Tue Aug 18 16:57:21 2020,order,svc_latency,[]
-Tue Aug 18 16:57:31 2020,order,svc_latency,[]
-Tue Aug 18 16:57:41 2020,order,svc_latency,[]
-Tue Aug 18 16:57:51 2020,order,svc_latency,[]
-Tue Aug 18 16:58:01 2020,order,svc_latency,[]
-Tue Aug 18 16:58:11 2020,order,svc_latency,[]
-Tue Aug 18 16:58:21 2020,order,svc_latency,[]
-Tue Aug 18 16:58:31 2020,order,svc_latency,[]Wed Aug 19 09:53:56 2020,orders,svc_latency,[]
 Wed Aug 19 09:54:05 2020,orders,svc_latency,[]
 Wed Aug 19 09:54:15 2020,orders,svc_latency,[]
 Wed Aug 19 09:54:25 2020,orders,svc_latency,"[('orders', 0.5405420020268137), ('front-end', 0.45945799797318637), ('user', 0.0), ('orders-db', 0.0), ('shipping', 0.0), ('carts', 0.0), ('payment', 0.0)]"

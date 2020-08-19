@@ -598,7 +598,7 @@ def parse_args():
 if __name__ == "__main__":
 
     args = parse_args()
-    faults_name = args.fault
+    faults_name = './data/' + args.fault
     len_second = 150
     prom_url = 'http://39.100.0.61:30598/api/v1/query_range'
     prom_url_no_range = 'http://39.100.0.61:30598/api/v1/query'
@@ -652,7 +652,7 @@ if __name__ == "__main__":
             anomaly_score_new.append(anomaly_target)
     print(anomaly_score_new)
 
-    filename = 'MicroRCA_results.csv'                    
+    filename = './results/MicroRCA_results.csv'                    
     with open(filename,'a') as f:
         writer = csv.writer(f)
         localtime = time.asctime( time.localtime(time.time()) )
