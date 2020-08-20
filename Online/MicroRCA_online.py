@@ -631,7 +631,7 @@ if __name__ == "__main__":
     # anomaly detection on response time of service invocation
     anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
 
-    print(anomalies)
+    # print(anomalies)
     
     # get the anomalous service
     # anomaly_nodes = []
@@ -642,7 +642,7 @@ if __name__ == "__main__":
     # anomaly_nodes = set(anomaly_nodes)
      
     anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
-    print(anomaly_score)
+    # print(anomaly_score)
 
     anomaly_score_new = []
     for anomaly_target in anomaly_score:
@@ -650,7 +650,7 @@ if __name__ == "__main__":
 #       print(anomaly_target[0])
         if DG.nodes[node]['type'] == 'service':
             anomaly_score_new.append(anomaly_target)
-    print(anomaly_score_new)
+    print('\nMicroRCA score:', anomaly_score_new)
 
     filename = './results/MicroRCA_results.csv'
     fault = faults_name.replace('./data/', '')                      

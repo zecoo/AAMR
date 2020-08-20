@@ -509,7 +509,7 @@ def calc_score(faults_name):
             svc_name = key.split('_')[1]
             trace_based_ratio.update({svc_name: ratio[key]})
     
-    print('\ntrace_based_ratio: ', trace_based_ratio)
+    # print('\ntrace_based_ratio: ', trace_based_ratio)
 
     # 添加 trace 信息
     # print('\nget trace: ')
@@ -520,13 +520,13 @@ def calc_score(faults_name):
                 trace_based_ratio[fault] = trace_based_ratio[fault] + ratio[single_trace]
 
     # 获取邻居个数
-    print('\ndegree: ', DG.degree)
+    # print('\ndegree: ', DG.degree)
     up = pd.DataFrame(trace_based_ratio, index=[0]).T
     down  = pd.DataFrame(dict(DG.degree), index=[0]).T
     score = (up / down).dropna().to_dict()
     score = score[0]
 
-    print('\nscore:', score)
+    # print('\nscore:', score)
 
     # score 和 服务 进行对应
     score_list = []
@@ -536,7 +536,7 @@ def calc_score(faults_name):
 
     score_arr = np.array(score_list)
 
-    print(score_arr)
+    # print(score_arr)
 
     # 归一化处理
     z_score = []
@@ -615,7 +615,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
     # print('\nanomaly graph: ', anomaly_graph.adj)
 
     personalization = calc_score(faults_name)
-    print('\npersonalization: ', personalization)
+    # print('\npersonalization: ', personalization)
 
     anomaly_score = nx.pagerank(DG, alpha=0.85, personalization=personalization, max_iter=10000)
 
@@ -681,7 +681,7 @@ if __name__ == "__main__":
     # anomaly detection on response time of service invocation
     anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
 
-    print('\nanomalies: ', anomalies)
+    # print('\nanomalies: ', anomalies)
     
     # get the anomalous service
     # anomaly_nodes = []
@@ -692,7 +692,7 @@ if __name__ == "__main__":
     # anomaly_nodes = set(anomaly_nodes)
      
     anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
-    print('\nanomaly_score: ', anomaly_score)
+    print('\ntRCA_score: ', anomaly_score)
 
     anomaly_score_new = []
     for anomaly_target in anomaly_score:
