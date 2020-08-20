@@ -99,7 +99,7 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
     filename = faults_name + '_latency_source_50.csv'
     # latency_df.set_index('timestamp')
 
-    print('latency_df:')
+    # print('latency_df:')
     # print(latency_df)
 
     latency_df.to_csv(filename)

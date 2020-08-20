@@ -15,7 +15,7 @@ auth_header = get_base64("b", "b").decode()
 print(auth_header)
 
 class httpUser(HttpUser):
-  wait_time = between(1, 5)
+  wait_time = between(0.1, 0.5)
 
   @task
   def load(self):
