@@ -329,10 +329,12 @@ def calc_sim(faults_name):
     # 获取 locust 数据
     locust_filename = './Online/example_stats_history.csv'
     locust_df = pd.read_csv(locust_filename)
+    print(locust_df)
 
     locust_latency_50 = locust_df['50%'][-31:].tolist()
 
     svc_latency_df = pd.DataFrame()
+    print(latency_df)
 
     for key in latency_df.keys():
         if 'db' in key or 'rabbitmq' in key or 'Unnamed' in key:

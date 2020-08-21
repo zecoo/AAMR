@@ -592,10 +592,12 @@ def calc_sim(faults_name):
     # 获取 locust 数据
     locust_filename = './example_stats_history.csv'
     locust_df = pd.read_csv(locust_filename)
+    print(locust_df)
 
     locust_latency_50 = locust_df['50%'][-31:].tolist()
 
     svc_latency_df = pd.DataFrame()
+    print(latency_df)
 
     for key in latency_df.keys():
         if 'db' in key or 'rabbitmq' in key or 'Unnamed' in key:
@@ -670,6 +672,7 @@ if __name__ == "__main__":
     latency_df_source = latency_source_50(prom_url, start_time, end_time, faults_name)
     latency_df_destination = latency_destination_50(prom_url, start_time, end_time, faults_name)
     latency_df = latency_df_destination.add(latency_df_source)
+    svc_metrics(prom_url, start_time, end_time, faults_name)
 
     filename = './results/Microscope_results.csv'
     fault = faults_name.replace('./data/', '')                      
