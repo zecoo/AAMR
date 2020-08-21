@@ -1,5 +1,3 @@
-#!/bin/bash 
-
 sleep 150
 wait
 
@@ -13,8 +11,7 @@ do
   n=0
   while (($n<10))
   do
-    python3 tRCA_online.py --fault $MS &
-    python3 MicroRCA_online.py --fault $MS &
+    python3 Microscope_online.py --fault $MS
     n=$((n+1))
     sleep 10
   done 
@@ -24,5 +21,3 @@ do
   sleep 150
 	wait
 done
-
-

@@ -12,7 +12,7 @@ import csv
 
 from sklearn.cluster import Birch
 from sklearn import preprocessing
-
+from scipy.stats import pearsonr
 
 smoothing_window = 12
 
@@ -326,11 +326,48 @@ def calc_sim(faults_name):
     # print(latency_df)
     latency_df.to_csv('%s_latency.csv'%fault)
 
+    # 获取 locust 数据
+    locust_filename = './Online/example_stats_history.csv'
+    locust_df = pd.read_csv(locust_filename)
+
+    locust_latency_50 = locust_df['50%'][-31:].tolist()
+
+    svc_latency_df = pd.DataFrame()
+
+    for key in latency_df.keys():
+        if 'db' in key or 'rabbitmq' in key or 'Unnamed' in key:
+            continue
+        else:
+            svc_name = key.split('_')[1]
+            if svc_name in svc_latency_df:
+                svc_latency_df[svc_name].add(latency_df[key])
+            else:
+                svc_latency_df[svc_name] = latency_df[key]
+
+    # print(svc_latency_df)
+
+    score = {}
+
+    for key in svc_latency_df.keys():
+        # len : 31
+        # print(len(svc_latency_df[key].tolist()))
+
+        # 输出:(r, p)
+        # r:相关系数[-1，1]之间
+        # p:p值越小
+
+        score.update({key: pearsonr(svc_latency_df[key].tolist(), locust_latency_50)[0]})
+    
+    score = sorted(score.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
+    print(score)
+
     corr_df = latency_df.corr()
     # corr_df[corr_df] = np.nan
-    print('\ncorr: ', corr_df)
+    # print('\ncorr: ', corr_df)
 
     corr_df.to_csv('%s_corr.csv'%fault)
+
+    return score
 
 def print_rank(anomaly_score, target):
     num = 10
