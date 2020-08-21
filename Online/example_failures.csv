@@ -1,4 +1,4 @@
 Method,Name,Error,Occurrences
-POST,/cart,500 Server Error: Internal Server Error for url: http://39.100.0.61:30001/cart,48
+POST,/cart,500 Server Error: Internal Server Error for url: http://39.100.0.61:30001/cart,49
 POST,/orders,500 Server Error: Internal Server Error for url: http://39.100.0.61:30001/orders,1
-POST,/orders,406 Client Error: Not Acceptable for url: http://39.100.0.61:30001/orders,7130
+POST,/orders,406 Client Error: Not Acceptable for url: http://39.100.0.61:30001/orders,7309
