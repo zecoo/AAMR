@@ -212,6 +212,9 @@ def calc_score(faults_name):
     latency_df_destination.loc['all'] = latency_df_destination.apply(lambda x:x.sum())
 
     df_data = pd.DataFrame(columns=['svc', 'ratio'])
+
+    # 防止 payment 这样很小的值在 personalization 里很大
+    weight = 0.1
     # ratio 就是 source / destination
     df_data = latency_df_source.loc['all'] / latency_df_destination.loc['all']
 
@@ -354,7 +357,7 @@ if __name__ == '__main__':
     
     # faults_name = './faults/1/svc_latency/catalogue'
     
-    faults_name = './Online/data/user'
+    faults_name = './Online/data/1'
     latency_df = rt_invocations(faults_name)
     
     # if (target == 'payment' or target  == 'shipping') and fault_type != 'svc_latency':
