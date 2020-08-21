@@ -1,2 +1,3 @@
 Method,Name,Error,Occurrences
-POST,/orders,406 Client Error: Not Acceptable for url: http://39.100.0.61:30001/orders,54
+POST,/cart,500 Server Error: Internal Server Error for url: http://39.100.0.61:30001/cart,1
+POST,/orders,406 Client Error: Not Acceptable for url: http://39.100.0.61:30001/orders,100
