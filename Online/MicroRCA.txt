@@ -1,0 +1,2 @@
+
+MicroRCA score: [('carts', 0.4573286940734327), ('front-end', 0.3543983947653937), ('orders', 0.18827291116117376), ('carts-db', 0.0), ('payment', 0.0), ('orders-db', 0.0), ('shipping', 0.0), ('user', 0.0)]

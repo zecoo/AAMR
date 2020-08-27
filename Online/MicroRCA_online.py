@@ -602,7 +602,7 @@ if __name__ == "__main__":
     faults_name = './data/' + args.fault
     len_second = 150
     prom_url = 'http://39.100.0.61:30598/api/v1/query_range'
-    # prom_url_no_range = 'http://39.100.0.61:30598/api/v1/query'
+    prom_url_no_range = 'http://39.100.0.61:30598/api/v1/query'
     
     end_time = time.time()
     start_time = end_time - len_second
