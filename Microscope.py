@@ -332,6 +332,7 @@ def calc_sim(faults_name):
     print(locust_df)
 
     locust_latency_50 = locust_df['50%'][-31:].tolist()
+    print(len(locust_latency_50))
 
     svc_latency_df = pd.DataFrame()
     print(latency_df)
@@ -382,7 +383,7 @@ def print_rank(anomaly_score, target):
 
 
 if __name__ == '__main__':
-    faults_name = './Online/data/carts'
+    faults_name = './Online/data/payment'
     calc_sim(faults_name)
 
 def tmp():
@@ -407,7 +408,7 @@ def tmp():
     # faults_name = '../faults/' + fault_type + '_' + target
     
     # faults_name = './faults/1/svc_latency/catalogue'
-    faults_name = './Online/data/carts'
+    faults_name = './Online/data/1'
     latency_df = rt_invocations(faults_name)
 
     # if (target == 'payment' or target  == 'shipping') and fault_type != 'svc_latency':

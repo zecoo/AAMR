@@ -117,6 +117,7 @@ def latency_destination_50(prom_url, start_time, end_time, faults_name):
                                     'end': end_time,
                                     'step': metric_step})
     results = response.json()['data']['result']
+    print(results)
 
     for result in results:
         dest_svc = result['metric']['destination_workload']

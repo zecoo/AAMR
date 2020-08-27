@@ -51,6 +51,7 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
     # [{'metric': {'destination_workload': 'orders-db', 'source_workload': 'orders'}, 'value': [1594888889.714, '0.03426666666666667']}, 
     # 解读：value 的第一个值表示当前时间，第二个值表示真正的 value 也就是这一长串 promQL 的 value
     results = response.json()['data']['result']
+    
 
     # print(results)
 
@@ -601,7 +602,7 @@ if __name__ == "__main__":
     faults_name = './data/' + args.fault
     len_second = 150
     prom_url = 'http://39.100.0.61:30598/api/v1/query_range'
-    prom_url_no_range = 'http://39.100.0.61:30598/api/v1/query'
+    # prom_url_no_range = 'http://39.100.0.61:30598/api/v1/query'
     
     end_time = time.time()
     start_time = end_time - len_second

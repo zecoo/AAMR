@@ -13,6 +13,7 @@ import numpy as np
 import networkx as nx
 import argparse
 import csv
+from scipy.stats import pearsonr
 
 from sklearn.cluster import Birch
 from sklearn import preprocessing

@@ -339,7 +339,7 @@ if __name__ == '__main__':
     # faults_name = '../faults/' + fault_type + '_' + target
     
     # faults_name = './faults/1/svc_latency/catalogue'
-    faults_name = './Online/data/carts'
+    faults_name = './Online/data/catalogue'
     latency_df = rt_invocations(faults_name)
 
     # if (target == 'payment' or target  == 'shipping') and fault_type != 'svc_latency':
