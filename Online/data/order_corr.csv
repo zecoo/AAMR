@@ -1,1 +1,17 @@
-""
+,Unnamed: 0,carts_carts-db,catalogue_catalogue-db,front-end_carts,front-end_catalogue,front-end_orders,front-end_user,orders_carts,orders_orders-db,orders_payment,orders_shipping,orders_user,queue-master_rabbitmq,shipping_rabbitmq,unknown_front-end,user_user-db
+Unnamed: 0,1.0,-0.02179358793362142,,,,,,,0.021793587933619536,,,,0.3474539949345906,-0.24468111141711768,,0.021793587933620517
+carts_carts-db,-0.02179358793362142,1.0,,,,,,,-1.0,,,,-0.04775179827173961,0.7528316095521257,,-1.0000000000000009
+catalogue_catalogue-db,,,,,,,,,,,,,,,,
+front-end_carts,,,,,,,,,,,,,,,,
+front-end_catalogue,,,,,,,,,,,,,,,,
+front-end_orders,,,,,,,,,,,,,,,,
+front-end_user,,,,,,,,,,,,,,,,
+orders_carts,,,,,,,,,,,,,,,,
+orders_orders-db,0.021793587933619536,-1.0,,,,,,,1.0,,,,0.04775179827173932,-0.7528316095521268,,1.000000000000001
+orders_payment,,,,,,,,,,,,,,,,
+orders_shipping,,,,,,,,,,,,,,,,
+orders_user,,,,,,,,,,,,,,,,
+queue-master_rabbitmq,0.3474539949345906,-0.04775179827173961,,,,,,,0.04775179827173932,,,,1.0,-0.69341135755554,,0.047751798271739664
+shipping_rabbitmq,-0.24468111141711768,0.7528316095521257,,,,,,,-0.7528316095521268,,,,-0.69341135755554,1.0,,-0.7528316095521286
+unknown_front-end,,,,,,,,,,,,,,,,
+user_user-db,0.021793587933620517,-1.0000000000000009,,,,,,,1.000000000000001,,,,0.047751798271739664,-0.7528316095521286,,1.0
