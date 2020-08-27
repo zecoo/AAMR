@@ -15,6 +15,7 @@ do
   do
     python3 tRCA_online.py --fault $MS &
     python3 MicroRCA_online.py --fault $MS &
+    python3 Microscope_online.py --fault $MS &
     n=$((n+1))
     sleep 10
   done 

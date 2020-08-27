@@ -579,7 +579,7 @@ def calc_sim(faults_name):
 
     latency_filename = faults_name + '_latency_source_50.csv'  # inbound
     latency_df_source = pd.read_csv(latency_filename)
-    print("\nfilename")
+    # print("\nfilename")
     print(latency_filename)
 
     latency_filename = faults_name + '_latency_destination_50.csv' # outbound
@@ -588,8 +588,8 @@ def calc_sim(faults_name):
     # 这里的 fill_value=0 很关键，把 unknown-fe 的 nan 给替换了
     latency_df = latency_df_source.add(latency_df_destination, fill_value=0)
 
-    print('\nlatency_df: ')
-    print(latency_df)
+    # print('\nlatency_df: ')
+    # print(latency_df)
     latency_df.to_csv('%s_latency.csv'%fault)
 
     # 获取 locust 数据
@@ -600,7 +600,7 @@ def calc_sim(faults_name):
     locust_latency_50 = locust_df['50%'][-31:].tolist()
 
     svc_latency_df = pd.DataFrame()
-    print(latency_df)
+    # print(latency_df)
 
     for key in latency_df.keys():
         if 'db' in key or 'rabbitmq' in key or 'Unnamed' in key:
@@ -678,8 +678,9 @@ if __name__ == "__main__":
     svc_metrics(prom_url, start_time, end_time, faults_name)
 
     filename = './results/Microscope_results.csv'
-    fault = faults_name.replace('./data/', '')                      
+    fault = faults_name.replace('./data/', '')
+    rank = calc_sim(faults_name)
     with open(filename,'a') as f:
         writer = csv.writer(f)
         localtime = time.asctime( time.localtime(time.time()) )
-        writer.writerow([localtime, fault, 'svc_latency', calc_sim(faults_name)])
+        writer.writerow([localtime, fault, 'svc_latency', rank])
