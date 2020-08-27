@@ -1,19 +1,2 @@
 Method,Name,Error,Occurrences
-<<<<<<< HEAD
-GET,/detail.html?id=zzz4f044-b040-410d-8ead-4de0446aec7e,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /detail.html?id=zzz4f044-b040-410d-8ead-4de0446aec7e (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fa82798b908>: Failed to establish a new connection: [Errno 111] Connection refused'))",1
-GET,/category.html,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /category.html (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fa82798b4e0>: Failed to establish a new connection: [Errno 111] Connection refused'))",1
-POST,/orders,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /orders (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fa82c487518>: Failed to establish a new connection: [Errno 111] Connection refused'))",2
-POST,/cart,500 Server Error: Internal Server Error for url: http://39.100.0.61:30001/cart,52
-GET,/catalogue,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /catalogue (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fa82762c630>: Failed to establish a new connection: [Errno 111] Connection refused'))",337067
-POST,/orders,500 Server Error: Internal Server Error for url: http://39.100.0.61:30001/orders,1
-GET,/customers,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /customers (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fa82c43cd68>: Failed to establish a new connection: [Errno 111] Connection refused'))",1
-GET,/catalogue,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /catalogue (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fa827623908>: Failed to establish a new connection: [Errno 110] Connection timed out'))",6546
-POST,/orders,406 Client Error: Not Acceptable for url: http://39.100.0.61:30001/orders,7922
-GET,/login,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /login (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fa82c386978>: Failed to establish a new connection: [Errno 111] Connection refused'))",1
-DELETE,/cart,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /cart (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fa827616358>: Failed to establish a new connection: [Errno 111] Connection refused'))",1
-POST,/cart,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /cart (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fa827616cc0>: Failed to establish a new connection: [Errno 111] Connection refused'))",1
-GET,/basket.html,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /basket.html (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fa827623320>: Failed to establish a new connection: [Errno 111] Connection refused'))",1
-=======
-POST,/cart,500 Server Error: Internal Server Error for url: http://39.100.0.61:30001/cart,8
-POST,/orders,406 Client Error: Not Acceptable for url: http://39.100.0.61:30001/orders,600
->>>>>>> 0c8f1148dcef7ad5684b4ffdeaef907692068d37
+POST,/orders,406 Client Error: Not Acceptable for url: http://39.100.0.61:30001/orders,640

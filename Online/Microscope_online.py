@@ -578,6 +578,8 @@ def calc_sim(faults_name):
 
     latency_filename = faults_name + '_latency_source_50.csv'  # inbound
     latency_df_source = pd.read_csv(latency_filename)
+    print("\nfilename")
+    print(latency_filename)
 
     latency_filename = faults_name + '_latency_destination_50.csv' # outbound
     latency_df_destination = pd.read_csv(latency_filename) 
@@ -585,14 +587,14 @@ def calc_sim(faults_name):
     # 这里的 fill_value=0 很关键，把 unknown-fe 的 nan 给替换了
     latency_df = latency_df_source.add(latency_df_destination, fill_value=0)
 
-    # print('\nlatency_df: ')
-    # print(latency_df)
+    print('\nlatency_df: ')
+    print(latency_df)
     latency_df.to_csv('%s_latency.csv'%fault)
 
     # 获取 locust 数据
     locust_filename = './example_stats_history.csv'
     locust_df = pd.read_csv(locust_filename)
-    print(locust_df)
+    # print(locust_df)
 
     locust_latency_50 = locust_df['50%'][-31:].tolist()
 
