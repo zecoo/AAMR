@@ -1,35 +1,3 @@
 Method,Name,Error,Occurrences
-POST,/cart,"('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",2
-POST,/orders,"('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))",1
-GET,/login,"('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",1
-DELETE,/cart,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /cart (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff2f0ee92b0>: Failed to establish a new connection: [Errno 110] Connection timed out'))",7
-GET,/detail.html?id=510a0d7e-8e83-4193-b483-e27e09ddc34d,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /detail.html?id=510a0d7e-8e83-4193-b483-e27e09ddc34d (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff2f049ccc0>: Failed to establish a new connection: [Errno 110] Connection timed out'))",1
-GET,/detail.html?id=837ab141-399e-4c1f-9abc-bace40296bac,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /detail.html?id=837ab141-399e-4c1f-9abc-bace40296bac (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff2f0ff1c18>: Failed to establish a new connection: [Errno 110] Connection timed out'))",1
-POST,/orders,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /orders (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff2f0f8f400>: Failed to establish a new connection: [Errno 110] Connection timed out'))",7
-GET,/catalogue,"('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",9
-GET,/detail.html?id=zzz4f044-b040-410d-8ead-4de0446aec7e,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /detail.html?id=zzz4f044-b040-410d-8ead-4de0446aec7e (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff2f0eff550>: Failed to establish a new connection: [Errno 110] Connection timed out'))",2
-GET,/detail.html?id=510a0d7e-8e83-4193-b483-e27e09ddc34d,"('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",1
-POST,/cart,500 Server Error: Internal Server Error for url: http://39.100.0.61:30001/cart,4
-GET,/catalogue,"('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",84
-GET,/login,"('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",1
-POST,/cart,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /cart (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff2f049cbe0>: Failed to establish a new connection: [Errno 110] Connection timed out'))",2
-GET,/login,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /login (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff2f0ff15f8>: Failed to establish a new connection: [Errno 110] Connection timed out'))",3
-GET,/customers,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /customers (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff2f0f0b588>: Failed to establish a new connection: [Errno 110] Connection timed out'))",1
-GET,/detail.html?id=d3588630-ad8e-49df-bbd7-3167f7efb246,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /detail.html?id=d3588630-ad8e-49df-bbd7-3167f7efb246 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff2f0f77c88>: Failed to establish a new connection: [Errno 110] Connection timed out'))",2
-DELETE,/cart,"('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",4
-GET,/catalogue,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /catalogue (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff2f0fc8d30>: Failed to establish a new connection: [Errno 110] Connection timed out'))",10
-GET,/category.html,"('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",2
-POST,/orders,406 Client Error: Not Acceptable for url: http://39.100.0.61:30001/orders,396
-GET,/category.html,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /category.html (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff2f0faf940>: Failed to establish a new connection: [Errno 110] Connection timed out'))",2
-GET,/,"('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",1
-POST,/orders,"('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",3
-GET,/basket.html,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /basket.html (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff2f0f4f9e8>: Failed to establish a new connection: [Errno 110] Connection timed out'))",1
-POST,/orders,"('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",11
-GET,/detail.html?id=03fef6ac-1896-4ce8-bd69-b798f85c6e0b,"('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",1
-GET,/basket.html,"('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",5
-GET,/detail.html?id=819e1fbf-8b7e-4f6d-811f-693534916a8b,"('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",1
-GET,/,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff2f0f65b70>: Failed to establish a new connection: [Errno 110] Connection timed out'))",2
-GET,/detail.html?id=zzz4f044-b040-410d-8ead-4de0446aec7e,"('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",1
-GET,/customers,"('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",2
-GET,/detail.html?id=a0a4f044-b040-410d-8ead-4de0446aec7e,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /detail.html?id=a0a4f044-b040-410d-8ead-4de0446aec7e (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff2f0db6358>: Failed to establish a new connection: [Errno 110] Connection timed out'))",1
-POST,/cart,"('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",4
+POST,/cart,500 Server Error: Internal Server Error for url: http://39.100.0.61:30001/cart,15
+POST,/orders,406 Client Error: Not Acceptable for url: http://39.100.0.61:30001/orders,1322

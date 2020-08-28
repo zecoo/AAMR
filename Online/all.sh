@@ -1,6 +1,6 @@
 #!/bin/bash
 
-arr=(MicroRCA_online.py Microscope_online.py tRCA_online.py)
+array=(MicroRCA_online.py Microscope_online.py tRCA_online.py)
 
 ./headless_locust.sh &
 

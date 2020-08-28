@@ -1,0 +1,16 @@
+Unnamed: 0,19.143426294820717
+carts_carts-db,45.166915168022456
+catalogue_catalogue-db,52.16717576525562
+front-end_carts,7.242868911258062
+front-end_catalogue,1.7363545092080892
+front-end_orders,398.4069740621644
+front-end_user,1.8224263071380116
+orders_carts,3.7956326089090267
+orders_orders-db,0.7300970976026671
+orders_payment,3.8867819034053173
+orders_shipping,1123.9598068916368
+orders_user,2.150636366753476
+queue-master_rabbitmq,2.9444156925268605
+shipping_rabbitmq,0.0001478436039392215
+unknown_front-end,
+user_user-db,103.8130935104357
