@@ -4,10 +4,10 @@ array=(MicroRCA_online.py Microscope_online.py tRCA_online.py)
 
 ./headless_locust.sh &
 
-echo '----- RCA will be started in 150s ... ----'
+echo '----- RCA will be started in 3min ... ----'
 
 function countdown() {
-  for i in $(seq 150 -5 5)
+  for i in $(seq 180 -5 5)
   do
     echo -e "${i}s left"
     sleep 5
@@ -22,7 +22,7 @@ do
   kubectl apply -f /root/zik/microservices-demo/zik-test/sock-shop/$MS-delay.yaml
 
   n=0
-  while (($n<5))
+  while (($n<10))
   do
     for var in ${array[@]}
     do
