@@ -1,1 +1,12 @@
 ,source,destination
+0,orders,orders-db
+1,queue-master,rabbitmq
+2,orders,user
+3,carts,carts-db
+4,front-end,catalogue
+5,orders,payment
+6,shipping,rabbitmq
+7,front-end,user
+8,user,user-db
+9,catalogue,catalogue-db
+10,unknown,front-end

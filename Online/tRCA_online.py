@@ -14,6 +14,7 @@ import networkx as nx
 import argparse
 import csv
 import itertools
+import os
 
 from sklearn.cluster import Birch
 from sklearn import preprocessing
@@ -119,7 +120,7 @@ def latency_destination_50(prom_url, start_time, end_time, faults_name):
                                     'end': end_time,
                                     'step': metric_step})
     results = response.json()['data']['result']
-    print(results)
+    # print(results)
 
     for result in results:
         dest_svc = result['metric']['destination_workload']
@@ -487,11 +488,13 @@ def calc_score(faults_name):
     latency_df_destination.loc['all'] = latency_df_destination.apply(lambda x:x.sum())
 
     # 获取 locust 数据
-    locust_filename = './example_stats_history.csv'
+
+    locust_filename = 'example_stats_history.csv'
+
     locust_df = pd.read_csv(locust_filename)
 
     locust_latency_50 = []
-    print(len(locust_df))
+    # print(len(locust_df))
     if (len(locust_df) < 31):
         locust_latency_50 = locust_df['50%'].tolist()
     else:
@@ -506,7 +509,10 @@ def calc_score(faults_name):
     df_data = pd.DataFrame(columns=['svc', 'ratio'])
 
     # ratio 就是 source / destination
-    df_data = (latency_df_source.loc['all'] / avg_locust_latency ) / latency_df_destination.loc['all']
+    df_data = (latency_df_source.loc['all'] / latency_df_destination.loc['all']) * (latency_df_source.loc['all'] + latency_df_destination.loc['all']) / avg_locust_latency
+
+    # latency_df_source.loc['all'].to_csv('source.csv')
+    # latency_df_destination.loc['all'].to_csv('destination.csv')
 
     df_data.to_csv('%s_latency_ratio.csv'%faults_name, index=[0])
     # print('\ndf_data: ', df_data)
@@ -547,7 +553,7 @@ def calc_score(faults_name):
     score = (up / down).dropna().to_dict()
     score = score[0]
 
-    # print('\nscore:', score)
+    print('\nscore:', score)
 
     # score 和 服务 进行对应
     score_list = []
@@ -557,7 +563,7 @@ def calc_score(faults_name):
 
     score_arr = np.array(score_list)
 
-    # print(score_arr)
+    print('\nscore_arr: ', score_arr)
 
     # 归一化处理
     z_score = []
@@ -565,7 +571,7 @@ def calc_score(faults_name):
         x = float(x - score_arr.mean())/score_arr.std() + 0.5
         z_score.append(x)
     
-    # print('\nz_score: ', z_score)
+    print('\nz_score: ', z_score)
 
     n = 0
     for svc in score:

@@ -1,1 +1,17 @@
-Unnamed: 0,
+,all
+Unnamed: 0,inf
+carts_carts-db,inf
+catalogue_catalogue-db,
+front-end_carts,
+front-end_catalogue,
+front-end_orders,
+front-end_user,
+orders_carts,
+orders_orders-db,inf
+orders_payment,
+orders_shipping,
+orders_user,
+queue-master_rabbitmq,inf
+shipping_rabbitmq,inf
+unknown_front-end,
+user_user-db,inf
