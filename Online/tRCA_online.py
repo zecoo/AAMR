@@ -484,9 +484,27 @@ def calc_score(faults_name):
     # 加和 destination
     latency_df_destination.loc['all'] = latency_df_destination.apply(lambda x:x.sum())
 
+    # 获取 locust 数据
+    locust_filename = './Online/example_stats_history.csv'
+    locust_df = pd.read_csv(locust_filename)
+
+    locust_latency_50 = []
+    print(len(locust_df))
+    if (len(locust_df) < 31):
+        locust_latency_50 = locust_df['50%'].tolist()
+    else:
+        locust_latency_50 = locust_df['50%'][-31:0].tolist()
+    
+    locust_latency_50 = np.nan_to_num(locust_latency_50)
+    print('\n50:', locust_latency_50)
+
+    avg_locust_latency = mean(locust_latency_50)
+    print('\navg:', avg_locust_latency)
+
     df_data = pd.DataFrame(columns=['svc', 'ratio'])
+
     # ratio 就是 source / destination
-    df_data = latency_df_source.loc['all'] / latency_df_destination.loc['all']
+    df_data = (latency_df_source.loc['all'] / latency_df_destination.loc['all']) / avg_locust_latency
 
     df_data.to_csv('%s_latency_ratio.csv'%faults_name, index=[0])
     # print('\ndf_data: ', df_data)

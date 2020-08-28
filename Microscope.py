@@ -329,13 +329,20 @@ def calc_sim(faults_name):
     # 获取 locust 数据
     locust_filename = './Online/example_stats_history.csv'
     locust_df = pd.read_csv(locust_filename)
-    print(locust_df)
 
-    locust_latency_50 = locust_df['50%'][-31:].tolist()
-    print(len(locust_latency_50))
+    locust_latency_50 = []
+    print(len(locust_df))
+    if (len(locust_df) < 31):
+        locust_latency_50 = locust_df['50%'].tolist()
+    else:
+        locust_latency_50 = locust_df['50%'][-31:0].tolist()
+    
+    locust_latency_50 = np.nan_to_num(locust_latency_50)
+    print('\n50:', locust_latency_50)
+
+    fklen = len(locust_latency_50)
 
     svc_latency_df = pd.DataFrame()
-    print(latency_df)
 
     for key in latency_df.keys():
         if 'db' in key or 'rabbitmq' in key or 'Unnamed' in key:
@@ -350,7 +357,6 @@ def calc_sim(faults_name):
     # print(svc_latency_df)
 
     score = {}
-
     for key in svc_latency_df.keys():
         # len : 31
         # print(len(svc_latency_df[key].tolist()))
@@ -358,8 +364,7 @@ def calc_sim(faults_name):
         # 输出:(r, p)
         # r:相关系数[-1，1]之间
         # p:p值越小
-
-        score.update({key: pearsonr(svc_latency_df[key].tolist(), locust_latency_50)[0]})
+        score.update({key: pearsonr(svc_latency_df[key].tolist()[-fklen:], locust_latency_50)[0]})
     
     score = sorted(score.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
     print(score)

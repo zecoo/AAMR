@@ -13,7 +13,7 @@ import itertools
 
 from sklearn.cluster import Birch
 from sklearn import preprocessing
-
+from numpy import mean
 
 smoothing_window = 12
 
@@ -213,10 +213,31 @@ def calc_score(faults_name):
 
     df_data = pd.DataFrame(columns=['svc', 'ratio'])
 
-    # 防止 payment 这样很小的值在 personalization 里很大
-    weight = 0.1
-    # ratio 就是 source / destination
-    df_data = latency_df_source.loc['all'] / latency_df_destination.loc['all']
+    # 防止 payment 这样很小的值在 personalization 里很大 
+    # 不一定要用 locust 里面的数据，获取所有服务的平均相应时间就可以了
+    # 算了还是用 locsut 的数据吧
+
+    # 获取 locust 数据
+    locust_filename = './Online/example_stats_history.csv'
+    locust_df = pd.read_csv(locust_filename)
+
+    locust_latency_50 = []
+    print(len(locust_df))
+    if (len(locust_df) < 30):
+        locust_latency_50 = locust_df['50%'].tolist()
+    else:
+        locust_latency_50 = locust_df['50%'][-31:10].tolist()
+    
+    locust_latency_50 = np.nan_to_num(locust_latency_50) 
+    
+    print('\n50:', locust_latency_50)
+    print('\n', len(locust_latency_50))
+
+    avg_locust_latency = mean(locust_latency_50)
+    print('\navg:', avg_locust_latency)
+
+    # df_data 表示的是 ratio 就是 source / destination
+    df_data = (latency_df_source.loc['all'] / latency_df_destination.loc['all']) / avg_locust_latency
 
     df_data.to_csv('%s_latency_ratio.csv'%faults_name, index=[0])
     # print('\ndf_data: ', df_data)
@@ -357,7 +378,7 @@ if __name__ == '__main__':
     
     # faults_name = './faults/1/svc_latency/catalogue'
     
-    faults_name = './Online/data/1'
+    faults_name = './Online/data/user'
     latency_df = rt_invocations(faults_name)
     
     # if (target == 'payment' or target  == 'shipping') and fault_type != 'svc_latency':
