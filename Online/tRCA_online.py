@@ -17,6 +17,8 @@ import itertools
 
 from sklearn.cluster import Birch
 from sklearn import preprocessing
+from numpy import mean
+
 #import seaborn as sns
 
 ## =========== Data collection ===========
@@ -485,7 +487,7 @@ def calc_score(faults_name):
     latency_df_destination.loc['all'] = latency_df_destination.apply(lambda x:x.sum())
 
     # 获取 locust 数据
-    locust_filename = './Online/example_stats_history.csv'
+    locust_filename = './example_stats_history.csv'
     locust_df = pd.read_csv(locust_filename)
 
     locust_latency_50 = []
@@ -493,7 +495,7 @@ def calc_score(faults_name):
     if (len(locust_df) < 31):
         locust_latency_50 = locust_df['50%'].tolist()
     else:
-        locust_latency_50 = locust_df['50%'][-31:0].tolist()
+        locust_latency_50 = locust_df['50%'][-31:].tolist()
     
     locust_latency_50 = np.nan_to_num(locust_latency_50)
     print('\n50:', locust_latency_50)
@@ -504,7 +506,7 @@ def calc_score(faults_name):
     df_data = pd.DataFrame(columns=['svc', 'ratio'])
 
     # ratio 就是 source / destination
-    df_data = (latency_df_source.loc['all'] / latency_df_destination.loc['all']) / avg_locust_latency
+    df_data = (latency_df_source.loc['all'] / avg_locust_latency ) / latency_df_destination.loc['all']
 
     df_data.to_csv('%s_latency_ratio.csv'%faults_name, index=[0])
     # print('\ndf_data: ', df_data)

@@ -1,0 +1,42 @@
+tRCA_online.py:511: FutureWarning: The signature of `Series.to_csv` was aligned to that of `DataFrame.to_csv`, and argument 'header' will change its default value from False to True: please pass an explicit value to suppress this warning.
+  df_data.to_csv('%s_latency_ratio.csv'%faults_name, index=[0])
+Traceback (most recent call last):
+  File "tRCA_online.py", line 715, in <module>
+    anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
+  File "tRCA_online.py", line 638, in anomaly_subgraph
+    personalization = calc_score(faults_name)
+  File "tRCA_online.py", line 537, in calc_score
+    for path in nx.all_simple_paths(DG, source='front-end', target=fault):
+  File "/usr/python3/lib/python3.7/site-packages/networkx/algorithms/simple_paths.py", line 231, in all_simple_paths
+    raise nx.NodeNotFound('source node %s not in graph' % source)
+networkx.exception.NodeNotFound: source node front-end not in graph
+tRCA_online.py:511: FutureWarning: The signature of `Series.to_csv` was aligned to that of `DataFrame.to_csv`, and argument 'header' will change its default value from False to True: please pass an explicit value to suppress this warning.
+  df_data.to_csv('%s_latency_ratio.csv'%faults_name, index=[0])
+Traceback (most recent call last):
+  File "tRCA_online.py", line 715, in <module>
+    anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
+  File "tRCA_online.py", line 638, in anomaly_subgraph
+    personalization = calc_score(faults_name)
+  File "tRCA_online.py", line 537, in calc_score
+    for path in nx.all_simple_paths(DG, source='front-end', target=fault):
+  File "/usr/python3/lib/python3.7/site-packages/networkx/algorithms/simple_paths.py", line 231, in all_simple_paths
+    raise nx.NodeNotFound('source node %s not in graph' % source)
+networkx.exception.NodeNotFound: source node front-end not in graph
+tRCA_online.py:511: FutureWarning: The signature of `Series.to_csv` was aligned to that of `DataFrame.to_csv`, and argument 'header' will change its default value from False to True: please pass an explicit value to suppress this warning.
+  df_data.to_csv('%s_latency_ratio.csv'%faults_name, index=[0])
+Traceback (most recent call last):
+  File "tRCA_online.py", line 715, in <module>
+    anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
+  File "tRCA_online.py", line 638, in anomaly_subgraph
+    personalization = calc_score(faults_name)
+  File "tRCA_online.py", line 537, in calc_score
+    for path in nx.all_simple_paths(DG, source='front-end', target=fault):
+  File "/usr/python3/lib/python3.7/site-packages/networkx/algorithms/simple_paths.py", line 231, in all_simple_paths
+    raise nx.NodeNotFound('source node %s not in graph' % source)
+networkx.exception.NodeNotFound: source node front-end not in graph
+tRCA_online.py:511: FutureWarning: The signature of `Series.to_csv` was aligned to that of `DataFrame.to_csv`, and argument 'header' will change its default value from False to True: please pass an explicit value to suppress this warning.
+  df_data.to_csv('%s_latency_ratio.csv'%faults_name, index=[0])
+tRCA_online.py:511: FutureWarning: The signature of `Series.to_csv` was aligned to that of `DataFrame.to_csv`, and argument 'header' will change its default value from False to True: please pass an explicit value to suppress this warning.
+  df_data.to_csv('%s_latency_ratio.csv'%faults_name, index=[0])
+tRCA_online.py:511: FutureWarning: The signature of `Series.to_csv` was aligned to that of `DataFrame.to_csv`, and argument 'header' will change its default value from False to True: please pass an explicit value to suppress this warning.
+  df_data.to_csv('%s_latency_ratio.csv'%faults_name, index=[0])

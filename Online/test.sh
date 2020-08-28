@@ -21,7 +21,7 @@ do
   n=0
   while (($n<3))
   do
-    python3 Microscope_online.py --fault $MS 2>&1 | tee tRCA.log &
+    python3 tRCA_online.py --fault $MS &
     n=$((n+1))
     sleep 10
   done
