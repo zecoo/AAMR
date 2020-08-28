@@ -1,0 +1,5 @@
+Fri Aug 28 16:04:50 2020,user,svc_latency,[]
+Fri Aug 28 16:05:04 2020,user,svc_latency,"[('user', 0.5405396329646597), ('front-end', 0.29589842407777583), ('orders', 0.16356194295756454), ('user-db', 0.0)]"
+Fri Aug 28 16:05:11 2020,user,svc_latency,"[('user', 0.37386714199935556), ('front-end', 0.3735697535725049), ('orders', 0.2525631044281397), ('user-db', 0.0), ('payment', 0.0), ('carts', 0.0), ('orders-db', 0.0), ('shipping', 0.0)]"
+Fri Aug 28 16:05:21 2020,user,svc_latency,"[('user', 0.40417683808340793), ('front-end', 0.366608735655049), ('orders', 0.22921442626154326), ('carts', 0.0), ('payment', 0.0), ('shipping', 0.0), ('orders-db', 0.0), ('user-db', 0.0)]"
+Fri Aug 28 16:05:26 2020,user,svc_latency,"[('user', 0.42916310922933276), ('front-end', 0.36086787403874643), ('orders', 0.20996901673192098), ('user-db', 0.0), ('payment', 0.0), ('shipping', 0.0), ('orders-db', 0.0), ('carts', 0.0)]"
