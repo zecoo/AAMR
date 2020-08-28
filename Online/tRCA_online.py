@@ -501,10 +501,10 @@ def calc_score(faults_name):
         locust_latency_50 = locust_df['50%'][-31:].tolist()
     
     locust_latency_50 = np.nan_to_num(locust_latency_50)
-    print('\n50:', locust_latency_50)
+    # print('\n50:', locust_latency_50)
 
     avg_locust_latency = mean(locust_latency_50)
-    print('\navg:', avg_locust_latency)
+    # print('\navg:', avg_locust_latency)
 
     df_data = pd.DataFrame(columns=['svc', 'ratio'])
 
@@ -553,7 +553,7 @@ def calc_score(faults_name):
     score = (up / down).dropna().to_dict()
     score = score[0]
 
-    print('\nscore:', score)
+    # print('\nscore:', score)
 
     # score 和 服务 进行对应
     score_list = []
@@ -563,7 +563,7 @@ def calc_score(faults_name):
 
     score_arr = np.array(score_list)
 
-    print('\nscore_arr: ', score_arr)
+    # print('\nscore_arr: ', score_arr)
 
     # 归一化处理
     z_score = []
@@ -571,7 +571,7 @@ def calc_score(faults_name):
         x = float(x - score_arr.mean())/score_arr.std() + 0.5
         z_score.append(x)
     
-    print('\nz_score: ', z_score)
+    # print('\nz_score: ', z_score)
 
     n = 0
     for svc in score:

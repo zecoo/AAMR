@@ -1,1 +1,1 @@
-ps aux | grep locust | awk '{print $2}'
+ps aux | grep locust

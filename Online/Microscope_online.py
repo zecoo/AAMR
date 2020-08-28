@@ -580,7 +580,7 @@ def calc_sim(faults_name):
     latency_filename = faults_name + '_latency_source_50.csv'  # inbound
     latency_df_source = pd.read_csv(latency_filename)
     # print("\nfilename")
-    print(latency_filename)
+    # print(latency_filename)
 
     latency_filename = faults_name + '_latency_destination_50.csv' # outbound
     latency_df_destination = pd.read_csv(latency_filename) 
@@ -595,20 +595,20 @@ def calc_sim(faults_name):
     # 获取 locust 数据
     locust_filename = './example_stats_history.csv'
     locust_df = pd.read_csv(locust_filename)
-    print(locust_df)
+    # print(locust_df)
 
     locust_latency_50 = []
-    print(len(locust_df))
+    # print(len(locust_df))
     if (len(locust_df) < 31):
         locust_latency_50 = locust_df['50%'].tolist()
     else:
         locust_latency_50 = locust_df['50%'][-31:].tolist()
     
     locust_latency_50 = np.nan_to_num(locust_latency_50)
-    print('\n50:', locust_latency_50)
+    # print('\n50:', locust_latency_50)
 
     fklen = len(locust_latency_50)
-    print('\nfklen: ', fklen)
+    # print('\nfklen: ', fklen)
 
     svc_latency_df = pd.DataFrame()
 
@@ -622,7 +622,7 @@ def calc_sim(faults_name):
             else:
                 svc_latency_df[svc_name] = latency_df[key]
 
-    print('\nsvc_len:', len(svc_latency_df))
+    # print('\nsvc_len:', len(svc_latency_df))
 
     score = {}
     for key in svc_latency_df.keys():
@@ -635,7 +635,7 @@ def calc_sim(faults_name):
         score.update({key: pearsonr(svc_latency_df[key].tolist()[-fklen:], locust_latency_50)[0]})
     
     score = sorted(score.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
-    print(score)
+    # print(score)
 
     corr_df = latency_df.corr()
     # corr_df[corr_df] = np.nan
