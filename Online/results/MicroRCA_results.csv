@@ -1,0 +1,60 @@
+Fri Aug 28 17:05:50 2020,user,svc_latency,[]
+Fri Aug 28 17:06:02 2020,user,svc_latency,[]
+Fri Aug 28 17:06:09 2020,user,svc_latency,[]
+Fri Aug 28 17:06:21 2020,user,svc_latency,"[('front-end', 0.4003802275536252), ('orders', 0.3424572068400311), ('user', 0.25716256560634365), ('user-db', 0.0), ('carts', 0.0), ('orders-db', 0.0), ('payment', 0.0), ('shipping', 0.0)]"
+Fri Aug 28 17:06:30 2020,user,svc_latency,"[('front-end', 0.3982617313527275), ('orders', 0.3353506274293044), ('user', 0.26638764121796754), ('user-db', 0.0), ('orders-db', 0.0), ('shipping', 0.0), ('carts', 0.0), ('payment', 0.0)]"
+Fri Aug 28 17:06:39 2020,user,svc_latency,"[('front-end', 0.3784315831627595), ('user', 0.3527082848469606), ('orders', 0.2688601319902801), ('orders-db', 0.0), ('shipping', 0.0), ('carts', 0.0), ('payment', 0.0), ('user-db', 0.0)]"
+Fri Aug 28 17:06:49 2020,user,svc_latency,"[('front-end', 0.3794971555573267), ('user', 0.34807067755712984), ('orders', 0.27243216688554367), ('user-db', 0.0), ('payment', 0.0), ('shipping', 0.0), ('orders-db', 0.0), ('carts', 0.0)]"
+Fri Aug 28 17:07:00 2020,user,svc_latency,"[('user', 0.3862087371235396), ('front-end', 0.37073588566102256), ('orders', 0.24305537721543774), ('user-db', 0.0), ('shipping', 0.0), ('payment', 0.0), ('carts', 0.0), ('orders-db', 0.0)]"
+Fri Aug 28 17:07:10 2020,user,svc_latency,"[('front-end', 0.39464260461887113), ('orders', 0.3232161532741722), ('user', 0.2821412421069569), ('user-db', 0.0), ('carts', 0.0), ('orders-db', 0.0), ('payment', 0.0), ('shipping', 0.0)]"
+Fri Aug 28 17:07:20 2020,user,svc_latency,"[('front-end', 0.41014674740398765), ('orders', 0.3752020631200104), ('user', 0.2146511894760021), ('user-db', 0.0), ('shipping', 0.0), ('payment', 0.0), ('carts', 0.0), ('orders-db', 0.0)]"
+Fri Aug 28 17:10:31 2020,catalogue,svc_latency,[]
+Fri Aug 28 17:10:41 2020,catalogue,svc_latency,[]
+Fri Aug 28 17:10:52 2020,catalogue,svc_latency,[]
+Fri Aug 28 17:11:01 2020,catalogue,svc_latency,[]
+Fri Aug 28 17:11:12 2020,catalogue,svc_latency,"[('catalogue', 0.5405398932771217), ('front-end', 0.45946010672287846), ('catalogue-db', 0.0)]"
+Fri Aug 28 17:11:19 2020,catalogue,svc_latency,"[('catalogue', 0.5405398932771217), ('front-end', 0.45946010672287846), ('catalogue-db', 0.0)]"
+Fri Aug 28 17:11:31 2020,catalogue,svc_latency,"[('catalogue', 0.5405398932771217), ('front-end', 0.45946010672287846), ('catalogue-db', 0.0)]"
+Fri Aug 28 17:11:41 2020,catalogue,svc_latency,"[('catalogue', 0.5405398932771217), ('front-end', 0.45946010672287846), ('catalogue-db', 0.0)]"
+Fri Aug 28 17:11:51 2020,catalogue,svc_latency,"[('catalogue', 0.5405398932771217), ('front-end', 0.45946010672287846), ('catalogue-db', 0.0)]"
+Fri Aug 28 17:12:02 2020,catalogue,svc_latency,"[('catalogue', 0.5405398932771217), ('front-end', 0.45946010672287846), ('catalogue-db', 0.0)]"
+Fri Aug 28 17:15:10 2020,order,svc_latency,[]
+Fri Aug 28 17:15:21 2020,order,svc_latency,[]
+Fri Aug 28 17:15:31 2020,order,svc_latency,[]
+Fri Aug 28 17:15:39 2020,order,svc_latency,[]
+Fri Aug 28 17:15:50 2020,order,svc_latency,[]
+Fri Aug 28 17:16:02 2020,order,svc_latency,[]
+Fri Aug 28 17:16:11 2020,order,svc_latency,[]
+Fri Aug 28 17:16:20 2020,order,svc_latency,[]
+Fri Aug 28 17:16:31 2020,order,svc_latency,[]
+Fri Aug 28 17:16:41 2020,order,svc_latency,[]
+Fri Aug 28 17:19:50 2020,payment,svc_latency,[]
+Fri Aug 28 17:20:04 2020,payment,svc_latency,[]
+Fri Aug 28 17:20:12 2020,payment,svc_latency,[]
+Fri Aug 28 17:20:21 2020,payment,svc_latency,"[('orders', 0.35185779153703606), ('payment', 0.34906029831002344), ('front-end', 0.2990819101529402), ('carts', 0.0), ('orders-db', 0.0), ('shipping', 0.0), ('user', 0.0)]"
+Fri Aug 28 17:20:31 2020,payment,svc_latency,"[('payment', 0.35740053510273273), ('orders', 0.34735077836068484), ('front-end', 0.29524868653658276), ('orders-db', 0.0), ('shipping', 0.0), ('user', 0.0), ('carts', 0.0)]"
+Fri Aug 28 17:20:42 2020,payment,svc_latency,"[('payment', 0.3732582199259852), ('orders', 0.3387793876627783), ('front-end', 0.28796239241123656), ('carts', 0.0), ('user', 0.0), ('shipping', 0.0), ('orders-db', 0.0)]"
+Fri Aug 28 17:20:49 2020,payment,svc_latency,"[('payment', 0.3874317453644605), ('orders', 0.33111939191687434), ('front-end', 0.2814488627186651), ('carts', 0.0), ('shipping', 0.0), ('orders-db', 0.0), ('user', 0.0)]"
+Fri Aug 28 17:21:02 2020,payment,svc_latency,"[('payment', 0.36841428072984694), ('orders', 0.341397288070695), ('front-end', 0.2901884311994582), ('carts', 0.0), ('user', 0.0), ('shipping', 0.0), ('orders-db', 0.0)]"
+Fri Aug 28 17:21:11 2020,payment,svc_latency,"[('payment', 0.37734794003531325), ('orders', 0.3365690706077066), ('front-end', 0.28608298935698), ('orders-db', 0.0), ('shipping', 0.0), ('user', 0.0), ('carts', 0.0)]"
+Fri Aug 28 17:21:23 2020,payment,svc_latency,"[('payment', 0.38202780924431223), ('orders', 0.3340398310911912), ('front-end', 0.28393235966449676), ('orders-db', 0.0), ('carts', 0.0), ('shipping', 0.0), ('user', 0.0)]"
+Fri Aug 28 17:24:30 2020,carts,svc_latency,[]
+Fri Aug 28 17:24:41 2020,carts,svc_latency,[]
+Fri Aug 28 17:24:53 2020,carts,svc_latency,"[('orders', 0.5405420020268137), ('front-end', 0.45945799797318637), ('user', 0.0), ('shipping', 0.0), ('carts', 0.0), ('orders-db', 0.0), ('payment', 0.0)]"
+Fri Aug 28 17:25:01 2020,carts,svc_latency,"[('front-end', 0.4087028279473834), ('orders', 0.37035258853826464), ('carts', 0.2209445835143523), ('carts-db', 0.0), ('shipping', 0.0), ('payment', 0.0), ('user', 0.0), ('orders-db', 0.0)]"
+Fri Aug 28 17:25:12 2020,carts,svc_latency,"[('front-end', 0.3994374159839269), ('orders', 0.3392930361621562), ('carts', 0.2612695478539172), ('carts-db', 0.0), ('shipping', 0.0), ('payment', 0.0), ('orders-db', 0.0), ('user', 0.0)]"
+Fri Aug 28 17:25:22 2020,carts,svc_latency,"[('front-end', 0.39359636885262056), ('orders', 0.31971156309070414), ('carts', 0.28669206805667513), ('orders-db', 0.0), ('payment', 0.0), ('shipping', 0.0), ('user', 0.0), ('carts-db', 0.0)]"
+Fri Aug 28 17:25:32 2020,carts,svc_latency,"[('front-end', 0.39082835091167784), ('orders', 0.3104262641769373), ('carts', 0.2987453849113847), ('shipping', 0.0), ('payment', 0.0), ('orders-db', 0.0), ('user', 0.0), ('carts-db', 0.0)]"
+Fri Aug 28 17:25:41 2020,carts,svc_latency,"[('front-end', 0.38370147570943053), ('carts', 0.32977610216303765), ('orders', 0.28652242212753154), ('payment', 0.0), ('shipping', 0.0), ('orders-db', 0.0), ('user', 0.0), ('carts-db', 0.0)]"
+Fri Aug 28 17:25:52 2020,carts,svc_latency,"[('front-end', 0.38126843503527263), ('carts', 0.34036138342569844), ('orders', 0.2783701815390289), ('carts-db', 0.0), ('payment', 0.0), ('shipping', 0.0), ('user', 0.0), ('orders-db', 0.0)]"
+Fri Aug 28 17:26:01 2020,carts,svc_latency,"[('front-end', 0.39656624438414917), ('orders', 0.32966366386271795), ('carts', 0.27377009175313255), ('payment', 0.0), ('shipping', 0.0), ('orders-db', 0.0), ('user', 0.0), ('carts-db', 0.0)]"
+Fri Aug 28 17:29:13 2020,shipping,svc_latency,[]
+Fri Aug 28 17:29:21 2020,shipping,svc_latency,[]
+Fri Aug 28 17:29:34 2020,shipping,svc_latency,"[('shipping', 0.5405398932771217), ('orders', 0.45946010672287846), ('rabbitmq', 0.0)]"
+Fri Aug 28 17:29:42 2020,shipping,svc_latency,"[('orders', 0.39657844984575247), ('front-end', 0.33709486826603063), ('shipping', 0.2663266818882166), ('orders-db', 0.0), ('user', 0.0), ('carts', 0.0), ('payment', 0.0), ('rabbitmq', 0.0)]"
+Fri Aug 28 17:29:52 2020,shipping,svc_latency,"[('orders', 0.37849281859913403), ('front-end', 0.3217197384512489), ('shipping', 0.2997874429496169), ('rabbitmq', 0.0), ('carts', 0.0), ('user', 0.0), ('payment', 0.0), ('orders-db', 0.0)]"
+Fri Aug 28 17:30:02 2020,shipping,svc_latency,"[('orders', 0.3898186442134164), ('front-end', 0.3313433799878019), ('shipping', 0.27883797579878183), ('rabbitmq', 0.0), ('orders-db', 0.0), ('carts', 0.0), ('payment', 0.0), ('user', 0.0)]"
+Fri Aug 28 17:30:13 2020,shipping,svc_latency,"[('orders', 0.4017439729730269), ('front-end', 0.3414822529293527), ('shipping', 0.2567737740976202), ('payment', 0.0), ('orders-db', 0.0), ('user', 0.0), ('carts', 0.0), ('rabbitmq', 0.0)]"
+Fri Aug 28 17:30:27 2020,shipping,svc_latency,"[('orders', 0.427762514715043), ('front-end', 0.36359497653755474), ('shipping', 0.20864250874740214), ('payment', 0.0), ('user', 0.0), ('carts', 0.0), ('orders-db', 0.0), ('rabbitmq', 0.0)]"
+Fri Aug 28 17:30:33 2020,shipping,svc_latency,"[('orders', 0.48234952213817833), ('front-end', 0.4099955987269591), ('shipping', 0.1076548791348622), ('rabbitmq', 0.0), ('orders-db', 0.0), ('carts', 0.0), ('payment', 0.0), ('user', 0.0)]"
+Fri Aug 28 17:30:42 2020,shipping,svc_latency,"[('shipping', 0.37031008582458846), ('orders', 0.3403732225492071), ('front-end', 0.28931669162620427), ('rabbitmq', 0.0), ('payment', 0.0), ('carts', 0.0), ('user', 0.0), ('orders-db', 0.0)]"
