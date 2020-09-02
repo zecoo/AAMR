@@ -15,7 +15,7 @@ function countdown() {
   done
 }
 
-for MS in 'user' 'catalogue' 'order' 'payment' 'carts' 'shipping'
+for MS in 'user' 'catalogue' 'orders' 'payment' 'carts' 'shipping'
 do
   countdown
 
