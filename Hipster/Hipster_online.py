@@ -174,11 +174,13 @@ def svc_metrics(prom_url, start_time, end_time, faults_name):
 
     for result in results:
         df = pd.DataFrame()
-        svc = result['metric']['container_name']
+        # svc = result['metric']['container_name']
         pod_name = result['metric']['pod_name']
         nodename = result['metric']['instance']
 
         # print(svc)
+
+        svc = pod_name.split('-')[0]
         values = result['values']
 
         values = list(zip(*values))
@@ -453,14 +455,22 @@ def svc_personalization(svc, anomaly_graph, baseline_df, faults_name):
     num = 0
     for u, v, data in anomaly_graph.in_edges(svc, data=True):
         num = num + 1
+        if np.isnan(data['weight']):
+            data['weight'] = 1
+        print('\ndata.weight: ', data['weight'])
         edges_weight_avg = edges_weight_avg + data['weight']
 
     for u, v, data in anomaly_graph.out_edges(svc, data=True):
+        if np.isnan(data['weight']):
+            data['weight'] = 1
         if anomaly_graph.nodes[v]['type'] == 'service':
             num = num + 1
             edges_weight_avg = edges_weight_avg + data['weight']
 
     edges_weight_avg  = edges_weight_avg / num
+
+    print('\navg: ', edges_weight_avg)
+    print('\ncorr: ', max_corr)
 
     personalization = edges_weight_avg * max_corr
 
@@ -497,7 +507,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 
 #    print('edge df:', edge_df)
     nodes = set(nodes)
-#    print(nodes)
+    print('\nnodes: ', nodes)
 
     personalization = {}
     for node in DG.nodes():
@@ -547,6 +557,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 #        print(node, personalization[node])
 
     anomaly_graph = anomaly_graph.reverse(copy=True)
+    print('\nanomaly_graph: ', anomaly_graph.nodes)
 #
     edges = list(anomaly_graph.edges(data=True))
 
@@ -564,9 +575,10 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 #    plt.show()
 #
 ##    personalization['shipping'] = 2
-#    print('Personalization:', personalization)
+    
+    print('Personalization:', personalization)
 
-    anomaly_score = nx.pagerank(anomaly_graph, alpha=0.85, personalization=personalization, max_iter=10000)
+    anomaly_score = nx.pagerank(DG, alpha=0.85, personalization=personalization, max_iter=10000)
 
     anomaly_score = sorted(anomaly_score.items(), key=lambda x: x[1], reverse=True)
 
@@ -648,43 +660,3 @@ if __name__ == "__main__":
         writer = csv.writer(f)
         localtime = time.asctime( time.localtime(time.time()) )
         writer.writerow([localtime, fault, 'svc_latency', anomaly_score_new])
-
-# if __name__ == '__main__':
-#     args = parse_args()
-
-#     folder = args.folder
-#     len_second = args.length
-#     prom_url = args.url
-    
-#     faults_name = folder
-    
-#     end_time = time.time()
-#     start_time = end_time - len_second
-
-
-#     # Tuning parameters
-#     alpha = 0.55  
-#     ad_threshold = 0.045  
-
-#     latency_df_source = latency_source_50(prom_url, start_time, end_time, faults_name)
-#     latency_df_destination = latency_destination_50(prom_url, start_time, end_time, faults_name)
-#     latency_df = latency_df_destination.add(latency_df_source) 
-    
-    
-#     svc_metrics(prom_url, start_time, end_time, faults_name)
-    
-#     DG = mpg(prom_url, faults_name)
-
-#     # anomaly detection on response time of service invocation
-#     anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
-    
-#     # get the anomalous service
-#     anomaly_nodes = []
-#     for anomaly in anomalies:
-#         edge = anomaly.split('_')
-#         anomaly_nodes.append(edge[1])
-    
-#     anomaly_nodes = set(anomaly_nodes)
-     
-#     anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
-#     print(anomaly_score)
