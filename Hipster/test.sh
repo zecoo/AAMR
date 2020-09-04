@@ -2,8 +2,6 @@
 
 var='Hipster_online.py'
 
-./headless_locust.sh &
-
 echo '----- Locust started -----'
 echo '----- RCA will be started in 150s ... ----'
 
@@ -23,7 +21,7 @@ do
   kubectl apply -f /root/zik/fault-injection/hipster/$MS.yaml
 
   n=0
-  while (($n<5))
+  while (($n<10))
   do
     python3 $var --fault $MS &
     n=$((n+1))
