@@ -47,7 +47,7 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
     # print(end_time)
 
     response = requests.get(prom_url,
-                            params={'query': 'histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", destination_workload_namespace=\"sock-shop\"}[1m])) by (destination_workload, source_workload, le))',
+                            params={'query': 'histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", destination_workload_namespace=\"hipster\"}[1m])) by (destination_workload, source_workload, le))',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -115,7 +115,7 @@ def latency_destination_50(prom_url, start_time, end_time, faults_name):
     latency_df = pd.DataFrame()
 
     response = requests.get(prom_url,
-                            params={'query': 'histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", destination_workload_namespace=\"sock-shop\"}[1m])) by (destination_workload, source_workload, le))',
+                            params={'query': 'histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", destination_workload_namespace=\"hipster\"}[1m])) by (destination_workload, source_workload, le))',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -170,7 +170,7 @@ def latency_destination_50(prom_url, start_time, end_time, faults_name):
 # 但是感觉后面没有用到系统层面的 scv 文件啊
 def svc_metrics(prom_url, start_time, end_time, faults_name):
     response = requests.get(prom_url,
-                            params={'query': 'sum(rate(container_cpu_usage_seconds_total{namespace="sock-shop", container_name!~\'POD|istio-proxy|\'}[1m])) by (pod_name, instance, container_name)',
+                            params={'query': 'sum(rate(container_cpu_usage_seconds_total{namespace="hipster", container_name!~\'POD|istio-proxy|\'}[1m])) by (pod_name, instance, container_name)',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -186,6 +186,8 @@ def svc_metrics(prom_url, start_time, end_time, faults_name):
 
         # print(svc)
         values = result['values']
+
+        svc = pod_name.split('-')[0]
 
         values = list(zip(*values))
         if 'timestamp' not in df:
@@ -230,7 +232,7 @@ def svc_metrics(prom_url, start_time, end_time, faults_name):
 # ctn: container
 def ctn_network(prom_url, start_time, end_time, pod_name):
     response = requests.get(prom_url,
-                            params={'query': 'sum(rate(container_network_transmit_packets_total{namespace="sock-shop", pod_name="%s"}[1m])) / 1000 * sum(rate(container_network_transmit_packets_total{namespace="sock-shop", pod_name="%s"}[1m])) / 1000' % (pod_name, pod_name),
+                            params={'query': 'sum(rate(container_network_transmit_packets_total{namespace="hipster", pod_name="%s"}[1m])) / 1000 * sum(rate(container_network_transmit_packets_total{namespace="hipster", pod_name="%s"}[1m])) / 1000' % (pod_name, pod_name),
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -245,7 +247,7 @@ def ctn_network(prom_url, start_time, end_time, pod_name):
 
 def ctn_memory(prom_url, start_time, end_time, pod_name):
     response = requests.get(prom_url,
-                            params={'query': 'sum(rate(container_memory_working_set_bytes{namespace="sock-shop", pod_name="%s"}[1m])) / 1000 ' % pod_name,
+                            params={'query': 'sum(rate(container_memory_working_set_bytes{namespace="hipster", pod_name="%s"}[1m])) / 1000 ' % pod_name,
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -344,7 +346,7 @@ def mpg(prom_url, faults_name):
         DG.nodes[destination]['type'] = 'service'
 
     response = requests.get(prom_url,
-                            params={'query': 'sum(istio_requests_total{destination_workload_namespace=\'sock-shop\'}) by (source_workload, destination_workload)'
+                            params={'query': 'sum(istio_requests_total{destination_workload_namespace=\'hipster\'}) by (source_workload, destination_workload)'
                                     })
     results = response.json()['data']['result']
 
@@ -361,7 +363,7 @@ def mpg(prom_url, faults_name):
         DG.nodes[destination]['type'] = 'service'
 
     response = requests.get(prom_url,
-                            params={'query': 'sum(container_cpu_usage_seconds_total{namespace="sock-shop", container_name!~\'POD|istio-proxy\'}) by (instance, container)'
+                            params={'query': 'sum(container_cpu_usage_seconds_total{namespace="hipster", container_name!~\'POD|istio-proxy\'}) by (instance, container)'
                                     })
     results = response.json()['data']['result']
     for result in results:
@@ -677,8 +679,8 @@ if __name__ == "__main__":
     args = parse_args()
     faults_name = './data/' + args.fault
     len_second = 150
-    prom_url = 'http://39.100.0.61:30236/api/v1/query_range'
-    prom_url_no_range = 'http://39.100.0.61:30236/api/v1/query'
+    prom_url = 'http://39.100.0.61:32644/api/v1/query_range'
+    prom_url_no_range = 'http://39.100.0.61:32644/api/v1/query'
     
     end_time = time.time()
     start_time = end_time - len_second
@@ -735,46 +737,3 @@ if __name__ == "__main__":
         writer = csv.writer(f)
         localtime = time.asctime( time.localtime(time.time()) )
         writer.writerow([localtime, fault, 'svc_latency', anomaly_score_new])
-
-# if __name__ == '__main__':
-#     args = parse_args()
-
-#     folder = args.folder
-#     len_second = args.length
-#     prom_url = args.url
-    
-#     faults_name = folder
-    
-#     end_time = time.time()
-#     start_time = end_time - len_second
-
-
-#     # Tuning parameters
-#     alpha = 0.55  
-#     ad_threshold = 0.045  
-
-#     latency_df_source = latency_source_50(prom_url, start_time, end_time, faults_name)
-#     latency_df_destination = latency_destination_50(prom_url, start_time, end_time, faults_name)
-#     latency_df = latency_df_destination.add(latency_df_source) 
-    
-    
-#     svc_metrics(prom_url, start_time, end_time, faults_name)
-    
-#     DG = mpg(prom_url, faults_name)
-
-#     # anomaly detection on response time of service invocation
-#     anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
-    
-#     # get the anomalous service
-#     anomaly_nodes = []
-#     for anomaly in anomalies:
-#         edge = anomaly.split('_')
-#         anomaly_nodes.append(edge[1])
-    
-#     anomaly_nodes = set(anomaly_nodes)
-     
-#     anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
-#     print(anomaly_score)
-
-    
-
