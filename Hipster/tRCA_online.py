@@ -542,7 +542,7 @@ def calc_score(faults_name):
 
     # 添加 trace 信息
     # print('\nget trace: ')
-    for path in nx.all_simple_paths(DG, source='front-end', target=fault):
+    for path in nx.all_simple_paths(DG, source='frontend', target=fault):
         for i in list(itertools.combinations(path, 2)):
             single_trace = i[0] + '_' + i[1]
             if single_trace in index and fault not in single_trace:

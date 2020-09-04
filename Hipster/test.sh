@@ -1,6 +1,6 @@
 #!/bin/bash
 
-var='Microscope_online.py'
+var='tRCA_online.py'
 
 ./headless_locust.sh &
 echo '----- Locust started -----'
@@ -15,7 +15,7 @@ function countdown() {
   done
 }
 
-for MS in 'adservice' 'shippingservice'
+for MS in 'checkoutservice' 'cartservice'
 do
   countdown
 
