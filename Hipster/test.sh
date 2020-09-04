@@ -1,7 +1,8 @@
 #!/bin/bash
 
-var='Hipster_online.py'
+var='Microscope_online.py'
 
+./headless_locust.sh &
 echo '----- Locust started -----'
 echo '----- RCA will be started in 150s ... ----'
 
