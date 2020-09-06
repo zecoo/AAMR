@@ -6,7 +6,7 @@ echo '----- Locust started -----'
 echo '----- Test will be started in 150s ... ----'
 
 function countdown() {
-  for i in $(seq 150 -5 5)
+  for i in $(seq 180 -5 5)
   do
     echo -e "${i}s left"
     sleep 5
