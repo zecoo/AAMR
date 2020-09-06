@@ -255,21 +255,11 @@ if __name__ == "__main__":
     # Tuning parameters
     alpha = 0.55  
     ad_threshold = 0.045
-
-    # response = requests.get(prom_url,
-    #                         params={'query': 'sum(irate(istio_tcp_sent_bytes_total{reporter=\"source\"}[1m])) by (destination_workload, source_workload) / 1000',
-    #                                 'start': start_time,
-    #                                 'end': end_time,
-    #                                 'step': metric_step})
-    # results = response.json()['data']['result']
-
-    # print(results)
     
-    for i in range(0, 10):
-        faults_name = str(i)
+    for i in range(0, 15):
+        faults_name = faults_name + str(i)
         print(faults_name)
         latency_df_source = latency_source_50(prom_url, start_time, end_time, faults_name)
         latency_df_destination = latency_destination_50(prom_url, start_time, end_time, faults_name)
-        latency_df = latency_df_destination.add(latency_df_source)
         os.system('sleep 10')
         os.system('wait')
