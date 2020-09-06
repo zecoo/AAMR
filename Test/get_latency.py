@@ -266,7 +266,8 @@ if __name__ == "__main__":
     # print(results)
     
     for i in range(0, 10):
-        faults_name = faults_name + str(i)
+        faults_name = str(i)
+        print(faults_name)
         latency_df_source = latency_source_50(prom_url, start_time, end_time, faults_name)
         latency_df_destination = latency_destination_50(prom_url, start_time, end_time, faults_name)
         latency_df = latency_df_destination.add(latency_df_source)
