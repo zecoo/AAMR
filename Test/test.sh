@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./headless_locust &
+./headless_locust.sh &
 
 echo '----- Locust started -----'
 echo '----- Test will be started in 150s ... ----'
@@ -18,11 +18,11 @@ for MS in 'user' 'catalogue'
 do
   countdown
 
-  kubectl apply -f /root/zik/microservices-demo/zik-test/sock-shop/$MS-delay.yaml
+  kubectl apply -f /root/zik/fault-injection/sock-shop/$MS-delay.yaml
 
   python3 get_latency.py --fault $MS
 
-  kubectl delete -f /root/zik/microservices-demo/zik-test/sock-shop/$MS-delay.yaml
+  kubectl delete -f /root/zik/fault-injection/sock-shop/$MS-delay.yaml
 done
 
 wait
