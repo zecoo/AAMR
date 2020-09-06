@@ -248,18 +248,17 @@ if __name__ == "__main__":
     len_second = 150
     prom_url = 'http://39.100.0.61:32644/api/v1/query_range'
     prom_url_no_range = 'http://39.100.0.61:32644/api/v1/query'
-    
-    end_time = time.time()
-    start_time = end_time - len_second
 
     # Tuning parameters
     alpha = 0.55  
     ad_threshold = 0.045
     
     for i in range(0, 15):
+        os.system('sleep 10')
+        end_time = time.time()
+        start_time = end_time - len_second
         faults_name = faults_name + str(i)
         print(faults_name)
         latency_df_source = latency_source_50(prom_url, start_time, end_time, faults_name)
         latency_df_destination = latency_destination_50(prom_url, start_time, end_time, faults_name)
-        os.system('sleep 10')
         os.system('wait')
