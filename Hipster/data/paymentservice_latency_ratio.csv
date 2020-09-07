@@ -1,0 +1,27 @@
+Unnamed: 0,7.364253393665159
+carts_carts-db,0.0370764541583531
+cartservice_redis-cart,0.2829219105988357
+catalogue_catalogue-db,
+checkoutservice_cartservice,2.99002651593565
+checkoutservice_currencyservice,2.6300904977375565
+checkoutservice_emailservice,2.6300904977375565
+checkoutservice_paymentservice,29785.77488687783
+checkoutservice_productcatalogservice,2.6796101703902715
+checkoutservice_shippingservice,2.6300904977375565
+front-end_catalogue,
+front-end_user,
+frontend_adservice,2.8191396857400974
+frontend_cartservice,3.144635322377178
+frontend_checkoutservice,425.04141079508724
+frontend_currencyservice,2.7120562581788277
+frontend_productcatalogservice,2.6753587371168277
+frontend_recommendationservice,4.603204501410872
+frontend_shippingservice,2.670799185730397
+orders_orders-db,0.0370764541583531
+orders_payment,
+orders_user,
+queue-master_rabbitmq,8.599270011034719e-05
+recommendationservice_productcatalogservice,2.6529164472461986
+shipping_rabbitmq,4.794734677087619e-05
+unknown_frontend,
+user_user-db,0.013166262432818652
