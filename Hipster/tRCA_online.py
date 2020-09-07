@@ -475,7 +475,7 @@ def node_weight(svc, anomaly_graph, baseline_df, faults_name):
 
 def calc_score(faults_name):
     
-    fault = faults_name.replace('./MicroRCA_Online/data/','')
+    fault = faults_name.replace('./data/', '')
 
     latency_filename = faults_name + '_latency_source_50.csv'  # inbound
     latency_df_source = pd.read_csv(latency_filename)
@@ -660,7 +660,7 @@ def parse_args():
         description='Root cause analysis for microservices')
 
     parser.add_argument('--fault', type=str, required=False,
-                        default='user',
+                        default='checkoutservice',
                         help='folder name to store csv file')
     
     # 150s 每隔 5s 取一次数据 所以 csv 文件里一共有 30 行
@@ -689,14 +689,6 @@ if __name__ == "__main__":
     alpha = 0.55  
     ad_threshold = 0.045
 
-    # response = requests.get(prom_url,
-    #                         params={'query': 'sum(irate(istio_tcp_sent_bytes_total{reporter=\"source\"}[1m])) by (destination_workload, source_workload) / 1000',
-    #                                 'start': start_time,
-    #                                 'end': end_time,
-    #                                 'step': metric_step})
-    # results = response.json()['data']['result']
-
-    # print(results)
 
     latency_df_source = latency_source_50(prom_url, start_time, end_time, faults_name)
     latency_df_destination = latency_destination_50(prom_url, start_time, end_time, faults_name)

@@ -577,7 +577,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 
 
 def calc_sim(faults_name):
-    fault = faults_name.replace('./Online/data/','')
+    fault = faults_name.replace('./data/','')
 
     latency_filename = faults_name + '_latency_source_50.csv'  # inbound
     latency_df_source = pd.read_csv(latency_filename)
