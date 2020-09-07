@@ -619,9 +619,6 @@ def calc_sim(faults_name):
         new_locust_df = locust_df['50%'][-latency_len:]
     new_locust_df = np.nan_to_num(new_locust_df)
 
-    print(len(new_latency_df))
-    print(len(new_locust_df))
-
     DG = mpg(prom_url_no_range, faults_name)
 
     score = {}
@@ -633,7 +630,6 @@ def calc_sim(faults_name):
         # r:相关系数[-1，1]之间
         # p:p值越小
         
-        print(key)
         degree = DG.degree(key)
         pearson_sim = pearsonr(new_latency_df[key].tolist(), new_locust_df)[0]
         score.update({key: pearson_sim / degree})
