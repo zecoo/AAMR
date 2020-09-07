@@ -17,7 +17,7 @@ function countdown() {
 
 for MS in 'checkoutservice' 'cartservice'
 do
-  # countdown
+  countdown
 
   kubectl apply -f /root/zik/fault-injection/hipster/$MS.yaml
 
