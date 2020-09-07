@@ -16,7 +16,11 @@
 
 import random
 import time
+import locust.stats
 from locust import HttpUser, between, task
+
+locust.stats.CSV_STATS_INTERVAL_SEC = 5 # default is 1 second
+locust.stats.CSV_STATS_FLUSH_INTERVAL_SEC = 5 # Determines how often the data is flushed to disk, default is 10 seconds
 
 products = [
 '0PUK6V6EV0',

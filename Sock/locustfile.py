@@ -7,7 +7,7 @@ from locust.clients import HttpSession
 import locust.stats
 
 locust.stats.CSV_STATS_INTERVAL_SEC = 5 # default is 1 second
-locust.stats.CSV_STATS_FLUSH_INTERVAL_SEC = 10 # Determines how often the data is flushed to disk, default is 10 seconds
+locust.stats.CSV_STATS_FLUSH_INTERVAL_SEC = 5 # Determines how often the data is flushed to disk, default is 10 seconds
 
 def get_base64(username, password):
   string = "%s:%s" % (username, password)

@@ -575,7 +575,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 
 
 def calc_sim(faults_name):
-    fault = faults_name.replace('./Online/data/','')
+    fault = faults_name.replace('./data/','')
 
     latency_filename = faults_name + '_latency_source_50.csv'  # inbound
     latency_df_source = pd.read_csv(latency_filename)
@@ -612,11 +612,11 @@ def calc_sim(faults_name):
     
     # locust len may always be longer
     new_latency_df = svc_latency_df
-    new_locust_df = locust_df['50%']
+    new_locust_df = locust_df['66%']
     if (locust_len < latency_len):
         new_latency_df = svc_latency_df[-locust_len:]
     else:
-        new_locust_df = locust_df['50%'][-latency_len:]
+        new_locust_df = locust_df['66%'][-latency_len:]
     new_locust_df = np.nan_to_num(new_locust_df)
 
     DG = mpg(prom_url_no_range, faults_name)
