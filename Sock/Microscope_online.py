@@ -588,11 +588,12 @@ def calc_sim(faults_name):
     # 这里的 fill_value=0 很关键，把 unknown-fe 的 nan 给替换了
     latency_df = latency_df_source.add(latency_df_destination, fill_value=0)
 
+    # print('\nlatency_df: ')
     latency_len = len(latency_df)
 
     latency_df.to_csv('%s_latency.csv'%fault)
 
-    # 获取 locust 数据
+        # 获取 locust 数据
     locust_filename = './example_stats_history.csv'
     locust_df = pd.read_csv(locust_filename)
     
@@ -608,17 +609,17 @@ def calc_sim(faults_name):
             if svc_name in svc_latency_df:
                 svc_latency_df[svc_name].add(latency_df[key])
             else:
-                svc_latency_df[svc_name] = latency_df[key]
-    
-    # locust len may always be longer
-    new_latency_df = svc_latency_df
-    new_locust_df = locust_df['66%']
-    if (locust_len < latency_len):
-        new_latency_df = svc_latency_df[-locust_len:]
-    else:
-        new_locust_df = locust_df['66%'][-latency_len:]
-    new_locust_df = np.nan_to_num(new_locust_df)
+                svc_latency_df[svc_name] = latency_df[key] 
 
+    # locust len may always be longer
+
+    new_locust_list = locust_df['66%']
+    
+    if (locust_len > latency_len):
+        new_locust_list = locust_df['66%'][-latency_len:]
+    
+    new_locust_list = np.nan_to_num(new_locust_list)
+    
     DG = mpg(prom_url_no_range, faults_name)
 
     score = {}
@@ -631,17 +632,14 @@ def calc_sim(faults_name):
         # p:p值越小
         
         degree = DG.degree(key)
-        pearson_sim = pearsonr(new_latency_df[key].tolist(), new_locust_df)[0]
+        print(degree)
+        new_latency_list = svc_latency_df[key].tolist()[-len(new_locust_list):]
+        new_latency_list = np.nan_to_num(new_latency_list)
+        pearson_sim = pearsonr(new_latency_list, new_locust_list)[0]
         score.update({key: pearson_sim / degree})
     
     score = sorted(score.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
     # print(score)
-
-    corr_df = latency_df.corr()
-    # corr_df[corr_df] = np.nan
-    # print('\ncorr: ', corr_df)
-
-    corr_df.to_csv('%s_corr.csv'%fault)
 
     return score
 
