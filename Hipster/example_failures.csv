@@ -1,1 +1,15 @@
 Method,Name,Error,Occurrences
+GET,/product/2ZYFJ3GM2N,500 Server Error: Internal Server Error for url: http://39.100.0.61:32580/product/2ZYFJ3GM2N,214
+GET,/product/LS4PSXUNUM,500 Server Error: Internal Server Error for url: http://39.100.0.61:32580/product/LS4PSXUNUM,201
+GET,/cart,500 Server Error: Internal Server Error for url: http://39.100.0.61:32580/cart,433
+GET,/,500 Server Error: Internal Server Error for url: http://39.100.0.61:32580/,150
+POST,/setCurrency,500 Server Error: Internal Server Error for url: http://39.100.0.61:32580/,304
+GET,/product/0PUK6V6EV0,500 Server Error: Internal Server Error for url: http://39.100.0.61:32580/product/0PUK6V6EV0,195
+GET,/product/L9ECAV7KIM,500 Server Error: Internal Server Error for url: http://39.100.0.61:32580/product/L9ECAV7KIM,193
+GET,/product/9SIQT8TOJO,500 Server Error: Internal Server Error for url: http://39.100.0.61:32580/product/9SIQT8TOJO,196
+POST,/cart,500 Server Error: Internal Server Error for url: http://39.100.0.61:32580/cart,322
+POST,/cart/checkout,500 Server Error: Internal Server Error for url: http://39.100.0.61:32580/cart/checkout,127
+GET,/product/66VCHSJNUP,500 Server Error: Internal Server Error for url: http://39.100.0.61:32580/product/66VCHSJNUP,182
+GET,/product/1YMWWN1N4O,500 Server Error: Internal Server Error for url: http://39.100.0.61:32580/product/1YMWWN1N4O,208
+GET,/product/OLJCESPC7Z,500 Server Error: Internal Server Error for url: http://39.100.0.61:32580/product/OLJCESPC7Z,211
+GET,/product/6E92ZMYYFZ,500 Server Error: Internal Server Error for url: http://39.100.0.61:32580/product/6E92ZMYYFZ,209

@@ -613,15 +613,25 @@ def calc_sim(faults_name):
             else:
                 svc_latency_df[svc_name] = latency_df[key]
     
+    print(latency_df)
+    print(svc_latency_df)    
+
     # locust len may always be longer
     new_latency_df = svc_latency_df
     new_locust_df = locust_df['66%']
+    
     if (locust_len < latency_len):
         new_latency_df = svc_latency_df[-locust_len:]
     else:
         new_locust_df = locust_df['66%'][-latency_len:]
+    
     new_locust_df = np.nan_to_num(new_locust_df)
+    new_latency_df = np.nan_to_num(new_latency_df)
 
+    print(new_locust_df)
+    print(new_latency_df)
+    print('\n', new_latency_df['frontend'].tolist())
+    
     DG = mpg(prom_url_no_range, faults_name)
 
     score = {}

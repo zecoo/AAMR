@@ -19,7 +19,7 @@ for MS in 'cartservice' 'productcatalogservice' 'currencyservice' 'checkoutservi
 do
   countdown
 
-  kubectl apply -f /root/zik/fault-injection/hipster/$MS-delay.yaml
+  kubectl apply -f /root/zik/fault-injection/hipster/$MS.yaml
 
   n=0
   while (($n<10))
@@ -32,7 +32,7 @@ do
     sleep 10
   done
 
-  kubectl delete -f /root/zik/fault-injection/hipster/$MS-delay.yaml
+  kubectl delete -f /root/zik/fault-injection/hipster/$MS.yaml
 done
 
 wait
