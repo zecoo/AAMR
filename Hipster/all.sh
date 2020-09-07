@@ -15,7 +15,7 @@ function countdown() {
   done
 }
 
-for MS in 'cartservice' 'productcatalogservice' 'currencyservice' 'checkoutservice' 'recommendationservice' 'adservice'
+for MS in 'cartservice' 'productcatalogservice' 'currencyservice' 'checkoutservice' 'recommendationservice' 'adservice' 'emailservice' 'paymentservice' 'shippingservice'
 do
   countdown
 
