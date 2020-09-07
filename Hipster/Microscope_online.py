@@ -611,26 +611,16 @@ def calc_sim(faults_name):
             if svc_name in svc_latency_df:
                 svc_latency_df[svc_name].add(latency_df[key])
             else:
-                svc_latency_df[svc_name] = latency_df[key]
-    
-    print(latency_df)
-    print(svc_latency_df)    
+                svc_latency_df[svc_name] = latency_df[key] 
 
     # locust len may always be longer
-    new_latency_df = svc_latency_df
-    new_locust_df = locust_df['66%']
-    
-    if (locust_len < latency_len):
-        new_latency_df = svc_latency_df[-locust_len:]
-    else:
-        new_locust_df = locust_df['66%'][-latency_len:]
-    
-    new_locust_df = np.nan_to_num(new_locust_df)
-    new_latency_df = np.nan_to_num(new_latency_df)
 
-    print(new_locust_df)
-    print(new_latency_df)
-    print('\n', new_latency_df['frontend'].tolist())
+    new_locust_list = locust_df['66%']
+    
+    if (locust_len > latency_len):
+        new_locust_list = locust_df['66%'][-latency_len:]
+    
+    new_locust_list = np.nan_to_num(new_locust_list)
     
     DG = mpg(prom_url_no_range, faults_name)
 
@@ -644,7 +634,9 @@ def calc_sim(faults_name):
         # p:p值越小
         
         degree = DG.degree(key)
-        pearson_sim = pearsonr(new_latency_df[key].tolist(), new_locust_df)[0]
+        new_latency_list = svc_latency_df[key].tolist()[-len(new_locust_list):]
+        new_latency_list = np.nan_to_num(new_latency_list)
+        pearson_sim = pearsonr(new_latency_list, new_locust_list)[0]
         score.update({key: pearson_sim / degree})
     
     score = sorted(score.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
