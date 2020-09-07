@@ -1,8 +1,8 @@
 #!/bin/bash
 
-var='tRCA_online.py'
+var='Microscope_online.py'
 
-./headless_locust.sh &
+# ./headless_locust.sh &
 
 echo '----- RCA will be started in 3min ... ----'
 
