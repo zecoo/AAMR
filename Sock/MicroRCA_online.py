@@ -74,7 +74,7 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
         latency_df[name] = latency_df[name].astype('float64')  * 1000
 
     response = requests.get(prom_url,
-                            params={'query': 'sum(irate(istio_tcp_sent_bytes_total{reporter=\"source\"}[1m])) by (destination_workload, source_workload) / 1000',
+                            params={'query': 'sum(irate(istio_tcp_sent_bytes_total{destination_workload_namespace=\"sock-shop\",reporter=\"source\"}[1m])) by (destination_workload, source_workload) / 1000',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -135,7 +135,7 @@ def latency_destination_50(prom_url, start_time, end_time, faults_name):
 
 
     response = requests.get(prom_url,
-                            params={'query': 'sum(irate(istio_tcp_sent_bytes_total{reporter=\"destination\"}[1m])) by (destination_workload, source_workload) / 1000',
+                            params={'query': 'sum(irate(istio_tcp_sent_bytes_total{reporter=\"destination\",destination_workload_namespace=\"sock-shop\"}[1m])) by (destination_workload, source_workload) / 1000',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -321,7 +321,7 @@ def mpg(prom_url, faults_name):
     DG = nx.DiGraph()
     df = pd.DataFrame(columns=['source', 'destination'])
     response = requests.get(prom_url,
-                            params={'query': 'sum(istio_tcp_received_bytes_total) by (source_workload, destination_workload)'
+                            params={'query': 'sum(istio_tcp_received_bytes_total{destination_workload_namespace=\'sock-shop\'}) by (source_workload, destination_workload)'
                                     })
     
     results = response.json()['data']['result']
@@ -601,8 +601,8 @@ if __name__ == "__main__":
     args = parse_args()
     faults_name = './data/' + args.fault
     len_second = 150
-    prom_url = 'http://39.100.0.61:30236/api/v1/query_range'
-    prom_url_no_range = 'http://39.100.0.61:30236/api/v1/query'
+    prom_url = 'http://39.100.0.61:32644/api/v1/query_range'
+    prom_url_no_range = 'http://39.100.0.61:32644/api/v1/query'
     
     end_time = time.time()
     start_time = end_time - len_second

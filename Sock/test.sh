@@ -20,7 +20,7 @@ for MS in 'user,catalogue' 'catalogue,payment'
 do
   countdown
 
-  arr=(${str//,/ })
+  arr=(${MS//,/ })
 
   for i in ${arr[@]}  
   do  
