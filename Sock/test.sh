@@ -1,6 +1,6 @@
 #!/bin/bash
 
-var='MicroRCA_online.py'
+var='Microscope_online.py'
 
 ./headless_locust.sh &
 
