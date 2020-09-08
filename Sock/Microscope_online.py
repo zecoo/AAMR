@@ -72,7 +72,7 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
         latency_df[name] = latency_df[name].astype('float64')  * 1000
 
     response = requests.get(prom_url,
-                            params={'query': 'sum(irate(istio_tcp_sent_bytes_total{reporter=\"source\"}[1m])) by (destination_workload, source_workload) / 1000',
+                            params={'query': 'sum(irate(istio_tcp_sent_bytes_total{destination_workload_namespace=\"sock-shop\",reporter=\"source\"}[1m])) by (destination_workload, source_workload) / 1000',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -133,7 +133,7 @@ def latency_destination_50(prom_url, start_time, end_time, faults_name):
 
 
     response = requests.get(prom_url,
-                            params={'query': 'sum(irate(istio_tcp_sent_bytes_total{reporter=\"destination\"}[1m])) by (destination_workload, source_workload) / 1000',
+                            params={'query': 'sum(irate(istio_tcp_sent_bytes_total{destination_workload_namespace=\"sock-shop\",reporter=\"destination\"}[1m])) by (destination_workload, source_workload) / 1000',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -319,7 +319,7 @@ def mpg(prom_url, faults_name):
     DG = nx.DiGraph()
     df = pd.DataFrame(columns=['source', 'destination'])
     response = requests.get(prom_url,
-                            params={'query': 'sum(istio_tcp_received_bytes_total) by (source_workload, destination_workload)'
+                            params={'query': 'sum(istio_tcp_received_bytes_total{destination_workload_namespace=\"sock-shop\"}) by (source_workload, destination_workload)'
                                     })
     
     results = response.json()['data']['result']
