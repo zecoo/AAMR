@@ -591,8 +591,6 @@ def calc_sim(faults_name):
     # print('\nlatency_df: ')
     latency_len = len(latency_df)
 
-    latency_df.to_csv('%s_latency.csv'%fault)
-
         # 获取 locust 数据
     locust_filename = './example_stats_history.csv'
     locust_df = pd.read_csv(locust_filename)
@@ -632,7 +630,7 @@ def calc_sim(faults_name):
         # p:p值越小
         
         degree = DG.degree(key)
-        print(degree)
+        
         new_latency_list = svc_latency_df[key].tolist()[-len(new_locust_list):]
         new_latency_list = np.nan_to_num(new_latency_list)
         pearson_sim = pearsonr(new_latency_list, new_locust_list)[0]
