@@ -1,3 +1,4 @@
 Method,Name,Error,Occurrences
-POST,/cart,500 Server Error: Internal Server Error for url: http://39.100.0.61:30001/cart,49
-POST,/orders,406 Client Error: Not Acceptable for url: http://39.100.0.61:30001/orders,1225
+POST,/cart,500 Server Error: Internal Server Error for url: http://39.100.0.61:30001/cart,2
+GET,/catalogue,"HTTPConnectionPool(host='39.100.0.61', port=30001): Max retries exceeded with url: /catalogue (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff802aa4358>: Failed to establish a new connection: [Errno 110] Connection timed out'))",50
+POST,/orders,406 Client Error: Not Acceptable for url: http://39.100.0.61:30001/orders,44
