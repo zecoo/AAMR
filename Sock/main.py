@@ -2,11 +2,11 @@ import os
 import time
 from itertools import combinations
 
-rca_arr = ['Microscope_online.py']
-svc_arr = ['user', 'catalogue']
+# rca_arr = ['Microscope_online.py']
+# svc_arr = ['user', 'catalogue']
 
-# rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
-# svc_arr = ['user', 'catalogue', 'order', 'payment']
+rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
+svc_arr = ['user', 'catalogue', 'orders', 'payment', 'front-end']
 
 def combine_svc():
   comb_svc = list(combinations(svc_arr, 2))
@@ -41,10 +41,10 @@ if __name__ == '__main__':
     while (n<10):
       for rca in rca_arr:
         os.system('python3 %s --fault %s &' % (rca, svcs))
-        time.sleep(10)
+      time.sleep(6)
       n = n + 1
     
     for svc in svc2:
-      os.system('kubectl apply -f /root/zik/fault-injection/sock-shop/%s-delay.yaml' % svc)
+      os.system('kubectl delete -f /root/zik/fault-injection/sock-shop/%s-delay.yaml' % svc)
     
   print('---- Test ends ----')
