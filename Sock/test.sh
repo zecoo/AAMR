@@ -1,11 +1,11 @@
 #!/bin/bash
 
-var='Microscope_online.py'
+var='MicroRCA_online.py'
 
 ./headless_locust.sh &
 
 echo '----- Locust started -----'
-echo '----- RCA will be started in 150s ... ----'
+echo '----- RCA will be started in 3min ... ----'
 
 function countdown() {
   for i in $(seq 180 -5 5)
@@ -16,11 +16,17 @@ function countdown() {
   done
 }
 
-for MS in 'user' 'catalogue' 'orders' 'payment'
+for MS in 'user,catalogue' 'catalogue,payment'
 do
   countdown
 
-  kubectl apply -f /root/zik/fault-injection/sock-shop/$MS-delay.yaml
+  arr=(${str//,/ })
+
+  for i in ${arr[@]}  
+  do  
+      echo $i 
+      kubectl apply -f /root/zik/fault-injection/sock-shop/$i-delay.yaml
+  done
 
   n=0
   while (($n<10))
@@ -30,7 +36,12 @@ do
     sleep 10
   done
 
-  kubectl delete -f /root/zik/fault-injection/sock-shop/$MS-delay.yaml
+  for i in ${arr[@]}  
+  do  
+      echo $i 
+      kubectl delete -f /root/zik/fault-injection/sock-shop/$i-delay.yaml
+  done
+
 done
 
 wait

@@ -1,0 +1,27 @@
+Unnamed: 0,32.986270022883296
+carts_carts-db,0.0665920310110092
+cartservice_redis-cart,0.4897102483252036
+catalogue_catalogue-db,
+checkoutservice_cartservice,6.539755949880125
+checkoutservice_currencyservice,5.497711670480549
+checkoutservice_emailservice,5.497711670480549
+checkoutservice_paymentservice,5.497711670480549
+checkoutservice_productcatalogservice,4.965675057208237
+checkoutservice_shippingservice,5.497711670480549
+front-end_catalogue,
+front-end_user,
+frontend_adservice,5.651052113083449
+frontend_cartservice,6.311768631502693
+frontend_checkoutservice,78.08478983565026
+frontend_currencyservice,5.621832910757469
+frontend_productcatalogservice,5.577034268679733
+frontend_recommendationservice,8.363422961350766
+frontend_shippingservice,5.602137744198799
+orders_orders-db,0.0665920310110092
+orders_payment,
+orders_user,
+queue-master_rabbitmq,0.00029735907621491147
+recommendationservice_productcatalogservice,5.577021641369398
+shipping_rabbitmq,0.00023831145716729244
+unknown_frontend,
+user_user-db,0.020510196905155924

@@ -582,7 +582,7 @@ def parse_args():
         description='Root cause analysis for microservices')
 
     parser.add_argument('--fault', type=str, required=False,
-                        default='user',
+                        default='user,catalogue',
                         help='folder name to store csv file')
     
     # 150s 每隔 5s 取一次数据 所以 csv 文件里一共有 30 行
