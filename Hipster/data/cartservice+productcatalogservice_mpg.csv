@@ -1,0 +1,17 @@
+,source,destination
+0,cartservice,redis-cart
+1,checkoutservice,paymentservice
+2,recommendationservice,productcatalogservice
+3,checkoutservice,currencyservice
+4,frontend,checkoutservice
+5,frontend,currencyservice
+6,checkoutservice,productcatalogservice
+7,checkoutservice,cartservice
+8,frontend,cartservice
+9,checkoutservice,emailservice
+10,frontend,productcatalogservice
+11,checkoutservice,shippingservice
+12,frontend,shippingservice
+13,frontend,adservice
+14,frontend,recommendationservice
+15,unknown,frontend

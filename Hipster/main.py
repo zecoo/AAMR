@@ -2,11 +2,11 @@ import os
 import time
 from itertools import combinations
 
-rca_arr = ['Microscope_online.py']
-svc_arr = ['cartservice', 'productcatalogservice']
+# rca_arr = ['Microscope_online.py']
+# svc_arr = ['cartservice', 'productcatalogservice']
 
-# rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
-# svc_arr = ['cartservice', 'productcatalogservice', 'currencyservice', 'checkoutservice', 'recommendationservice', 'paymentservice',]
+rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
+svc_arr = ['cartservice', 'productcatalogservice', 'currencyservice', 'checkoutservice', 'recommendationservice', 'paymentservice',]
 
 def combine_svc():
   comb_svc = list(combinations(svc_arr, 2))
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     svc2 = svcs.split('+')
     for svc in svc2:
-      os.system('kubectl apply -f /root/zik/fault-injection/sock-shop/%s.yaml' % svc)
+      os.system('kubectl apply -f /root/zik/fault-injection/hipster/%s.yaml' % svc)
 
     n = 0
     while (n<10):
@@ -45,6 +45,6 @@ if __name__ == '__main__':
       n = n + 1
     
     for svc in svc2:
-      os.system('kubectl delete -f /root/zik/fault-injection/sock-shop/%s.yaml' % svc)
+      os.system('kubectl delete -f /root/zik/fault-injection/hipster/%s.yaml' % svc)
     
   print('---- Test ends ----')
