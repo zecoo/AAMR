@@ -593,9 +593,7 @@ def calc_sim(faults_name):
     # print('\nlatency_df: ')
     latency_len = len(latency_df)
 
-    latency_df.to_csv('%s_latency.csv'%fault)
-
-        # 获取 locust 数据
+    # 获取 locust 数据
     locust_filename = './example_stats_history.csv'
     locust_df = pd.read_csv(locust_filename)
     
