@@ -1,5 +1,7 @@
 import os
 import time
+import pandas as pd
+import threading
 from itertools import combinations
 
 # rca_arr = ['Microscope_online.py']
@@ -8,7 +10,8 @@ from itertools import combinations
 rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
 svc_arr = ['user', 'catalogue', 'orders', 'payment', 'front-end']
 down_time = 180
-fault_injection_path = 'kubectl apply -f /root/zik/fault-injection/sock-shop/'
+fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/sock-shop/'
+fault_delete_path = 'kubectl delete -f /root/zik/fault-injection/sock-shop/'
 
 def combine_svc():
   comb_svc = list(combinations(svc_arr, 2))
@@ -44,10 +47,10 @@ def tRCA(rca_types, svc):
     # os.system('python3 %s --fault %s' % (rca_type, svc))
     for rca in rca_types:
       print('python3 %s --fault %s &' % (rca, svc))
-    countdown(down_time)
+    countdown(4)
     timer.start()
   else:
-    countdown(down_time)
+    countdown(4)
     timer.start()
     print('    ----    ')
 
@@ -63,14 +66,14 @@ if __name__ == '__main__':
   os.system('./headless_locust.sh &')
   print('==== RCA will be started in 3min ... ====')
   if case == 1:
-    countdown(down_time)
     for svc in svc_arr:
-      print(fault_injection_path + '%s.yaml' % svc)
+      countdown(down_time)
+      os.system(fault_apply_path + '%s.yaml' % svc)
       timer = threading.Timer(5, tRCA, (rca_arr, svc))
       timer.start()
       time.sleep(60)
       timer.cancel()
-      print(fault_injection_path + '%s.yaml' % svc)
+      os.system(fault_delete_path + '%s.yaml' % svc)
     print("==== ends ====")
   elif case == 2:
     svc_list = combine_svc()
