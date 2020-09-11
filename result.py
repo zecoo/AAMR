@@ -126,10 +126,16 @@ def getPredictions(pre_list):
 if __name__ == '__main__':
     # getAllAcc()
     # getSvcAcc()
-    res_df = pd.read_csv(sock_path + rca_arr[2] + '_results.csv')
-    test_k = 50
-    y_true = res_df['fault'][:test_k].tolist()
-    y_pred = getPredictions(res_df['pred'][:test_k].tolist())
+    for rca in rca_arr:
+        print(rca)
+        res_df = pd.read_csv(sock_path + rca + '_results.csv')
+        new_col = ['time', 'fault', 'type', 'pred']
+        res_df.columns = new_col
+        
+        test_k = 50
+        y_true = res_df['fault'][:test_k].tolist()
+        y_pred = getPredictions(res_df['pred'][:test_k].tolist())
 
-    res = precision_recall_fscore_k(y_true, y_pred, k=topK, digs=2)
-    print(res)
+        res = precision_recall_fscore_k(y_true, y_pred, k=topK, digs=2)
+        print(res)
+        print()

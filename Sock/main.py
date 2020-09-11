@@ -9,7 +9,7 @@ from itertools import combinations
 
 rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
 svc_arr = ['user', 'catalogue', 'orders', 'payment', 'carts', 'shipping']
-down_time = 150
+down_time = 180
 fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/sock-shop/'
 fault_delete_path = 'kubectl delete -f /root/zik/fault-injection/sock-shop/'
 
@@ -50,7 +50,7 @@ if __name__ == '__main__':
             os.system(fault_apply_path + '%s.yaml' % svc)
             timer = threading.Timer(5, tRCA, (rca_arr, svc))
             timer.start()
-            time.sleep(100)
+            time.sleep(120)
             timer.cancel()
             os.system(fault_delete_path + '%s.yaml' % svc)
         print("==== ends ====")
