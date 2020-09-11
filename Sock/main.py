@@ -8,7 +8,7 @@ from itertools import combinations
 # svc_arr = ['user', 'catalogue']
 
 rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
-svc_arr = ['user', 'catalogue', 'orders', 'payment', 'front-end']
+svc_arr = ['user', 'catalogue', 'orders', 'payment', 'carts', 'shipping']
 down_time = 180
 fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/sock-shop/'
 fault_delete_path = 'kubectl delete -f /root/zik/fault-injection/sock-shop/'
@@ -47,9 +47,8 @@ def tRCA(rca_types, svc):
     timer = threading.Timer(5, tRCA, (rca_types, svc))
 
     if (anomaly_detection()):
-        # os.system('python3 %s --fault %s' % (rca_type, svc))
         for rca in rca_types:
-            print('python3 %s --fault %s &' % (rca, svc))
+            os.system('python3 %s --fault %s &' % (rca, svc))
         countdown(4)
         timer.start()
     else:
@@ -92,7 +91,7 @@ if __name__ == '__main__':
             # interval apply RCA
             timer = threading.Timer(5, tRCA, (rca_arr, svcs))
             timer.start()
-            time.sleep(60)
+            time.sleep(100)
             timer.cancel()
             # delete fault injection
             for svc in svc2:
