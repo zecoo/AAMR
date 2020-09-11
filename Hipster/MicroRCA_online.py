@@ -633,30 +633,23 @@ if __name__ == "__main__":
     # anomaly detection on response time of service invocation
     anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
 
-    # print(anomalies)
-    
-    # get the anomalous service
-    # anomaly_nodes = []
-    # for anomaly in anomalies:
-    #     edge = anomaly.split('_')
-    #     anomaly_nodes.append(edge[1])
-    
-    # anomaly_nodes = set(anomaly_nodes)
-     
-    anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
-    # print(anomaly_score)
+    if len(anomalies) != 0:     
+        anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
+        # print(anomaly_score)
 
-    anomaly_score_new = []
-    for anomaly_target in anomaly_score:
-        node = anomaly_target[0]
-#       print(anomaly_target[0])
-        if DG.nodes[node]['type'] == 'service':
-            anomaly_score_new.append(anomaly_target)
-    print('\nMicroRCA score:', anomaly_score_new)
+        anomaly_score_new = []
+        for anomaly_target in anomaly_score:
+            node = anomaly_target[0]
+    #       print(anomaly_target[0])
+            if DG.nodes[node]['type'] == 'service':
+                anomaly_score_new.append(anomaly_target)
+        print('\nMicroRCA score:', anomaly_score_new)
 
-    filename = './results/MicroRCA_results.csv'
-    fault = faults_name.replace('./data/', '')                      
-    with open(filename,'a') as f:
-        writer = csv.writer(f)
-        localtime = time.asctime( time.localtime(time.time()) )
-        writer.writerow([localtime, fault, 'svc_latency', anomaly_score_new])
+        filename = './results/MicroRCA_results.csv'
+        fault = faults_name.replace('./data/', '')                      
+        with open(filename,'a') as f:
+            writer = csv.writer(f)
+            localtime = time.asctime( time.localtime(time.time()) )
+            writer.writerow([localtime, fault, 'svc_latency', anomaly_score_new])
+    else:
+        print('no anomaly')

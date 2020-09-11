@@ -682,11 +682,19 @@ if __name__ == "__main__":
     latency_df = latency_df_destination.add(latency_df_source)
     svc_metrics(prom_url, start_time, end_time, faults_name)
 
-    filename = './results/Microscope_results.csv'
-    fault = faults_name.replace('./data/', '')
-    rank = calc_sim(faults_name)
-    print('\nMicroscope Score:', rank)
-    with open(filename,'a') as f:
-        writer = csv.writer(f)
-        localtime = time.asctime( time.localtime(time.time()) )
-        writer.writerow([localtime, fault, 'svc_latency', rank])
+    DG = mpg(prom_url_no_range, faults_name)
+
+    # anomaly detection on response time of service invocation
+    anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
+
+    if len(anomalies) != 0:
+        filename = './results/Microscope_results.csv'
+        fault = faults_name.replace('./data/', '')
+        rank = calc_sim(faults_name)
+        print('\nMicroscope Score:', rank)
+        with open(filename,'a') as f:
+            writer = csv.writer(f)
+            localtime = time.asctime( time.localtime(time.time()) )
+            writer.writerow([localtime, fault, 'svc_latency', rank])
+    else:
+        print('no anomaly')
