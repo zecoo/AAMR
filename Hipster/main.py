@@ -10,7 +10,7 @@ from itertools import combinations
 rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
 svc_arr = ['cartservice', 'productcatalogservice', 'currencyservice',
            'checkoutservice', 'recommendationservice', 'paymentservice']
-down_time = 180
+down_time = 10
 fault_injection_path = 'kubectl apply -f /root/zik/fault-injection/hipster/'
 
 
@@ -73,12 +73,12 @@ if __name__ == '__main__':
     if case == 1:
         countdown(down_time)
         for svc in svc_arr:
-            print(fault_injection_path + '%s.yaml' % svc)
+            os.system(fault_injection_path + '%s.yaml' % svc)
             timer = threading.Timer(5, tRCA, (rca_arr, svc))
             timer.start()
             time.sleep(60)
             timer.cancel()
-            print(fault_injection_path + '%s.yaml' % svc)
+            os.system(fault_injection_path + '%s.yaml' % svc)
         print("==== ends ====")
     elif case == 2:
         svc_list = combine_svc()

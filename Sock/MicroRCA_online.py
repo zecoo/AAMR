@@ -651,4 +651,4 @@ if __name__ == "__main__":
             localtime = time.asctime( time.localtime(time.time()) )
             writer.writerow([localtime, fault, 'svc_latency', anomaly_score_new])
     else:
-        pass
+        print('no anomaly')

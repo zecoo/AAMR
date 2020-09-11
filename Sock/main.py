@@ -9,7 +9,7 @@ from itertools import combinations
 
 rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
 svc_arr = ['user', 'catalogue', 'orders', 'payment', 'carts', 'shipping']
-down_time = 180
+down_time = 150
 fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/sock-shop/'
 fault_delete_path = 'kubectl delete -f /root/zik/fault-injection/sock-shop/'
 
@@ -23,38 +23,13 @@ def combine_svc():
     return svc_list
 
 
-def anomaly_detection():
-    n = 0
-    locsut_latency_pd = pd.read_csv('example_stats_history.csv')
-    p90_avg = locsut_latency_pd['80%'][-20:].sum() / 20
-    p50_avg = locsut_latency_pd['50%'][-20:].sum() / 20
-
-    p90s = locsut_latency_pd['80%'][-3:]
-    p50s = locsut_latency_pd['50%'][-3:]
-
-    for p50 in p50s:
-        print(p50/p50_avg)
-        if (p50/p50_avg > 2):
-            n = n + 1
-    if n < 2:
-        return False
-    else:
-        return True
-
-
 def tRCA(rca_types, svc):
     global timer
     timer = threading.Timer(5, tRCA, (rca_types, svc))
-
-    if (anomaly_detection()):
-        for rca in rca_types:
-            os.system('python3 %s --fault %s &' % (rca, svc))
-        countdown(4)
-        timer.start()
-    else:
-        countdown(4)
-        timer.start()
-        print('    ----    ')
+    for rca in rca_types:
+        os.system('python3 %s --fault %s &' % (rca, svc))
+        time.sleep(5)
+    timer.start()
 
 
 def countdown(t):
@@ -75,7 +50,7 @@ if __name__ == '__main__':
             os.system(fault_apply_path + '%s.yaml' % svc)
             timer = threading.Timer(5, tRCA, (rca_arr, svc))
             timer.start()
-            time.sleep(60)
+            time.sleep(100)
             timer.cancel()
             os.system(fault_delete_path + '%s.yaml' % svc)
         print("==== ends ====")
