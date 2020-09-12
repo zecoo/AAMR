@@ -1,17 +1,16 @@
-Unnamed: 0,17.515188335358445
-carts_carts-db,38.54140953148526
-catalogue_catalogue-db,48.71265497287757
-front-end_carts,6.5368426307403995
-front-end_catalogue,1.6133153360851862
-front-end_orders,4402.173856227243
-front-end_user,1.6814684256393215
-orders_carts,3.6580879343506587
-orders_orders-db,0.6769614477500908
-orders_payment,3.5400123984836016
-orders_shipping,13920.410657755736
-orders_user,1.9559758677399117
-queue-master_rabbitmq,
-shipping_rabbitmq,0.00012653961941932784
+Unnamed: 0,17.77435265104809
+carts_carts-db,38.51973513920925
+catalogue_catalogue-db,49.22794093367645
+front-end_carts,6.08454940067723
+front-end_catalogue,1.6366006832913491
+front-end_orders,4461.773347285027
+front-end_user,1.6549460697752534
+orders_carts,3.6427388472901607
+orders_orders-db,0.6447185188417555
+orders_payment,3.5688711867463714
+orders_shipping,14295.40347039232
+orders_user,1.8684565575992425
+queue-master_rabbitmq,2.6791028399340697
+shipping_rabbitmq,0.00023565875417909946
 unknown_front-end,
-unknown_rabbitmq,
-user_user-db,96.72391410455337
+user_user-db,62.677869819304554
