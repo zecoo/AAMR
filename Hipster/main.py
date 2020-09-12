@@ -66,7 +66,7 @@ if __name__ == '__main__':
             # interval apply RCA
             timer = threading.Timer(5, tRCA, (rca_arr, svcs))
             timer.start()
-            time.sleep(100)
+            time.sleep(120)
             timer.cancel()
             # delete fault injection
             for svc in svc2:

@@ -576,7 +576,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
     return anomaly_score
 
 
-def calc_sim(faults_name):
+def calc_sim(faults_name, anomalies):
     fault = faults_name.replace('./data/','')
 
     latency_filename = faults_name + '_latency_source_50.csv'  # inbound
@@ -593,12 +593,6 @@ def calc_sim(faults_name):
     # print('\nlatency_df: ')
     latency_len = len(latency_df)
 
-    # 获取 locust 数据
-    locust_filename = './example_stats_history.csv'
-    locust_df = pd.read_csv(locust_filename)
-    
-    locust_len = len(locust_df)
-
     svc_latency_df = pd.DataFrame()
 
     for key in latency_df.keys():
@@ -612,30 +606,20 @@ def calc_sim(faults_name):
                 svc_latency_df[svc_name] = latency_df[key] 
 
     # locust len may always be longer
-
-    new_locust_list = locust_df['66%']
-    
-    if (locust_len > latency_len):
-        new_locust_list = locust_df['66%'][-latency_len:]
-    
-    new_locust_list = np.nan_to_num(new_locust_list)
     
     DG = mpg(prom_url_no_range, faults_name)
 
     score = {}
-    for key in svc_latency_df.keys():
-        # len : 31
-        # print(len(svc_latency_df[key].tolist()))
+    frontend_list = svc_latency_df['frontend'].tolist()
+    frontend_list = np.nan_to_num(frontend_list)
 
-        # 输出:(r, p)
-        # r:相关系数[-1，1]之间
-        # p:p值越小
-        
-        degree = DG.degree(key)
-        new_latency_list = svc_latency_df[key].tolist()[-len(new_locust_list):]
-        new_latency_list = np.nan_to_num(new_latency_list)
-        pearson_sim = pearsonr(new_latency_list, new_locust_list)[0]
-        score.update({key: pearson_sim / degree})
+    for anomaly in anomalies:
+        anomaly = anomaly.split('_')[1]
+        degree = DG.degree(anomaly)
+        key_list = svc_latency_df[anomaly].tolist()
+        key_list = np.nan_to_num(key_list)
+        pearson_sim = pearsonr(frontend_list, key_list)[0]
+        score.update({anomaly: pearson_sim / degree})        
     
     score = sorted(score.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
     # print(score)
@@ -690,7 +674,7 @@ if __name__ == "__main__":
     if len(anomalies) != 0:
         filename = './results/Microscope_results.csv'
         fault = faults_name.replace('./data/', '')
-        rank = calc_sim(faults_name)
+        rank = calc_sim(faults_name, anomalies)
         print('\nMicroscope Score:', rank)
         with open(filename,'a') as f:
             writer = csv.writer(f)

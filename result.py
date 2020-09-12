@@ -128,7 +128,7 @@ if __name__ == '__main__':
     # getSvcAcc()
     for rca in rca_arr:
         print(rca)
-        res_df = pd.read_csv(sock_path + rca + '_results.csv')
+        res_df = pd.read_csv(hipster_path + rca + '_results.csv')
         new_col = ['time', 'fault', 'type', 'pred']
         res_df.columns = new_col
         
