@@ -507,7 +507,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 
 #    print('edge df:', edge_df)
     nodes = set(nodes)
-    print('\nnodes: ', nodes)
+    # print('\nnodes: ', nodes)
 
     personalization = {}
     for node in DG.nodes():
@@ -557,7 +557,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 #        print(node, personalization[node])
 
     anomaly_graph = anomaly_graph.reverse(copy=True)
-    print('\nanomaly_graph: ', anomaly_graph.nodes)
+    # print('\nanomaly_graph: ', anomaly_graph.nodes)
 #
     edges = list(anomaly_graph.edges(data=True))
 
@@ -576,7 +576,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 #
 ##    personalization['shipping'] = 2
     
-    print('Personalization:', personalization)
+    # print('Personalization:', personalization)
 
     anomaly_score = nx.pagerank(DG, alpha=0.85, personalization=personalization, max_iter=10000)
 

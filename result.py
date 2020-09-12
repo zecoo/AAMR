@@ -1,8 +1,7 @@
 import pandas as pd
 from _tkinter import _flatten
 
-sock_path = './Sock/results/'
-hipster_path = './Hipster/results/'
+benchmarks = ['./Sock/results/', './Hipster/results/']
 rca_arr = ['Microscope', 'MicroRCA', 'tRCA']
 
 topK = 1
@@ -126,16 +125,18 @@ def getPredictions(pre_list):
 if __name__ == '__main__':
     # getAllAcc()
     # getSvcAcc()
-    for rca in rca_arr:
-        print(rca)
-        res_df = pd.read_csv(hipster_path + rca + '_results.csv')
-        new_col = ['time', 'fault', 'type', 'pred']
-        res_df.columns = new_col
-        
-        test_k = 50
-        y_true = res_df['fault'][:test_k].tolist()
-        y_pred = getPredictions(res_df['pred'][:test_k].tolist())
+    for ben in benchmarks:
+        print('==== ' + ben + ' ====')
+        for rca in rca_arr:
+            print(rca)
+            res_df = pd.read_csv(ben + rca + '_results.csv')
+            new_col = ['time', 'fault', 'type', 'pred']
+            res_df.columns = new_col
+            
+            test_k = 50
+            y_true = res_df['fault'][:test_k].tolist()
+            y_pred = getPredictions(res_df['pred'][:test_k].tolist())
 
-        res = precision_recall_fscore_k(y_true, y_pred, k=topK, digs=2)
-        print(res)
-        print()
+            res = precision_recall_fscore_k(y_true, y_pred, k=topK, digs=2)
+            print(res)
+            print()
