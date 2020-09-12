@@ -457,7 +457,7 @@ def svc_personalization(svc, anomaly_graph, baseline_df, faults_name):
         num = num + 1
         if np.isnan(data['weight']):
             data['weight'] = 1
-        print('\ndata.weight: ', data['weight'])
+        # print('\ndata.weight: ', data['weight'])
         edges_weight_avg = edges_weight_avg + data['weight']
 
     for u, v, data in anomaly_graph.out_edges(svc, data=True):
@@ -469,8 +469,8 @@ def svc_personalization(svc, anomaly_graph, baseline_df, faults_name):
 
     edges_weight_avg  = edges_weight_avg / num
 
-    print('\navg: ', edges_weight_avg)
-    print('\ncorr: ', max_corr)
+#    print('\navg: ', edges_weight_avg)
+#    print('\ncorr: ', max_corr)
 
     personalization = edges_weight_avg * max_corr
 

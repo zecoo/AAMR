@@ -8,7 +8,7 @@ from itertools import combinations
 # svc_arr = ['cartservice', 'productcatalogservice']
 
 rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
-svc_arr = ['currencyservice', 'cartservice', 'productcatalogservice', 'checkoutservice', 'recommendationservice', 'paymentservice']
+svc_arr = ['paymentservice', 'currencyservice', 'cartservice', 'productcatalogservice', 'checkoutservice', 'recommendationservice']
 down_time = 180
 fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/hipster/'
 fault_delete_path = 'kubectl delete -f /root/zik/fault-injection/hipster/'
@@ -42,7 +42,7 @@ def countdown(t):
 
 if __name__ == '__main__':
     case = 1
-    os.system('./headless_locust.sh &')
+#    os.system('./headless_locust.sh &')
     print('==== RCA will be started in 3min ... ====')
     if case == 1:
         for svc in svc_arr:
