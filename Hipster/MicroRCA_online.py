@@ -450,7 +450,6 @@ def svc_personalization(svc, anomaly_graph, baseline_df, faults_name):
             max_corr = temp
             metric = col
 
-
     edges_weight_avg = 0.0
     num = 0
     for u, v, data in anomaly_graph.in_edges(svc, data=True):
@@ -475,8 +474,6 @@ def svc_personalization(svc, anomaly_graph, baseline_df, faults_name):
     personalization = edges_weight_avg * max_corr
 
     return personalization, metric
-
-
 
 def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
     # Get the anomalous subgraph and rank the anomalous services
@@ -610,6 +607,13 @@ if __name__ == "__main__":
 
     args = parse_args()
     faults_name = './data/' + args.fault
+    filename = ''
+
+    if '+' in faults_name:
+        filename = './results/f2/tRCA_results.csv'
+    else:
+        filename = './results/f1/tRCA_results.csv'
+    
     len_second = 150
     prom_url = 'http://39.100.0.61:32644/api/v1/query_range'
     prom_url_no_range = 'http://39.100.0.61:32644/api/v1/query'

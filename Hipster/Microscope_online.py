@@ -650,6 +650,13 @@ if __name__ == "__main__":
 
     args = parse_args()
     faults_name = './data/' + args.fault
+    filename = ''
+
+    if '+' in faults_name:
+        filename = './results/f2/tRCA_results.csv'
+    else:
+        filename = './results/f1/tRCA_results.csv'
+
     len_second = 150
     prom_url = 'http://39.100.0.61:32644/api/v1/query_range'
     prom_url_no_range = 'http://39.100.0.61:32644/api/v1/query'
