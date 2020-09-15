@@ -180,7 +180,11 @@ def svc_metrics(prom_url, start_time, end_time, faults_name):
 
         # print(svc)
 
-        svc = pod_name.split('-')[0]
+        if len(pod_name.split('-')) > 3:
+            svc = pod_name.split('-')[0] + '-' + pod_name.split('-')[1]
+        else:
+            svc = pod_name.split('-')[0]
+            
         values = result['values']
 
         values = list(zip(*values))
@@ -549,6 +553,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 
     for node in nodes:
         # 这里用到了 系统层面的 metric
+        print(node)
         max_corr, col = svc_personalization(node, anomaly_graph, baseline_df, faults_name)
         personalization[node] = max_corr / anomaly_graph.degree(node)
 #        print(node, personalization[node])
@@ -615,8 +620,8 @@ if __name__ == "__main__":
         filename = './results/f1/tRCA_results.csv'
     
     len_second = 150
-    prom_url = 'http://39.100.0.61:32644/api/v1/query_range'
-    prom_url_no_range = 'http://39.100.0.61:32644/api/v1/query'
+    prom_url = 'http://39.100.0.61:31423/api/v1/query_range'
+    prom_url_no_range = 'http://39.100.0.61:31423/api/v1/query'
     
     end_time = time.time()
     start_time = end_time - len_second

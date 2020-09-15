@@ -372,17 +372,3 @@ if __name__ == '__main__':
 
     for rank in sorted(anomaly_score, key=lambda x: x[1], reverse=True):
         print(rank)
-
-    # anomaly_score_new = []
-    # for anomaly_target in anomaly_score:
-    #     print(anomaly_target[0])
-    #     anomaly_score_new.append(anomaly_target)
-
-    # for target in targets:
-    #     num = print_rank(anomaly_score_new, target)
-
-    # filename = 'MicroRCA_results.csv'                    
-    # with open(filename,'a') as f:
-    #     writer = csv.writer(f)
-    #     writer.writerow(['folder', 'catalogue', 'svc_latency', anomaly_score]) 
-            

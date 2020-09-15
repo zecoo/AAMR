@@ -1,0 +1,1 @@
+Tue Sep 15 14:56:13 2020,adservice,svc_latency,"[('cartservice', 0.0), ('redis-cart', 0.0), ('frontend', 0.0), ('adservice', 0.0), ('checkoutservice', 0.0), ('currencyservice', 0.0), ('emailservice', 0.0), ('paymentservice', 0.0), ('recommendationservice', 0.0), ('productcatalogservice', 0.0), ('unknown', 0.0), ('shippingservice', 0.0)]"
