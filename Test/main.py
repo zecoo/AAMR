@@ -42,6 +42,7 @@ def countdown(t):
 
 if __name__ == '__main__':
 
+    os.system('kubectl apply -f /root/zik/fault-injection/hipster/adservice.yaml')
     os_str = 'time python3 %s --fault %s &' % (rca_arr[0], svc_arr[0])
     f = os.popen(os_str, 'r')
     res = f.readlines()
@@ -51,3 +52,4 @@ if __name__ == '__main__':
         print(i)
 
     f.close()
+    os.system('kubectl delete -f /root/zik/fault-injection/hipster/adservice.yaml')
