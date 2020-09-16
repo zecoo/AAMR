@@ -659,9 +659,9 @@ if __name__ == "__main__":
     filename = ''
 
     if '+' in faults_name:
-        filename = './results/f2/tRCA_results.csv'
+        filename = './results/f2/Microscope_results.csv'
     else:
-        filename = './results/f1/tRCA_results.csv'
+        filename = './results/f1/Microscope_results.csv'
 
     len_second = 150
     prom_url = 'http://39.100.0.61:31423/api/v1/query_range'
@@ -674,6 +674,7 @@ if __name__ == "__main__":
     DG = mpg(prom_url_no_range, faults_name)
 
     rca_round = 0
+    n_correct = 0
 
     while rca_round < 40:
 
@@ -695,10 +696,11 @@ if __name__ == "__main__":
             rank1 = rank[0][0]
 
             if rank1 == args.fault:
+                n_correct = n_correct + 1
                 print('==========')
                 print('Gocha')
                 print('==========')
-                rca_round = 200
+                rca_round = 36 + n_correct
 
             print('\nMicroscope Score:', rank)
             with open(filename,'a') as f:
@@ -715,7 +717,7 @@ if __name__ == "__main__":
     rca_time = end - start
     print(rca_time)
 
-    filename = './results/MicroRCA_time.csv'
+    filename = './results/time_Microscope.csv'
     fault = faults_name.replace('./data/', '')                      
     with open(filename,'a') as f:
         writer = csv.writer(f)

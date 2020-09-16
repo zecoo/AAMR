@@ -703,16 +703,18 @@ if __name__ == "__main__":
     ad_threshold = 0.045
     # print(latency_df)
 
-    svc_metrics(prom_url, start_time, end_time, faults_name)
     DG = mpg(prom_url_no_range, faults_name)
 
     rca_round = 0
+    n_correct = 0
 
     while rca_round < 40:
 
         latency_df_source = latency_source_50(prom_url, start_time, end_time, faults_name)
         latency_df_destination = latency_destination_50(prom_url, start_time, end_time, faults_name)
         latency_df = latency_df_destination.add(latency_df_source)
+
+        svc_metrics(prom_url, start_time, end_time, faults_name)
 
         # anomaly detection on response time of service invocation
         anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
@@ -724,10 +726,11 @@ if __name__ == "__main__":
             rank1 = anomaly_score[0][0]
 
             if rank1 == args.fault:
+                n_correct = n_correct + 1
                 print('==========')
                 print('Gocha')
                 print('==========')
-                rca_round = 200
+                rca_round = 36 + n_correct
 
             fault = faults_name.replace('./data/', '')            
             with open(filename,'a') as f:
@@ -744,7 +747,7 @@ if __name__ == "__main__":
     rca_time = end - start
     print(rca_time)
 
-    filename = './results/MicroRCA_time.csv'
+    filename = './results/time_tRCA.csv'
     fault = faults_name.replace('./data/', '')                      
     with open(filename,'a') as f:
         writer = csv.writer(f)

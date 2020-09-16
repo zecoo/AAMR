@@ -618,9 +618,9 @@ if __name__ == "__main__":
     filename = ''
 
     if '+' in faults_name:
-        filename = './results/f2/tRCA_results.csv'
+        filename = './results/f2/MicroRCA_results.csv'
     else:
-        filename = './results/f1/tRCA_results.csv'
+        filename = './results/f1/MicroRCA_results.csv'
     
     len_second = 150
     prom_url = 'http://39.100.0.61:31423/api/v1/query_range'
@@ -630,10 +630,10 @@ if __name__ == "__main__":
     alpha = 0.55  
     ad_threshold = 0.045
 
-    svc_metrics(prom_url, start_time, end_time, faults_name)
     DG = mpg(prom_url_no_range, faults_name)
 
     rca_round = 0
+    n_correct = 0
 
     while rca_round < 40:
         end_time = time.time()
@@ -643,6 +643,8 @@ if __name__ == "__main__":
         latency_df_destination = latency_destination_50(prom_url, start_time, end_time, faults_name)
         latency_df = latency_df_destination.add(latency_df_source)
 
+        svc_metrics(prom_url, start_time, end_time, faults_name)
+
         # anomaly detection on response time of service invocation
         anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
 
@@ -650,24 +652,17 @@ if __name__ == "__main__":
             anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
             # print(anomaly_score)
 
-            anomaly_score_new = []
-            for anomaly_target in anomaly_score:
-                node = anomaly_target[0]
-        #       print(anomaly_target[0])
-                if DG.nodes[node]['type'] == 'service':
-                    anomaly_score_new.append(anomaly_target)
-
             print('\nMicroRCA score:', anomaly_score)
 
             rank1 = anomaly_score[0][0]
 
             if rank1 == args.fault:
+                n_correct = n_correct + 1
                 print('==========')
                 print('Gocha')
                 print('==========')
-                rca_round = 200
+                rca_round = 36 + n_correct
 
-            filename = './results/MicroRCA_results.csv'
             fault = faults_name.replace('./data/', '')                      
             with open(filename,'a') as f:
                 writer = csv.writer(f)
@@ -683,7 +678,7 @@ if __name__ == "__main__":
     rca_time = end - start
     print(rca_time)
 
-    filename = './results/MicroRCA_time.csv'
+    filename = './results/time_MicroRCA.csv'
     fault = faults_name.replace('./data/', '')                      
     with open(filename,'a') as f:
         writer = csv.writer(f)
