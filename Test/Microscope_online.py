@@ -691,6 +691,7 @@ if __name__ == "__main__":
         if len(anomalies) != 0:
 
             start = datetime.datetime.now()
+            print(start)
             time_list.append(start)
 
             fault = faults_name.replace('./data/', '')
