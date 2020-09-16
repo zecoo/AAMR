@@ -14,6 +14,7 @@ import networkx as nx
 import argparse
 import csv
 from scipy.stats import pearsonr
+import datetime
 
 from sklearn.cluster import Birch
 from sklearn import preprocessing
@@ -651,6 +652,8 @@ def parse_args():
 
 if __name__ == "__main__":
 
+    start = datetime.datetime.now()
+
     args = parse_args()
     faults_name = './data/' + args.fault
     filename = ''
@@ -701,3 +704,6 @@ if __name__ == "__main__":
                 writer.writerow([localtime, fault, 'svc_latency', rank])
         else:
             print('no anomaly')
+    
+    end = datetime.datetime.now()
+    print(end - start)
