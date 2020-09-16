@@ -42,7 +42,7 @@ def countdown(t):
 
 if __name__ == '__main__':
 
-    # os.system('./headless_locust.sh &')
+    os.system('./headless_locust.sh &')
     
     for svc in svc_arr:
         countdown(180)

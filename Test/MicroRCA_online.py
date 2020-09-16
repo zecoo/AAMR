@@ -653,13 +653,13 @@ if __name__ == "__main__":
 
             fault = faults_name.replace('./data/', '')
             anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
-            rank1 = rananomaly_scorek[0][0]
+            rank1 = anomaly_score[0][0]
 
             if rank1 == args.fault:
                 n_correct = n_correct + 1
                 rca_round = 46 + n_correct
 
-            print('\nMicroRCA Score:', rank1)
+            print('MicroRCA Score:', rank1)
             with open(filename,'a') as f:
                 writer = csv.writer(f)
                 localtime = time.asctime( time.localtime(time.time()) )
@@ -669,7 +669,7 @@ if __name__ == "__main__":
         
         rca_round = rca_round + 1
 
-    if n_correct == 4:
+    if n_correct > 2:
         print('==============')
         print('|| MR Gocha ||')
         print('==============')

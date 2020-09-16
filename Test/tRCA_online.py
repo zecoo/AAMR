@@ -732,7 +732,7 @@ if __name__ == "__main__":
                 n_correct = n_correct + 1
                 rca_round = 46 + n_correct
 
-            print('\ntRCA Score:', rank1)
+            print('tRCA Score:', rank1)
             with open(filename,'a') as f:
                 writer = csv.writer(f)
                 localtime = time.asctime( time.localtime(time.time()) )
@@ -742,7 +742,7 @@ if __name__ == "__main__":
         
         rca_round = rca_round + 1
 
-    if n_correct == 4:
+    if n_correct > 2:
         print('==============')
         print('|| TR Gocha ||')
         print('==============')
