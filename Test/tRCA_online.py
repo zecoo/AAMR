@@ -680,8 +680,6 @@ def parse_args():
 
 if __name__ == "__main__":
 
-    start = datetime.datetime.now()
-
     args = parse_args()
     faults_name = './data/' + args.fault
     filename = ''
@@ -707,11 +705,11 @@ if __name__ == "__main__":
 
     rca_round = 0
     n_correct = 0
+    time_list = []
 
     while rca_round < 50:
 
         end_time = time.time()
-        print(end_time)
         start_time = end_time - len_second
 
         latency_df_source = latency_source_50(prom_url, start_time, end_time, faults_name)
