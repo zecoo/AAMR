@@ -725,8 +725,8 @@ if __name__ == "__main__":
             time_list.append(start)
 
             fault = faults_name.replace('./data/', '')
-            rank = calc_sim(faults_name, anomalies)
-            rank1 = rank[0][0]
+            anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
+            rank1 = anomaly_score[0][0]
 
             if rank1 == args.fault:
                 n_correct = n_correct + 1
@@ -736,7 +736,7 @@ if __name__ == "__main__":
             with open(filename,'a') as f:
                 writer = csv.writer(f)
                 localtime = time.asctime( time.localtime(time.time()) )
-                writer.writerow([localtime, fault, 'svc_latency', rank])
+                writer.writerow([localtime, fault, 'svc_latency', anomaly_score])
         else:
             print('no anomaly')
         
