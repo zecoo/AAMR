@@ -675,7 +675,7 @@ if __name__ == "__main__":
 
     round = 0
 
-    while round < 20:
+    while round < 50:
 
         end_time = time.time()
         print(end_time)
@@ -714,8 +714,8 @@ if __name__ == "__main__":
     print(rca_time)
 
     filename = './results/MicroRCA_time.csv'
-        fault = faults_name.replace('./data/', '')                      
-        with open(filename,'a') as f:
-            writer = csv.writer(f)
-            localtime = time.asctime( time.localtime(time.time()) )
-            writer.writerow([localtime, fault, rca_time])
+    fault = faults_name.replace('./data/', '')                      
+    with open(filename,'a') as f:
+        writer = csv.writer(f)
+        localtime = time.asctime( time.localtime(time.time()) )
+        writer.writerow([localtime, fault, rca_time])
