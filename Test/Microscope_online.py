@@ -673,9 +673,9 @@ if __name__ == "__main__":
 
     DG = mpg(prom_url_no_range, faults_name)
 
-    uncatch = True
+    round = 0
 
-    while uncatch:
+    while round < 20:
 
         end_time = time.time()
         print(end_time)
@@ -696,7 +696,7 @@ if __name__ == "__main__":
 
             if rank1 == args.fault:
                 print('Gocha')
-                uncatch = False
+                round = 200
 
             print('\nMicroscope Score:', rank)
             with open(filename,'a') as f:
@@ -705,6 +705,17 @@ if __name__ == "__main__":
                 writer.writerow([localtime, fault, 'svc_latency', rank])
         else:
             print('no anomaly')
+        
+        round = round + 1
 
     end = datetime.datetime.now()
-    print(end - start)    
+
+    rca_time = end - start
+    print(rca_time)
+
+    filename = './results/MicroRCA_time.csv'
+        fault = faults_name.replace('./data/', '')                      
+        with open(filename,'a') as f:
+            writer = csv.writer(f)
+            localtime = time.asctime( time.localtime(time.time()) )
+            writer.writerow([localtime, fault, rca_time])

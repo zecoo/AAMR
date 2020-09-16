@@ -8,7 +8,7 @@ from itertools import combinations
 # svc_arr = ['cartservice', 'productcatalogservice']
 
 rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
-svc_arr = ['adservice', 'frontend', 'paymentservice', 'currencyservice', 'cartservice', 'productcatalogservice', 'checkoutservice', 'recommendationservice']
+svc_arr = ['cartservice', 'adservice', 'frontend', 'paymentservice', 'currencyservice', 'productcatalogservice', 'checkoutservice', 'recommendationservice']
 down_time = 180
 fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/hipster/'
 fault_delete_path = 'kubectl delete -f /root/zik/fault-injection/hipster/'
@@ -42,9 +42,11 @@ def countdown(t):
 
 if __name__ == '__main__':
 
-    countdown(150)
-    # os.system('./headless_locust.sh &')
-    os.system('kubectl apply -f /root/zik/fault-injection/hipster/cartservice.yaml')
-    os_str = 'python3 %s --fault %s' % (rca_arr[0], svc_arr[4])
-    os.system(os_str)
-    os.system('kubectl delete -f /root/zik/fault-injection/hipster/cartservice.yaml')
+    os.system('./headless_locust.sh &')
+    
+    for svc in svc_arr:
+        countdown(180)
+        os.system('kubectl apply -f /root/zik/fault-injection/hipster/cartservice.yaml')
+        os_str = 'python3 %s --fault %s' % (rca_arr[0], svc)
+        os.system(os_str)
+        os.system('kubectl delete -f /root/zik/fault-injection/hipster/cartservice.yaml')
