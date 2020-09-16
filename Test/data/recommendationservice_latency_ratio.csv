@@ -1,0 +1,17 @@
+Unnamed: 0,12.394668959587275
+cartservice_redis-cart,0.08023018216306822
+checkoutservice_cartservice,2.1300576530163187
+checkoutservice_currencyservice,1.6659501289767842
+checkoutservice_emailservice,1.6659501289767842
+checkoutservice_paymentservice,1.6659501289767842
+checkoutservice_productcatalogservice,1.46603611349957
+checkoutservice_shippingservice,1.6659501289767842
+frontend_adservice,2.127437828021987
+frontend_cartservice,2.366807836140598
+frontend_checkoutservice,57.01023040601658
+frontend_currencyservice,2.0920954060240216
+frontend_productcatalogservice,2.070173797624333
+frontend_recommendationservice,38.01410352657529
+frontend_shippingservice,2.0657781599312126
+recommendationservice_productcatalogservice,2.071136084216576
+unknown_frontend,

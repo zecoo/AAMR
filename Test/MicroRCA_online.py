@@ -655,6 +655,7 @@ if __name__ == "__main__":
             print('\nMicroRCA score:', anomaly_score)
 
             rank1 = anomaly_score[0][0]
+            print('======\n', rank1)
 
             if rank1 == args.fault:
                 n_correct = n_correct + 1

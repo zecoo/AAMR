@@ -1,0 +1,11 @@
+Wed Sep 16 14:56:52 2020,adservice,0:00:37.783254
+Wed Sep 16 15:00:52 2020,frontend,0:00:37.424064
+Wed Sep 16 15:04:52 2020,paymentservice,0:00:36.809094
+Wed Sep 16 15:08:19 2020,currencyservice,0:00:02.864804
+Wed Sep 16 15:26:09 2020,cartservice,0:00:36.692943
+Wed Sep 16 15:30:10 2020,paymentservice,0:00:36.808975
+Wed Sep 16 15:33:37 2020,checkoutservice,0:00:03.006665
+Wed Sep 16 15:38:05 2020,recommendationservice,0:00:30.882975
+Wed Sep 16 15:41:38 2020,currencyservice,0:00:02.910826
+Wed Sep 16 15:45:38 2020,productcatalogservice,0:00:02.866834
+Wed Sep 16 15:50:16 2020,adservice,0:00:39.763200
