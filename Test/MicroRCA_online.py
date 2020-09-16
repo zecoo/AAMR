@@ -681,7 +681,7 @@ if __name__ == "__main__":
 
     fault = faults_name.replace('./data/', '')
     timename = './results/time_mRCA.csv'                
-    with open(filename,'a') as f:
+    with open(timename,'a') as f:
         writer = csv.writer(f)
         localtime = time.asctime( time.localtime(time.time()) )
         writer.writerow([localtime, fault, rca_time])
