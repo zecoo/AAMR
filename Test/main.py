@@ -47,6 +47,9 @@ if __name__ == '__main__':
     for svc in svc_arr:
         countdown(180)
         os.system('kubectl apply -f /root/zik/fault-injection/hipster/%s.yaml' % svc)
-        os_str = 'python3 %s --fault %s' % (rca_arr[0], svc)
-        os.system(os_str)
+
+        for rca in rca_arr:
+            os_str = 'python3 %s --fault %s &' % (rca, svc)
+            os.system(os_str)
+
         os.system('kubectl delete -f /root/zik/fault-injection/hipster/%s.yaml' % svc)

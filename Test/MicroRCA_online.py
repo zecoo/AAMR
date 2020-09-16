@@ -13,8 +13,6 @@ import numpy as np
 import networkx as nx
 import argparse
 import csv
-from scipy.stats import pearsonr
-import datetime
 
 from sklearn.cluster import Birch
 from sklearn import preprocessing
@@ -33,7 +31,7 @@ node_dict = {
                 # 'kubernetes-minion-group-r23j' : '10.166.0.14:9100',
                 'iz8vbhflpp3tuw05qfowaxz' : '39.100.0.61:9100'
         }
-
+        
 
 def latency_source_50(prom_url, start_time, end_time, faults_name):
 
@@ -51,6 +49,7 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
     # [{'metric': {'destination_workload': 'orders-db', 'source_workload': 'orders'}, 'value': [1594888889.714, '0.03426666666666667']}, 
     # 解读：value 的第一个值表示当前时间，第二个值表示真正的 value 也就是这一长串 promQL 的 value
     results = response.json()['data']['result']
+    
 
     # print(results)
 
@@ -175,17 +174,18 @@ def svc_metrics(prom_url, start_time, end_time, faults_name):
 
     for result in results:
         df = pd.DataFrame()
-        svc = result['metric']['container_name']
+        # svc = result['metric']['container_name']
         pod_name = result['metric']['pod_name']
         nodename = result['metric']['instance']
 
         # print(svc)
-        values = result['values']
 
         if len(pod_name.split('-')) > 3:
             svc = pod_name.split('-')[0] + '-' + pod_name.split('-')[1]
         else:
             svc = pod_name.split('-')[0]
+            
+        values = result['values']
 
         values = list(zip(*values))
         if 'timestamp' not in df:
@@ -454,25 +454,30 @@ def svc_personalization(svc, anomaly_graph, baseline_df, faults_name):
             max_corr = temp
             metric = col
 
-
     edges_weight_avg = 0.0
     num = 0
     for u, v, data in anomaly_graph.in_edges(svc, data=True):
         num = num + 1
+        if np.isnan(data['weight']):
+            data['weight'] = 1
+        # print('\ndata.weight: ', data['weight'])
         edges_weight_avg = edges_weight_avg + data['weight']
 
     for u, v, data in anomaly_graph.out_edges(svc, data=True):
+        if np.isnan(data['weight']):
+            data['weight'] = 1
         if anomaly_graph.nodes[v]['type'] == 'service':
             num = num + 1
             edges_weight_avg = edges_weight_avg + data['weight']
 
     edges_weight_avg  = edges_weight_avg / num
 
+#    print('\navg: ', edges_weight_avg)
+#    print('\ncorr: ', max_corr)
+
     personalization = edges_weight_avg * max_corr
 
     return personalization, metric
-
-
 
 def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
     # Get the anomalous subgraph and rank the anomalous services
@@ -503,7 +508,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 
 #    print('edge df:', edge_df)
     nodes = set(nodes)
-#    print(nodes)
+    # print('\nnodes: ', nodes)
 
     personalization = {}
     for node in DG.nodes():
@@ -548,11 +553,13 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 
     for node in nodes:
         # 这里用到了 系统层面的 metric
+        print(node)
         max_corr, col = svc_personalization(node, anomaly_graph, baseline_df, faults_name)
         personalization[node] = max_corr / anomaly_graph.degree(node)
 #        print(node, personalization[node])
 
     anomaly_graph = anomaly_graph.reverse(copy=True)
+    # print('\nanomaly_graph: ', anomaly_graph.nodes)
 #
     edges = list(anomaly_graph.edges(data=True))
 
@@ -570,65 +577,16 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 #    plt.show()
 #
 ##    personalization['shipping'] = 2
-#    print('Personalization:', personalization)
+    
+    # print('Personalization:', personalization)
 
-    anomaly_score = nx.pagerank(anomaly_graph, alpha=0.85, personalization=personalization, max_iter=10000)
+    anomaly_score = nx.pagerank(DG, alpha=0.85, personalization=personalization, max_iter=10000)
 
     anomaly_score = sorted(anomaly_score.items(), key=lambda x: x[1], reverse=True)
 
 #    return anomaly_graph
     return anomaly_score
 
-
-def calc_sim(faults_name, anomalies):
-    fault = faults_name.replace('./data/','')
-
-    latency_filename = faults_name + '_latency_source_50.csv'  # inbound
-    latency_df_source = pd.read_csv(latency_filename)
-    # print("\nfilename")
-    # print(latency_filename)
-
-    latency_filename = faults_name + '_latency_destination_50.csv' # outbound
-    latency_df_destination = pd.read_csv(latency_filename) 
-
-    # 这里的 fill_value=0 很关键，把 unknown-fe 的 nan 给替换了
-    latency_df = latency_df_source.add(latency_df_destination, fill_value=0)
-
-    # print('\nlatency_df: ')
-    latency_len = len(latency_df)
-
-    svc_latency_df = pd.DataFrame()
-
-    for key in latency_df.keys():
-        if 'db' in key or 'rabbitmq' in key or 'Unnamed' in key:
-            continue
-        else:
-            svc_name = key.split('_')[1]
-            if svc_name in svc_latency_df:
-                svc_latency_df[svc_name].add(latency_df[key])
-            else:
-                svc_latency_df[svc_name] = latency_df[key] 
-
-    # locust len may always be longer
-    
-    DG = mpg(prom_url_no_range, faults_name)
-
-    score = {}
-    frontend_list = svc_latency_df['frontend'].tolist()
-    frontend_list = np.nan_to_num(frontend_list)
-
-    for anomaly in anomalies:
-        anomaly = anomaly.split('_')[1]
-        degree = DG.degree(anomaly)
-        key_list = svc_latency_df[anomaly].tolist()
-        key_list = np.nan_to_num(key_list)
-        pearson_sim = pearsonr(frontend_list, key_list)[0]
-        score.update({anomaly: pearson_sim / degree})        
-    
-    score = sorted(score.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
-    # print(score)
-
-    return score
 
 def parse_args():
     """Parse the args."""
@@ -662,37 +620,45 @@ if __name__ == "__main__":
         filename = './results/f2/tRCA_results.csv'
     else:
         filename = './results/f1/tRCA_results.csv'
-
+    
     len_second = 150
     prom_url = 'http://39.100.0.61:31423/api/v1/query_range'
     prom_url_no_range = 'http://39.100.0.61:31423/api/v1/query'
-    
+
     # Tuning parameters
     alpha = 0.55  
     ad_threshold = 0.045
 
+    svc_metrics(prom_url, start_time, end_time, faults_name)
     DG = mpg(prom_url_no_range, faults_name)
 
     rca_round = 0
 
     while rca_round < 40:
-
         end_time = time.time()
-        print(end_time)
         start_time = end_time - len_second
 
         latency_df_source = latency_source_50(prom_url, start_time, end_time, faults_name)
         latency_df_destination = latency_destination_50(prom_url, start_time, end_time, faults_name)
         latency_df = latency_df_destination.add(latency_df_source)
-        svc_metrics(prom_url, start_time, end_time, faults_name)
+
         # anomaly detection on response time of service invocation
         anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
 
-        if len(anomalies) != 0:
-            filename = './results/Microscope_results.csv'
-            fault = faults_name.replace('./data/', '')
-            rank = calc_sim(faults_name, anomalies)
-            rank1 = rank[0][0]
+        if len(anomalies) != 0:     
+            anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
+            # print(anomaly_score)
+
+            anomaly_score_new = []
+            for anomaly_target in anomaly_score:
+                node = anomaly_target[0]
+        #       print(anomaly_target[0])
+                if DG.nodes[node]['type'] == 'service':
+                    anomaly_score_new.append(anomaly_target)
+
+            print('\nMicroRCA score:', anomaly_score_new)
+
+            rank1 = anomaly_score_new[0][0]
 
             if rank1 == args.fault:
                 print('==========')
@@ -700,16 +666,17 @@ if __name__ == "__main__":
                 print('==========')
                 rca_round = 200
 
-            print('\nMicroscope Score:', rank)
+            filename = './results/MicroRCA_results.csv'
+            fault = faults_name.replace('./data/', '')                      
             with open(filename,'a') as f:
                 writer = csv.writer(f)
                 localtime = time.asctime( time.localtime(time.time()) )
-                writer.writerow([localtime, fault, 'svc_latency', rank])
+                writer.writerow([localtime, fault, 'svc_latency', anomaly_score_new])
         else:
             print('no anomaly')
         
         rca_round = rca_round + 1
-
+    
     end = datetime.datetime.now()
 
     rca_time = end - start
