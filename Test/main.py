@@ -42,14 +42,9 @@ def countdown(t):
 
 if __name__ == '__main__':
 
-    os.system('kubectl apply -f /root/zik/fault-injection/hipster/adservice.yaml')
-    os_str = 'time python3 %s --fault %s' % (rca_arr[0], svc_arr[0])
-    f = os.popen(os_str, 'r')
-    res = f.readlines()
-
-    for i in res:
-        print('------')
-        print(i)
-
-    f.close()
-    os.system('kubectl delete -f /root/zik/fault-injection/hipster/adservice.yaml')
+    countdown(150)
+    # os.system('./headless_locust.sh &')
+    os.system('kubectl apply -f /root/zik/fault-injection/hipster/cartservice.yaml')
+    os_str = 'python3 %s --fault %s' % (rca_arr[0], svc_arr[4])
+    os.system(os_str)
+    os.system('kubectl delete -f /root/zik/fault-injection/hipster/cartservice.yaml')

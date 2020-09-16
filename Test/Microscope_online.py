@@ -678,6 +678,7 @@ if __name__ == "__main__":
     while uncatch:
 
         end_time = time.time()
+        print(end_time)
         start_time = end_time - len_second
 
         latency_df_source = latency_source_50(prom_url, start_time, end_time, faults_name)
@@ -704,6 +705,6 @@ if __name__ == "__main__":
                 writer.writerow([localtime, fault, 'svc_latency', rank])
         else:
             print('no anomaly')
-    
+
     end = datetime.datetime.now()
-    print(end - start)
+    print(end - start)    
