@@ -708,48 +708,55 @@ if __name__ == "__main__":
     rca_round = 0
     n_correct = 0
 
-    while rca_round < 40:
+    while rca_round < 50:
+
+        end_time = time.time()
+        print(end_time)
+        start_time = end_time - len_second
 
         latency_df_source = latency_source_50(prom_url, start_time, end_time, faults_name)
         latency_df_destination = latency_destination_50(prom_url, start_time, end_time, faults_name)
         latency_df = latency_df_destination.add(latency_df_source)
-
         svc_metrics(prom_url, start_time, end_time, faults_name)
-
         # anomaly detection on response time of service invocation
         anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
 
         if len(anomalies) != 0:
-            anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
-            print('\ntRCA_score: ', anomaly_score)
 
-            rank1 = anomaly_score[0][0]
+            start = datetime.datetime.now()
+            time_list.append(start)
+
+            fault = faults_name.replace('./data/', '')
+            rank = calc_sim(faults_name, anomalies)
+            rank1 = rank[0][0]
 
             if rank1 == args.fault:
                 n_correct = n_correct + 1
-                print('==========')
-                print('Gocha')
-                print('==========')
-                rca_round = 36 + n_correct
+                rca_round = 46 + n_correct
 
-            fault = faults_name.replace('./data/', '')            
+            print('\ntRCA Score:', rank1)
             with open(filename,'a') as f:
                 writer = csv.writer(f)
                 localtime = time.asctime( time.localtime(time.time()) )
-                writer.writerow([localtime, fault, 'svc_latency', anomaly_score])
+                writer.writerow([localtime, fault, 'svc_latency', rank])
         else:
             print('no anomaly')
         
         rca_round = rca_round + 1
 
-    end = datetime.datetime.now()
+    if n_correct == 4:
+        print('==============')
+        print('|| TR Gocha ||')
+        print('==============')
 
-    rca_time = end - start
+    end = datetime.datetime.now()
+    time_list.append(end)
+    rca_time = time_list[-1] - time_list[0]
     print(rca_time)
 
-    filename = './results/time_tRCA.csv'
-    fault = faults_name.replace('./data/', '')                      
-    with open(filename,'a') as f:
+    fault = faults_name.replace('./data/', '')
+    timename = './results/time_tRCA.csv'
+    with open(timename, 'a') as f:
         writer = csv.writer(f)
         localtime = time.asctime( time.localtime(time.time()) )
         writer.writerow([localtime, fault, rca_time])
