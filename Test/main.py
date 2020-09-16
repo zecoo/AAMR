@@ -52,4 +52,6 @@ if __name__ == '__main__':
             os_str = 'python3 %s --fault %s &' % (rca, svc)
             os.system(os_str)
 
+        time.sleep(60)
+
         os.system('kubectl delete -f /root/zik/fault-injection/hipster/%s.yaml' % svc)

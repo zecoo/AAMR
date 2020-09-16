@@ -15,6 +15,7 @@ import argparse
 import csv
 import itertools
 import os
+import datetime
 
 from sklearn.cluster import Birch
 from sklearn import preprocessing
@@ -720,7 +721,7 @@ if __name__ == "__main__":
             anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
             print('\ntRCA_score: ', anomaly_score)
 
-            rank1 = anomaly_score_new[0][0]
+            rank1 = anomaly_score[0][0]
 
             if rank1 == args.fault:
                 print('==========')

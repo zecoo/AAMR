@@ -13,6 +13,7 @@ import numpy as np
 import networkx as nx
 import argparse
 import csv
+import datetime
 
 from sklearn.cluster import Birch
 from sklearn import preprocessing
@@ -656,9 +657,9 @@ if __name__ == "__main__":
                 if DG.nodes[node]['type'] == 'service':
                     anomaly_score_new.append(anomaly_target)
 
-            print('\nMicroRCA score:', anomaly_score_new)
+            print('\nMicroRCA score:', anomaly_score)
 
-            rank1 = anomaly_score_new[0][0]
+            rank1 = anomaly_score[0][0]
 
             if rank1 == args.fault:
                 print('==========')
@@ -671,7 +672,7 @@ if __name__ == "__main__":
             with open(filename,'a') as f:
                 writer = csv.writer(f)
                 localtime = time.asctime( time.localtime(time.time()) )
-                writer.writerow([localtime, fault, 'svc_latency', anomaly_score_new])
+                writer.writerow([localtime, fault, 'svc_latency', anomaly_score])
         else:
             print('no anomaly')
         
