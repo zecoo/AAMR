@@ -692,12 +692,14 @@ def anomaly_detection(faults_name, DG):
 	svc_latency_df = svc_latency_df.fillna(svc_latency_df.mean())
 
 	for svc in DG.nodes:
-		x = svc_latency_df['frontend']
-		y = svc_latency_df[svc]
-
-		if cal(x,y) > 1000:
-			print('AAAAAAAAnomaly')
-			has_anomaly = True
+                if svc == 'unknown':
+                        pass
+                else:
+                    x = svc_latency_df['frontend']
+                    y = svc_latency_df[svc]
+                    if cal(x,y) > 1000:
+                        print('AAAAAAAAnomaly')
+                        has_anomaly = True
 	
 	return has_anomaly
 
@@ -757,7 +759,7 @@ if __name__ == "__main__":
             time_list.append(start)
 
             fault = faults_name.replace('./data/', '')
-            anomaly_score = anomaly_subgraph(DG, atency_df, faults_name, alpha)
+            anomaly_score = anomaly_subgraph(DG, latency_df, faults_name, alpha)
             rank1 = anomaly_score[0][0]
 
             if rank1 == args.fault:

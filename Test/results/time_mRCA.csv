@@ -11,3 +11,13 @@ Wed Sep 16 19:09:49 2020,checkoutservice,0:00:11.874665
 Wed Sep 16 19:13:53 2020,recommendationservice,0:00:28.035761
 Wed Sep 16 19:17:49 2020,currencyservice,0:00:23.338912
 Wed Sep 16 19:21:49 2020,productcatalogservice,0:00:22.404495
+Thu Sep 17 14:22:57 2020,cartservice,0:00:25.163398
+Thu Sep 17 14:27:11 2020,cartservice,0:00:20.619106
+Thu Sep 17 14:39:36 2020,cartservice,0:00:15.216551
+Thu Sep 17 14:45:04 2020,cartservice,0:00:14.006604
+Thu Sep 17 14:49:19 2020,paymentservice,0:00:28.169362
+Thu Sep 17 14:53:19 2020,checkoutservice,0:00:27.187890
+Thu Sep 17 14:57:19 2020,recommendationservice,0:00:01.958796
+Thu Sep 17 15:01:34 2020,currencyservice,0:00:00
+Thu Sep 17 15:05:22 2020,productcatalogservice,0:00:16.334555
+Thu Sep 17 15:09:37 2020,adservice,0:00:43.006151
