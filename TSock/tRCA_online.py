@@ -27,7 +27,7 @@ from numpy import mean
 
 metric_step = '5s'
 smoothing_window = 12
-anomaly_threshold = 680
+anomaly_threshold = 365
 base_svc = 'catalogue'
 
 # kubectl get nodes -o wide | awk -F ' ' '{print $1 " : " $6":9100"}'
@@ -548,7 +548,7 @@ def calc_score(faults_name):
 
     # 添加 trace 信息
     # print('\nget trace: ')
-    for path in nx.all_simple_paths(DG, source='frontend', target=fault):
+    for path in nx.all_simple_paths(DG, source='front-end', target=fault):
         for i in list(itertools.combinations(path, 2)):
             single_trace = i[0] + '_' + i[1]
             if single_trace in index and fault not in single_trace:
@@ -694,7 +694,7 @@ def anomaly_detection(faults_name, DG):
 	svc_latency_df = svc_latency_df.fillna(svc_latency_df.mean())
 
 	for svc in DG.nodes:
-                if svc == 'unknown':
+                if svc not in ['payment', 'carts', 'user', 'catalogue', 'shipping', 'orders']:
                         pass
                 else:
                     x = svc_latency_df[base_svc]
@@ -712,7 +712,7 @@ def parse_args():
         description='Root cause analysis for microservices')
 
     parser.add_argument('--fault', type=str, required=False,
-                        default='checkoutservice',
+                        default='user',
                         help='folder name to store csv file')
 
     return parser.parse_args()
