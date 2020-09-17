@@ -14,8 +14,8 @@ fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/hipster/'
 fault_delete_path = 'kubectl delete -f /root/zik/fault-injection/hipster/'
 
 
-def combine_svc():
-    comb_svc = list(combinations(svc_arr, 2))
+def combine_svc(svcs):
+    comb_svc = list(combinations(svcs, 2))
     svc_list = []
     for svc in comb_svc:
         svc = svc[0] + '+' + svc[1]
@@ -55,7 +55,7 @@ if __name__ == '__main__':
             os.system(fault_delete_path + '%s.yaml' % svc)
         print("==== ends ====")
     elif case == 2:
-        svc_list = combine_svc()
+        svc_list = combine_svc(svc_arr)
         for svcs in svc_list:
             countdown(down_time)
             svc2 = svcs.split('+')

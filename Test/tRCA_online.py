@@ -16,7 +16,7 @@ import csv
 import itertools
 import os
 import datetime
-
+from dtw import dtw
 from sklearn.cluster import Birch
 from sklearn import preprocessing
 from numpy import mean
@@ -622,30 +622,7 @@ def svc_personalization(svc, anomaly_graph, baseline_df, faults_name):
 
 
 
-def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
-    # Get the anomalous subgraph and rank the anomalous services
-    # input: 
-    #   DG: attributed graph
-    #   anomlies: anoamlous service invocations
-    #   latency_df: service invocations from data collection
-    #   agg_latency_dff: aggregated service invocation
-    #   faults_name: prefix of csv file
-    #   alpha: weight of the anomalous edge
-    # output:
-    #   anomalous scores 
-
-#    plt.figure(figsize=(9,9))
-##    nx.draw(DG, with_labels=True, font_weight='bold')
-#    pos = nx.spring_layout(anomaly_graph)
-#    nx.draw(anomaly_graph, pos, with_labels=True, cmap = plt.get_cmap('jet'), node_size=1500, arrows=True, )
-#    labels = nx.get_edge_attributes(anomaly_graph,'weight')
-#    nx.draw_networkx_edge_labels(anomaly_graph,pos,edge_labels=labels)
-#    plt.show()
-#
-##    personalization['shipping'] = 2
-#    print('Personalization:', personalization)
-
-    # print('\nanomaly graph: ', anomaly_graph.adj)
+def anomaly_subgraph(DG, latency_df, faults_name, alpha):
 
     personalization = calc_score(faults_name)
     # print('\npersonalization: ', personalization)
@@ -657,6 +634,73 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 #    return anomaly_graph
     return anomaly_score
 
+def pre_score(data):
+	res = []
+	for i in range(0, len(data)):
+		if i == (len(data)-1):
+			res.append(data[i] - mean(data))
+		else:
+			res.append(data[i+1] - data[i])
+	return res
+
+def cal(x, y):
+	x = np.array(pre_score(x)).reshape(-1, 1)
+	y = np.array(pre_score(y)).reshape(-1, 1)
+
+	manhattan_distance = lambda x, y: np.abs(x - y)
+
+	d, cost_matrix, acc_cost_matrix, path = dtw(x, y, dist=manhattan_distance)
+
+	return d
+
+def get_svc_latency_df(faults_name):
+	fault = faults_name.replace('./data/','')
+	
+	latency_filename = faults_name + '_latency_source_50.csv'
+	latency_df_source = pd.read_csv(latency_filename)
+    # print("\nfilename")
+    # print(latency_filename)
+
+	latency_filename = faults_name + '_latency_destination_50.csv'
+	latency_df_destination = pd.read_csv(latency_filename) 
+
+	# 这里的 fill_value=0 很关键，把 unknown-fe 的 nan 给替换了
+	latency_df = latency_df_source.add(latency_df_destination, fill_value=0)
+
+	# print('\nlatency_df: ')
+	latency_len = len(latency_df)
+
+	svc_latency_df = pd.DataFrame()
+
+	for key in latency_df.keys():
+		if 'db' in key or 'rabbitmq' in key or 'Unnamed' in key:
+			continue
+		else:
+			svc_name = key.split('_')[1]
+			if svc_name in svc_latency_df:
+				svc_latency_df[svc_name].add(latency_df[key])
+			else:
+				svc_latency_df[svc_name] = latency_df[key]
+
+	return svc_latency_df
+
+def anomaly_detection(faults_name, DG):
+
+	has_anomaly = False
+	
+	svc_latency_df = get_svc_latency_df(faults_name)
+	svc_latency_df = svc_latency_df.fillna(svc_latency_df.mean())
+
+	for svc in DG.nodes:
+		x = svc_latency_df['frontend']
+		y = svc_latency_df[svc]
+
+		if cal(x,y) > 1000:
+			print('AAAAAAAAnomaly')
+			has_anomaly = True
+	
+	return has_anomaly
+
 
 def parse_args():
     """Parse the args."""
@@ -666,15 +710,6 @@ def parse_args():
     parser.add_argument('--fault', type=str, required=False,
                         default='checkoutservice',
                         help='folder name to store csv file')
-    
-    # 150s 每隔 5s 取一次数据 所以 csv 文件里一共有 30 行
-    # parser.add_argument('--length', type=int, required=False,
-    #                 default=150,
-    #                 help='length of time series')
-
-    # parser.add_argument('--url', type=str, required=False,
-    #                 default='http://http://39.100.0.61:30598/api/v1/query',
-    #                 help='url of prometheus query')
 
     return parser.parse_args()
 
@@ -716,16 +751,13 @@ if __name__ == "__main__":
         latency_df_destination = latency_destination_50(prom_url, start_time, end_time, faults_name)
         latency_df = latency_df_destination.add(latency_df_source)
         svc_metrics(prom_url, start_time, end_time, faults_name)
-        # anomaly detection on response time of service invocation
-        anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
-
-        if len(anomalies) != 0:
-
+        
+        if anomaly_detection(faults_name, DG):
             start = datetime.datetime.now()
             time_list.append(start)
 
             fault = faults_name.replace('./data/', '')
-            anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
+            anomaly_score = anomaly_subgraph(DG, atency_df, faults_name, alpha)
             rank1 = anomaly_score[0][0]
 
             if rank1 == args.fault:
