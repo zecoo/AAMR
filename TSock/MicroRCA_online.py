@@ -33,7 +33,6 @@ node_dict = {
                 'iz8vbhflpp3tuw05qfowaxz' : '39.100.0.61:9100'
         }
         
-
 def latency_source_50(prom_url, start_time, end_time, faults_name):
 
     latency_df = pd.DataFrame()
@@ -73,7 +72,7 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
         latency_df[name] = latency_df[name].astype('float64')  * 1000
 
     response = requests.get(prom_url,
-                            params={'query': 'sum(irate(istio_tcp_sent_bytes_total{reporter=\"source\",destination_workload_namespace=\"sock-shop\"}[1m])) by (destination_workload, source_workload) / 1000',
+                            params={'query': 'sum(irate(istio_tcp_sent_bytes_total{destination_workload_namespace=\"sock-shop\",reporter=\"source\"}[1m])) by (destination_workload, source_workload) / 1000',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -83,7 +82,7 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
         dest_svc = result['metric']['destination_workload']
         src_svc = result['metric']['source_workload']
         name = src_svc + '_' + dest_svc
-
+#        print(svc)
         values = result['values']
 
         values = list(zip(*values))
@@ -144,7 +143,7 @@ def latency_destination_50(prom_url, start_time, end_time, faults_name):
         dest_svc = result['metric']['destination_workload']
         src_svc = result['metric']['source_workload']
         name = src_svc + '_' + dest_svc
-
+#        print(svc)
         values = result['values']
 
         values = list(zip(*values))
@@ -175,17 +174,11 @@ def svc_metrics(prom_url, start_time, end_time, faults_name):
 
     for result in results:
         df = pd.DataFrame()
-        # svc = result['metric']['container_name']
+        svc = result['metric']['container_name']
         pod_name = result['metric']['pod_name']
         nodename = result['metric']['instance']
 
         # print(svc)
-
-        if len(pod_name.split('-')) > 3:
-            svc = pod_name.split('-')[0] + '-' + pod_name.split('-')[1]
-        else:
-            svc = pod_name.split('-')[0]
-            
         values = result['values']
 
         values = list(zip(*values))
@@ -202,7 +195,14 @@ def svc_metrics(prom_url, start_time, end_time, faults_name):
         df['ctn_memory'] = ctn_memory(prom_url, start_time, end_time, pod_name)
         df['ctn_memory'] = df['ctn_memory'].astype('float64')
 
-
+#        response = requests.get('http://localhost:9090/api/v1/query',
+#                                params={'query': 'sum(node_uname_info{nodename="%s"}) by (instance)' % nodename
+#                                        })
+#        results = response.json()['data']['result']
+#
+#        print(results)
+#
+#        instance = results[0]['metric']['instance']
         instance = node_dict[nodename]
 
         # 这里用到了各种的系统层面 metric 
@@ -224,7 +224,7 @@ def svc_metrics(prom_url, start_time, end_time, faults_name):
 # ctn: container
 def ctn_network(prom_url, start_time, end_time, pod_name):
     response = requests.get(prom_url,
-                            params={'query': 'sum(rate(container_network_transmit_packets_total{namespace="sock-shop", pod_name="%s"}[1m])) / 1000 * sum(rate(container_network_transmit_packets_total{namespace="hipster", pod_name="%s"}[1m])) / 1000' % (pod_name, pod_name),
+                            params={'query': 'sum(rate(container_network_transmit_packets_total{namespace="sock-shop", pod_name="%s"}[1m])) / 1000 * sum(rate(container_network_transmit_packets_total{namespace="sock-shop", pod_name="%s"}[1m])) / 1000' % (pod_name, pod_name),
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -267,7 +267,7 @@ def node_network(prom_url, start_time, end_time, instance):
     df['timestamp'] = df['timestamp'].astype('datetime64[s]')
     df['node_network'] = pd.Series(values[1])
     df['node_network'] = df['node_network'].astype('float64')
-
+#    return metric
     return df
 
 def node_cpu(prom_url, start_time, end_time, instance):
@@ -281,13 +281,15 @@ def node_cpu(prom_url, start_time, end_time, instance):
     # print(results)
     values = results[0]['values']
     values = list(zip(*values))
-
+#    metric = values[1]
+#    print(instance, len(metric))
+#    print(values[0])
     df = pd.DataFrame()
     df['timestamp'] = values[0]
     df['timestamp'] = df['timestamp'].astype('datetime64[s]')
     df['node_cpu'] = pd.Series(values[1])
     df['node_cpu'] = df['node_cpu'].astype('float64')
-
+#    return metric
     return df
 
 def node_memory(prom_url, start_time, end_time, instance):
@@ -300,13 +302,14 @@ def node_memory(prom_url, start_time, end_time, instance):
     values = results[0]['values']
 
     values = list(zip(*values))
-
+#    metric = values[1]
+#    return metric
     df = pd.DataFrame()
     df['timestamp'] = values[0]
     df['timestamp'] = df['timestamp'].astype('datetime64[s]')
     df['node_memory'] = pd.Series(values[1])
     df['node_memory'] = df['node_memory'].astype('float64')
-
+#    return metric
     return df
 
 # Create Graph
@@ -316,7 +319,7 @@ def mpg(prom_url, faults_name):
     DG = nx.DiGraph()
     df = pd.DataFrame(columns=['source', 'destination'])
     response = requests.get(prom_url,
-                            params={'query': 'sum(istio_tcp_received_bytes_total{destination_workload_namespace=\"sock-shop\"}) by (source_workload, destination_workload)'
+                            params={'query': 'sum(istio_tcp_received_bytes_total{destination_workload_namespace=\'sock-shop\'}) by (source_workload, destination_workload)'
                                     })
     
     results = response.json()['data']['result']
@@ -327,7 +330,7 @@ def mpg(prom_url, faults_name):
         metric = result['metric']
         source = metric['source_workload']
         destination = metric['destination_workload']
-
+#        print(metric['source_workload'] , metric['destination_workload'] )
         df = df.append({'source':source, 'destination': destination}, ignore_index=True)
         DG.add_edge(source, destination)
         
@@ -344,7 +347,7 @@ def mpg(prom_url, faults_name):
         
         source = metric['source_workload']
         destination = metric['destination_workload']
-
+#        print(metric['source_workload'] , metric['destination_workload'] )
         df = df.append({'source':source, 'destination': destination}, ignore_index=True)
         DG.add_edge(source, destination)
         
@@ -367,7 +370,7 @@ def mpg(prom_url, faults_name):
             DG.node[destination]['type'] = 'host'
 
     filename = faults_name + '_mpg.csv'
-
+##    df.set_index('timestamp')
     df.to_csv(filename)
     return DG
 
@@ -392,18 +395,19 @@ def birch_ad_with_smoothing(latency_df, threshold):
 
             X = normalized_x.reshape(-1,1)
 
-
+#            threshold = 0.05
 
             brc = Birch(branching_factor=50, n_clusters=None, threshold=threshold, compute_labels=True)
             brc.fit(X)
             brc.predict(X)
 
             labels = brc.labels_
-
+#            centroids = brc.subcluster_centers_
             n_clusters = np.unique(labels).size
             if n_clusters > 1:
                 anomalies.append(svc)
     return anomalies
+
 
 def node_weight(svc, anomaly_graph, baseline_df, faults_name):
 
@@ -411,7 +415,7 @@ def node_weight(svc, anomaly_graph, baseline_df, faults_name):
     in_edges_weight_avg = 0.0
     num = 0
     for u, v, data in anomaly_graph.in_edges(svc, data=True):
-
+#        print(u, v)
         num = num + 1
         in_edges_weight_avg = in_edges_weight_avg + data['weight']
     if num > 0:
@@ -444,18 +448,14 @@ def svc_personalization(svc, anomaly_graph, baseline_df, faults_name):
             max_corr = temp
             metric = col
 
+
     edges_weight_avg = 0.0
     num = 0
     for u, v, data in anomaly_graph.in_edges(svc, data=True):
         num = num + 1
-        if np.isnan(data['weight']):
-            data['weight'] = 1
-        # print('\ndata.weight: ', data['weight'])
         edges_weight_avg = edges_weight_avg + data['weight']
 
     for u, v, data in anomaly_graph.out_edges(svc, data=True):
-        if np.isnan(data['weight']):
-            data['weight'] = 1
         if anomaly_graph.nodes[v]['type'] == 'service':
             num = num + 1
             edges_weight_avg = edges_weight_avg + data['weight']
@@ -465,6 +465,8 @@ def svc_personalization(svc, anomaly_graph, baseline_df, faults_name):
     personalization = edges_weight_avg * max_corr
 
     return personalization, metric
+
+
 
 def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
     # Get the anomalous subgraph and rank the anomalous services
@@ -481,20 +483,21 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
     # Get reported anomalous nodes
     edges = []
     nodes = []
+#    print(DG.nodes())
     baseline_df = pd.DataFrame()
     edge_df = {}
     for anomaly in anomalies:
         edge = anomaly.split('_')
         edges.append(tuple(edge))
-
+#        nodes.append(edge[0])
         svc = edge[1]
         nodes.append(svc)
         baseline_df[svc] = latency_df[anomaly]
         edge_df[svc] = anomaly
 
-
+#    print('edge df:', edge_df)
     nodes = set(nodes)
-    # print('\nnodes: ', nodes)
+#    print(nodes)
 
     personalization = {}
     for node in DG.nodes():
@@ -504,10 +507,10 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
     # Get the subgraph of anomaly
     anomaly_graph = nx.DiGraph()
     for node in nodes:
-
+#        print(node)
         for u, v, data in DG.in_edges(node, data=True):
             edge = (u,v)
-
+#            print(edge)
             if edge in edges:
                 data = alpha
             else:
@@ -539,14 +542,12 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 
     for node in nodes:
         # 这里用到了 系统层面的 metric
-        print(node)
         max_corr, col = svc_personalization(node, anomaly_graph, baseline_df, faults_name)
         personalization[node] = max_corr / anomaly_graph.degree(node)
-
+#        print(node, personalization[node])
 
     anomaly_graph = anomaly_graph.reverse(copy=True)
-    # print('\nanomaly_graph: ', anomaly_graph.nodes)
-
+#
     edges = list(anomaly_graph.edges(data=True))
 
     for u, v, d in edges:
@@ -555,13 +556,12 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
             anomaly_graph.add_edge(v,u,weight=d['weight'])
 
 
-    anomaly_score = nx.pagerank(DG, alpha=0.85, personalization=personalization, max_iter=10000)
+    anomaly_score = nx.pagerank(anomaly_graph, alpha=0.85, personalization=personalization, max_iter=10000)
 
     anomaly_score = sorted(anomaly_score.items(), key=lambda x: x[1], reverse=True)
 
-
+#    return anomaly_graph
     return anomaly_score
-
 
 def parse_args():
     """Parse the args."""

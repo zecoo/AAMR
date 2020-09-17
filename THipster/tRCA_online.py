@@ -28,6 +28,7 @@ from numpy import mean
 metric_step = '5s'
 smoothing_window = 12
 anomaly_threshold = 500
+base_svc = 'frontend'
 
 # kubectl get nodes -o wide | awk -F ' ' '{print $1 " : " $6":9100"}'
 node_dict = {
@@ -696,7 +697,7 @@ def anomaly_detection(faults_name, DG):
                 if svc == 'unknown':
                         pass
                 else:
-                    x = svc_latency_df['frontend']
+                    x = svc_latency_df[base_svc]
                     y = svc_latency_df[svc]
                     if cal(x,y) > anomaly_threshold:
                         print('AAAAAAAAnomaly')
