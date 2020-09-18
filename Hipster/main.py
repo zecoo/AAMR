@@ -8,7 +8,7 @@ from itertools import combinations
 # svc_arr = ['cartservice', 'productcatalogservice']
 
 rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
-svc_arr = ['frontend', 'paymentservice', 'currencyservice', 'cartservice', 'productcatalogservice', 'checkoutservice', 'recommendationservice']
+svc_arr = ['paymentservice', 'currencyservice', 'cartservice', 'productcatalogservice', 'checkoutservice', 'recommendationservice']
 down_time = 180
 fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/hipster/'
 fault_delete_path = 'kubectl delete -f /root/zik/fault-injection/hipster/'
@@ -62,15 +62,15 @@ if __name__ == '__main__':
             # create fault injection
             for svc in svc2:
                 # os.system('kubectl apply -f /root/zik/fault-injection/hipster/%s.yaml' % svc)
-                print(fault_injection_path + '%s.yaml' % svc)
+                os.system(fault_apply_path + '%s.yaml' % svc)
             # interval apply RCA
-            timer = threading.Timer(5, tRCA, (rca_arr, svcs))
+            timer = threading.Timer(4, tRCA, (rca_arr, svcs))
             timer.start()
             time.sleep(120)
             timer.cancel()
             # delete fault injection
             for svc in svc2:
                 # os.system('kubectl delete -f /root/zik/fault-injection/hipster/%s.yaml' % svc)
-                print(fault_injection_path + '%s.yaml' % svc)
+                os.system(fault_delete_path + '%s.yaml' % svc)
 
     print('==== Experiment ends ====')
