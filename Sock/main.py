@@ -25,10 +25,10 @@ def combine_svc():
 
 def tRCA(rca_types, svc):
     global timer
-    timer = threading.Timer(5, tRCA, (rca_types, svc))
+    timer = threading.Timer(4, tRCA, (rca_types, svc))
     for rca in rca_types:
         os.system('python3 %s --fault %s &' % (rca, svc))
-        time.sleep(5)
+        time.sleep(4)
     timer.start()
 
 
@@ -41,7 +41,7 @@ def countdown(t):
 
 
 if __name__ == '__main__':
-    case = 1
+    case = 2
 #    os.system('./headless_locust.sh &')
     print('==== RCA will be started in 3min ... ====')
     if case == 1:
@@ -62,15 +62,15 @@ if __name__ == '__main__':
             # create fault injection
             for svc in svc2:
                 # os.system('kubectl apply -f /root/zik/fault-injection/hipster/%s.yaml' % svc)
-                print(fault_injection_path + '%s.yaml' % svc)
+                os.system(fault_apply_path + '%s.yaml' % svc)
             # interval apply RCA
-            timer = threading.Timer(5, tRCA, (rca_arr, svcs))
+            timer = threading.Timer(4, tRCA, (rca_arr, svcs))
             timer.start()
             time.sleep(100)
             timer.cancel()
             # delete fault injection
             for svc in svc2:
                 # os.system('kubectl delete -f /root/zik/fault-injection/hipster/%s.yaml' % svc)
-                print(fault_injection_path + '%s.yaml' % svc)
+                os.system(fault_delete_path + '%s.yaml' % svc)
 
     print('==== Experiment ends ====')

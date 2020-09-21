@@ -666,8 +666,8 @@ if __name__ == "__main__":
     args = parse_args()
     faults_name = './data/' + args.fault
     len_second = 150
-    prom_url = 'http://39.100.0.61:32644/api/v1/query_range'
-    prom_url_no_range = 'http://39.100.0.61:32644/api/v1/query'
+    prom_url = 'http://39.100.0.61:31423/api/v1/query_range'
+    prom_url_no_range = 'http://39.100.0.61:31423/api/v1/query'
     
     end_time = time.time()
     start_time = end_time - len_second
