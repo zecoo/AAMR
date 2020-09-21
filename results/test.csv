@@ -1,0 +1,12 @@
+ms,0.93, pr1
+ms,0.92, map1
+ms,0.67, pr2
+ms,0.67, map2
+ mRCA,0.96, pr1
+ mRCA,0.97, map1
+ mRCA,0.7, pr2
+ mRCA,0.7, map2
+tRCA,0.93, pr1
+tRCA,0.94, map1
+tRCA,0.84, pr2
+tRCA,0.85, map2

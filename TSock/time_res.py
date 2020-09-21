@@ -22,8 +22,9 @@ for res in time_arr:
 
         for row in time_df.itertuples():
             time0 = str2time(getattr(row, 'time'))
+            
             if getattr(row, 'svc') == svc:
-                if time0 < 0 or time0 > 50:
+                if time0 <= 0 or time0 > 50:
                     pass
                 else:
                     svc_time = time0 + svc_time

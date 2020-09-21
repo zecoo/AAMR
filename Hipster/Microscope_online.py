@@ -656,9 +656,9 @@ if __name__ == "__main__":
     filename = ''
 
     if '+' in faults_name:
-        filename = './results/f2/tRCA_results.csv'
+        filename = './results/f2/Microscope_results.csv'
     else:
-        filename = './results/f1/tRCA_results.csv'
+        filename = './results/f1/Microscope_results.csv'
 
     len_second = 150
     prom_url = 'http://39.100.0.61:31423/api/v1/query_range'
@@ -682,7 +682,7 @@ if __name__ == "__main__":
     anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
 
     if len(anomalies) != 0:
-        filename = './results/Microscope_results.csv'
+        
         fault = faults_name.replace('./data/', '')
         rank = calc_sim(faults_name, anomalies)
         print('\nMicroscope Score:', rank)

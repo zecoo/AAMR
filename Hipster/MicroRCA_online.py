@@ -615,9 +615,9 @@ if __name__ == "__main__":
     filename = ''
 
     if '+' in faults_name:
-        filename = './results/f2/tRCA_results.csv'
+        filename = './results/f2/MicroRCA_results.csv'
     else:
-        filename = './results/f1/tRCA_results.csv'
+        filename = './results/f1/MicroRCA_results.csv'
     
     len_second = 150
     prom_url = 'http://39.100.0.61:31423/api/v1/query_range'
@@ -654,7 +654,6 @@ if __name__ == "__main__":
                 anomaly_score_new.append(anomaly_target)
         print('\nMicroRCA score:', anomaly_score_new)
 
-        filename = './results/MicroRCA_results.csv'
         fault = faults_name.replace('./data/', '')                      
         with open(filename,'a') as f:
             writer = csv.writer(f)
