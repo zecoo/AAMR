@@ -1,4 +1,5 @@
 import os
+import argparse
 
 svc_arr = ['paymentservice', 'currencyservice', 'cartservice', 'productcatalogservice', 'checkoutservice', 'recommendationservice']
 
@@ -19,4 +20,4 @@ if __name__ == "__main__":
     replica_num = args.num
 
     for svc in svc_arr:
-        os.system('kubectl scale deployment -n hipster %s --replicas=%d' %(svc, replica_num))
+        os.system('kubectl scale deployment -n hipster %s --replicas=%d' %(svc, int(replica_num)))
