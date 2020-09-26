@@ -13,6 +13,8 @@ down_time = 180
 fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/hipster/'
 fault_delete_path = 'kubectl delete -f /root/zik/fault-injection/hipster/'
 
+replicas = 2
+
 
 def combine_svc(svcs):
     comb_svc = list(combinations(svcs, 2))
@@ -27,7 +29,7 @@ def tRCA(rca_types, svc):
     global timer
     timer = threading.Timer(4, tRCA, (rca_types, svc))
     for rca in rca_types:
-        os.system('python3 %s --fault %s &' % (rca, svc))
+        os.system('python3 %s --fault %s --num %d &' % (rca, svc, replicas))
         time.sleep(4)
     timer.start()
 

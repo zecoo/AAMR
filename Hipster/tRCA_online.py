@@ -666,14 +666,9 @@ def parse_args():
                         default='checkoutservice',
                         help='folder name to store csv file')
     
-    # 150s 每隔 5s 取一次数据 所以 csv 文件里一共有 30 行
-    # parser.add_argument('--length', type=int, required=False,
-    #                 default=150,
-    #                 help='length of time series')
-
-    # parser.add_argument('--url', type=str, required=False,
-    #                 default='http://http://39.100.0.61:30598/api/v1/query',
-    #                 help='url of prometheus query')
+    parser.add_argument('--replicas', type=str, required=False,
+                        default='1',
+                        help='folder name to store csv file')
 
     return parser.parse_args()
 
@@ -684,9 +679,9 @@ if __name__ == "__main__":
     filename = ''
 
     if '+' in faults_name:
-        filename = './results/f2/tRCA_results.csv'
+        filename = './results/f2/%s/tRCA_results.csv' % args.replicas
     else:
-        filename = './results/f1/tRCA_results.csv'
+        filename = './results/f1/%s/tRCA_results.csv' % args.replicas
 
     len_second = 150
     prom_url = 'http://39.100.0.61:31423/api/v1/query_range'
