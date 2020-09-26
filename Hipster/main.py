@@ -14,7 +14,7 @@ fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/hipster/'
 fault_delete_path = 'kubectl delete -f /root/zik/fault-injection/hipster/'
 
 replicas = 2
-
+case = 1
 
 def combine_svc(svcs):
     comb_svc = list(combinations(svcs, 2))
@@ -29,7 +29,7 @@ def tRCA(rca_types, svc):
     global timer
     timer = threading.Timer(4, tRCA, (rca_types, svc))
     for rca in rca_types:
-        os.system('python3 %s --fault %s --num %d &' % (rca, svc, replicas))
+        os.system('python3 %s --fault %s --replicas %d &' % (rca, svc, replicas))
         time.sleep(4)
     timer.start()
 
@@ -43,8 +43,7 @@ def countdown(t):
 
 
 if __name__ == '__main__':
-    case = 2
-   os.system('./headless_locust.sh &')
+#    os.system('./headless_locust.sh &')
     print('==== RCA will be started in 3min ... ====')
     if case == 1:
         for svc in svc_arr:
