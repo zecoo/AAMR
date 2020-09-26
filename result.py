@@ -2,7 +2,7 @@ import pandas as pd
 import csv
 from _tkinter import _flatten
 
-f1_benchmarks = ['./Sock/results/f1/']
+f1_benchmarks = ['./Hipster/results/f1/2/', './Sock/results/f1/']
 f2_benchmarks = ['./Hipster/results/f2/']
 rca_arr = ['Microscope', 'MicroRCA', 'tRCA']
 
