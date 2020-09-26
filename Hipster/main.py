@@ -13,7 +13,7 @@ down_time = 180
 fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/hipster/'
 fault_delete_path = 'kubectl delete -f /root/zik/fault-injection/hipster/'
 
-replicas = 2
+replicas = 5
 case = 1
 
 def combine_svc(svcs):
@@ -43,7 +43,7 @@ def countdown(t):
 
 
 if __name__ == '__main__':
-#    os.system('./headless_locust.sh &')
+    os.system('./headless_locust.sh &')
     print('==== RCA will be started in 3min ... ====')
     if case == 1:
         for svc in svc_arr:
