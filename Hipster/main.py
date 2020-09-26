@@ -42,7 +42,7 @@ def countdown(t):
 
 if __name__ == '__main__':
     case = 2
-#    os.system('./headless_locust.sh &')
+   os.system('./headless_locust.sh &')
     print('==== RCA will be started in 3min ... ====')
     if case == 1:
         for svc in svc_arr:

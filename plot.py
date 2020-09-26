@@ -28,7 +28,9 @@ def get_bar_plot():
     plt.show()
 
 def get_box_plot():
-    time_df = pd.read_csv("TSock/results/test.csv")
+    fig, ax1 = plt.subplots()
+
+    time_df = pd.read_csv("THipster/results/test.csv")
     time_df.columns = ['time', 'svc', 'value', 'rca']
     
     value_list = []
@@ -39,8 +41,14 @@ def get_box_plot():
     time_df.loc[:,('value')] = value_list
 
     print(time_df)
-    sns.boxplot(x='svc' , y='value' , hue='rca', data=time_df, width=0.8)
+    ax1 = sns.boxplot(x='svc' , y='value' , hue='rca', data=time_df)
+    box = ax1.get_position()
+    # ax1.set_position([box.x0, box.y0, box.width , box.width* 0.8])
+    # ax1.legend(loc='center left', bbox_to_anchor=(0.2, 1.12),ncol=3)
+    ax1.legend( bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0, numpoints=1)
+    fig.subplots_adjust(right=0.8)
     plt.show()
 
 if __name__ == "__main__":
     get_bar_plot()
+    # get_box_plot()
