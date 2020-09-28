@@ -8,12 +8,12 @@ from itertools import combinations
 # svc_arr = ['cartservice', 'productcatalogservice']
 
 rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
-svc_arr = ['paymentservice', 'currencyservice', 'cartservice', 'productcatalogservice', 'checkoutservice', 'recommendationservice']
+svc_arr = ['paymentservice', 'currencyservice', 'cartservice', 'productcatalogservice', 'checkoutservice', 'recommendationservice', 'frontend']
 down_time = 180
 fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/hipster/'
 fault_delete_path = 'kubectl delete -f /root/zik/fault-injection/hipster/'
 
-replicas = 5
+replicas = 10
 case = 1
 
 def combine_svc(svcs):
