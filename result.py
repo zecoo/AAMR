@@ -2,7 +2,10 @@ import pandas as pd
 import csv
 from _tkinter import _flatten
 
-f1_benchmarks = ['./Hipster/results/f1/1/', './Hipster/results/f1/2/', './Hipster/results/f1/3/', './Hipster/results/f1/4/', './Hipster/results/f1/5/']
+
+f1_benchmarks = []
+for i in range(1,10):
+    f1_benchmarks.append('./Hipster/results/f1/%d/' % i)
 f2_benchmarks = ['./Hipster/results/f2/']
 rca_arr = ['Microscope', 'MicroRCA', 'tRCA']
 
@@ -194,9 +197,8 @@ def getPredictions(pre_list):
         prediction.append(item)
     return prediction
 
+
 if __name__ == '__main__':
-    # getAllAcc()
-    # getSvcAcc()
     timename = './results/pr1_map_stat.csv'
     stat_df = pd.DataFrame(columns=['type', 'ms', 'mRCA', 'tRCA'])                  
    

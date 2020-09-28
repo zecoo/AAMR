@@ -19,7 +19,7 @@ def get_line_plot():
     dataset.columns = ['rca', 'replicas', 'PR@1', 'MAP']
 
     print(dataset)
-    ax1 = sns.lineplot(y="PR@1", x="replicas", hue="rca", data=dataset)
+    ax1 = sns.lineplot(y="PR@1", x="replicas", hue="rca", style='rca', markers=True, linewidth=2, data=dataset)
     box = ax1.get_position()
     # ax1.set_position([box.x0, box.y0, box.width , box.width* 0.8])
     # ax1.legend(loc='center left', bbox_to_anchor=(0.2, 1.12),ncol=3)
