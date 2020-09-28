@@ -5,7 +5,6 @@ Sat Sep 26 15:29:19 2020,paymentservice,svc_latency,"[('paymentservice', 0.65052
 Sat Sep 26 15:29:35 2020,paymentservice,svc_latency,"[('paymentservice', 0.6676175139393865), ('checkoutservice', 0.06930000292146607)]"
 Sat Sep 26 15:29:51 2020,paymentservice,svc_latency,"[('paymentservice', 0.6573296101019211), ('checkoutservice', 0.06497947347900392)]"
 Sat Sep 26 15:30:07 2020,paymentservice,svc_latency,"[('paymentservice', 0.5409478462511551), ('checkoutservice', 0.05731315880865446)]"
-Sat Sep 26 15:34:03 2020,currencyservice,svc_latency,"[('cartservice', array([], dtype=float64)), ('currencyservice', array([], dtype=float64)), ('emailservice', array([], dtype=float64)), ('paymentservice', array([], dtype=float64)), ('productcatalogservice', array([], dtype=float64)), ('shippingservice', array([], dtype=float64)), ('checkoutservice', array([], dtype=float64))]"
 Sat Sep 26 15:43:33 2020,productcatalogservice,svc_latency,"[('recommendationservice', 0.49999907788659953), ('checkoutservice', 0.14108169151123762), ('frontend', 0.1111111111111111)]"
 Sat Sep 26 15:43:49 2020,productcatalogservice,svc_latency,"[('recommendationservice', 0.49771169645686375), ('productcatalogservice', 0.25522399055787043), ('checkoutservice', 0.1388211772641344), ('frontend', 0.1111111111111111)]"
 Sat Sep 26 15:44:05 2020,productcatalogservice,svc_latency,"[('recommendationservice', 0.49796459125596354), ('productcatalogservice', 0.2754461173353338), ('checkoutservice', 0.12391481170487346), ('frontend', 0.1111111111111111)]"

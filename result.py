@@ -2,11 +2,11 @@ import pandas as pd
 import csv
 from _tkinter import _flatten
 
-f1_benchmarks = ['./Hipster/results/f1/2/', './Sock/results/f1/']
+f1_benchmarks = ['./Hipster/results/f1/1/', './Hipster/results/f1/2/', './Hipster/results/f1/3/', './Hipster/results/f1/4/', './Hipster/results/f1/5/']
 f2_benchmarks = ['./Hipster/results/f2/']
 rca_arr = ['Microscope', 'MicroRCA', 'tRCA']
 
-topK = 2
+topK = 1
 
 # 统计所有的类别
 def get_unique_labels(y_true, y_pred):

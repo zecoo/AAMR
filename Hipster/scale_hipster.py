@@ -1,7 +1,7 @@
 import os
 import argparse
 
-svc_arr = ['paymentservice', 'currencyservice', 'cartservice', 'productcatalogservice', 'checkoutservice', 'recommendationservice', 'emailservice', 'shippingservice', 'frontend', 'redis-cart']
+svc_arr = ['paymentservice', 'currencyservice', 'cartservice', 'productcatalogservice', 'checkoutservice', 'recommendationservice', 'frontend']
 
 def parse_args():
     """Parse the args."""

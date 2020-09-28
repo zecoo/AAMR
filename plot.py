@@ -6,11 +6,26 @@ import numpy as np
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-sns.set(style="darkgrid")
+sns.set(style="white")
 # 获取数据
 
 def str2time(str):
     return float(str.split(':')[1])
+
+def get_line_plot():
+    fig, ax1 = plt.subplots()
+
+    dataset = pd.read_csv("./Hipster/results/f1/replicas.csv")
+    dataset.columns = ['rca', 'replicas', 'PR@1', 'MAP']
+
+    print(dataset)
+    ax1 = sns.lineplot(y="PR@1", x="replicas", hue="rca", data=dataset)
+    box = ax1.get_position()
+    # ax1.set_position([box.x0, box.y0, box.width , box.width* 0.8])
+    # ax1.legend(loc='center left', bbox_to_anchor=(0.2, 1.12),ncol=3)
+    ax1.legend( bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0, numpoints=1)
+    fig.subplots_adjust(right=0.8)
+    plt.show()
 
 def get_bar_plot():
     fig, ax1 = plt.subplots()
@@ -50,5 +65,6 @@ def get_box_plot():
     plt.show()
 
 if __name__ == "__main__":
-    get_bar_plot()
+    # get_bar_plot()
     # get_box_plot()
+    get_line_plot()
