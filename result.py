@@ -4,12 +4,12 @@ from _tkinter import _flatten
 
 
 f1_benchmarks = []
-for i in range(1,10):
+for i in range(1,11):
     f1_benchmarks.append('./Hipster/results/f1/%d/' % i)
 f2_benchmarks = ['./Hipster/results/f2/']
 rca_arr = ['Microscope', 'MicroRCA', 'tRCA']
 
-topK = 1
+topK = 2
 
 # 统计所有的类别
 def get_unique_labels(y_true, y_pred):
@@ -100,7 +100,7 @@ def precision_k_f1(y_trues, y_preds, k=topK, digs=2):
     weighted_avg_line = 'avg:' + '\t\t' + str(round(weighted_precision, digs)) + '\t\t' + str(sums) + '\n' + 'map:' + '\t\t' + str(s_map)
 
     results += weighted_avg_line
-    print(results)
+    print(weighted_avg_line)
     print()
 
     return weighted_precision, s_map

@@ -16,10 +16,10 @@ def get_line_plot():
     fig, ax1 = plt.subplots()
 
     dataset = pd.read_csv("./Hipster/results/f1/replicas.csv")
-    dataset.columns = ['rca', 'replicas', 'PR@1', 'MAP']
+    dataset.columns = ['rca', 'replicas', '1fPR@1', '1fMAP@2', '1fPR@2', '1fMAP@2']
 
     print(dataset)
-    ax1 = sns.lineplot(y="PR@1", x="replicas", hue="rca", style='rca', markers=True, linewidth=2, data=dataset)
+    ax1 = sns.lineplot(y="1fPR@2", x="replicas", hue="rca", style='rca', markers=True, linewidth=2, data=dataset)
     box = ax1.get_position()
     # ax1.set_position([box.x0, box.y0, box.width , box.width* 0.8])
     # ax1.legend(loc='center left', bbox_to_anchor=(0.2, 1.12),ncol=3)
