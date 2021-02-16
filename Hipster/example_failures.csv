@@ -1,15 +1,15 @@
 Method,Name,Error,Occurrences
-GET,/product/2ZYFJ3GM2N,"HTTPConnectionPool(host='39.100.0.61', port=32580): Max retries exceeded with url: /product/2ZYFJ3GM2N (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9c0507fc88>: Failed to establish a new connection: [Errno 111] Connection refused'))",580
-POST,/cart/checkout,"HTTPConnectionPool(host='39.100.0.61', port=32580): Max retries exceeded with url: /cart/checkout (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9c0501a860>: Failed to establish a new connection: [Errno 111] Connection refused'))",429
-GET,/product/6E92ZMYYFZ,"HTTPConnectionPool(host='39.100.0.61', port=32580): Max retries exceeded with url: /product/6E92ZMYYFZ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9c050d72b0>: Failed to establish a new connection: [Errno 111] Connection refused'))",547
-GET,/product/0PUK6V6EV0,"HTTPConnectionPool(host='39.100.0.61', port=32580): Max retries exceeded with url: /product/0PUK6V6EV0 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9c05b20438>: Failed to establish a new connection: [Errno 111] Connection refused'))",558
-GET,/,"HTTPConnectionPool(host='39.100.0.61', port=32580): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9c050ca978>: Failed to establish a new connection: [Errno 111] Connection refused'))",424
-GET,/product/66VCHSJNUP,"HTTPConnectionPool(host='39.100.0.61', port=32580): Max retries exceeded with url: /product/66VCHSJNUP (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9c050aae80>: Failed to establish a new connection: [Errno 111] Connection refused'))",547
-GET,/product/LS4PSXUNUM,"HTTPConnectionPool(host='39.100.0.61', port=32580): Max retries exceeded with url: /product/LS4PSXUNUM (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9c0509c8d0>: Failed to establish a new connection: [Errno 111] Connection refused'))",538
-GET,/product/1YMWWN1N4O,"HTTPConnectionPool(host='39.100.0.61', port=32580): Max retries exceeded with url: /product/1YMWWN1N4O (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9c050634a8>: Failed to establish a new connection: [Errno 111] Connection refused'))",555
-GET,/cart,"HTTPConnectionPool(host='39.100.0.61', port=32580): Max retries exceeded with url: /cart (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9c050332e8>: Failed to establish a new connection: [Errno 111] Connection refused'))",1238
-POST,/cart,"HTTPConnectionPool(host='39.100.0.61', port=32580): Max retries exceeded with url: /cart (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9c0503fb70>: Failed to establish a new connection: [Errno 111] Connection refused'))",812
-GET,/product/OLJCESPC7Z,"HTTPConnectionPool(host='39.100.0.61', port=32580): Max retries exceeded with url: /product/OLJCESPC7Z (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9c04fddd68>: Failed to establish a new connection: [Errno 111] Connection refused'))",567
-POST,/setCurrency,"HTTPConnectionPool(host='39.100.0.61', port=32580): Max retries exceeded with url: /setCurrency (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9c050beb70>: Failed to establish a new connection: [Errno 111] Connection refused'))",814
-GET,/product/9SIQT8TOJO,"HTTPConnectionPool(host='39.100.0.61', port=32580): Max retries exceeded with url: /product/9SIQT8TOJO (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9c050aa278>: Failed to establish a new connection: [Errno 111] Connection refused'))",552
-GET,/product/L9ECAV7KIM,"HTTPConnectionPool(host='39.100.0.61', port=32580): Max retries exceeded with url: /product/L9ECAV7KIM (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9c0501a320>: Failed to establish a new connection: [Errno 111] Connection refused'))",540
+GET,/product/1YMWWN1N4O,500 Server Error: Internal Server Error for url: http://39.100.0.61:30951/product/1YMWWN1N4O,76
+GET,/product/LS4PSXUNUM,500 Server Error: Internal Server Error for url: http://39.100.0.61:30951/product/LS4PSXUNUM,82
+POST,/cart,500 Server Error: Internal Server Error for url: http://39.100.0.61:30951/cart,114
+GET,/product/6E92ZMYYFZ,500 Server Error: Internal Server Error for url: http://39.100.0.61:30951/product/6E92ZMYYFZ,86
+GET,/product/0PUK6V6EV0,500 Server Error: Internal Server Error for url: http://39.100.0.61:30951/product/0PUK6V6EV0,87
+POST,/cart/checkout,500 Server Error: Internal Server Error for url: http://39.100.0.61:30951/cart/checkout,59
+GET,/product/2ZYFJ3GM2N,500 Server Error: Internal Server Error for url: http://39.100.0.61:30951/product/2ZYFJ3GM2N,69
+GET,/cart,500 Server Error: Internal Server Error for url: http://39.100.0.61:30951/cart,198
+GET,/product/66VCHSJNUP,500 Server Error: Internal Server Error for url: http://39.100.0.61:30951/product/66VCHSJNUP,79
+GET,/product/L9ECAV7KIM,500 Server Error: Internal Server Error for url: http://39.100.0.61:30951/product/L9ECAV7KIM,84
+GET,/,500 Server Error: Internal Server Error for url: http://39.100.0.61:30951/,66
+GET,/product/9SIQT8TOJO,500 Server Error: Internal Server Error for url: http://39.100.0.61:30951/product/9SIQT8TOJO,95
+GET,/product/OLJCESPC7Z,500 Server Error: Internal Server Error for url: http://39.100.0.61:30951/product/OLJCESPC7Z,73
+POST,/setCurrency,500 Server Error: Internal Server Error for url: http://39.100.0.61:30951/,145

@@ -712,9 +712,9 @@ if __name__ == "__main__":
     filename = ''
 
     if '+' in faults_name:
-        filename = './results/f2/%s/MicroRCA_results.csv' % args.replicas
+        filename = './results/f2/%s/PCA_results.csv' % args.replicas
     else:
-        filename = './results/f1/%s/MicroRCA_results.csv' % args.replicas
+        filename = './results/f1/%s/PCA_results.csv' % args.replicas
     
     len_second = 150
     prom_url = 'http://39.100.0.61:31423/api/v1/query_range'
@@ -752,7 +752,7 @@ if __name__ == "__main__":
     #       print(anomaly_target[0])
             if DG.nodes[node]['type'] == 'service':
                 anomaly_score_new.append(anomaly_target)
-        print('\nMicroRCA score:', anomaly_score_new)
+        print('\nPCA score:', anomaly_score_new)
 
         fault = faults_name.replace('./data/', '')                      
         with open(filename,'a') as f:
