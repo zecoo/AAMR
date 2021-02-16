@@ -100,16 +100,22 @@ def calc_score(faults_name, cluster_nums):
 
     fault = faults_name.replace('./data/', '')
     foo = {}
+    ms_list = []
 
     DG = attributed_graph(faults_name)
     # a = list(nx.edge_dfs(DG,'frontend'))
     # print('\n DG:', a)
     df_pca = PCA()
     index = df_pca.index.values
-    
+
+    for i in index:
+        if 'Unnamed' not in i:
+            endpoint = str(i).split('_')[1]
+            ms_list.append(endpoint)
+
     # MD!!!!! 我发现我代码里出现致命错误，我一开始先入为主认为 anomaly 就是 fault 然后计算累加结果，那肯定是 anomaly 的分数最高啊
     p_scores = {}
-    for node in ['adservice', 'shippingservice', 'cartservice', 'paymentservice', 'recommendationservice','emailservice', 'redis-cart', 'checkoutservice', 'currencyservice', 'frontend']:
+    for node in ms_list:
     # for node in ['adservice', 'shippingservice']:
         foo[node] = 0
 

@@ -212,7 +212,7 @@ if __name__ == '__main__':
             new_col = ['time', 'fault', 'type', 'pred']
             res_df.columns = new_col
             
-            test_k = 50
+            test_k = 500
             y_true = res_df['fault'][:test_k].tolist()
             y_pred = getPredictions(res_df['pred'][:test_k].tolist())
 

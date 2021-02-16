@@ -11,7 +11,7 @@ from itertools import combinations
 # rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
 rca_arr = ['PCA_online.py']
 # svc_arr = ['paymentservice', 'currencyservice', 'cartservice', 'productcatalogservice', 'checkoutservice', 'recommendationservice', 'frontend']
-svc_arr = ['cartservice']
+svc_arr = ['emailservice', 'adservice', 'shippingservice']
 # random.shuffle(svc_arr)
 down_time = 180
 fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/hipster/'
@@ -47,7 +47,7 @@ def countdown(t):
 
 
 if __name__ == '__main__':
-    # os.system('./headless_locust.sh &')
+    os.system('./headless_locust.sh &')
     print('==== RCA will be started in 3min ... ====')
     if case == 1:
         for svc in svc_arr:

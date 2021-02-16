@@ -488,12 +488,19 @@ def PCA(latency_df):
 def calc_score(latency_df, faults_name, cluster_nums):
 
     foo = {}
+    ms_list = []
 
     DG = attributed_graph(faults_name)
     df_pca = PCA(latency_df)
-    index = df_pca.index.values    
+    index = df_pca.index.values
+
+    for i in index:
+        if 'Unnamed' not in i:
+            endpoint = str(i).split('_')[1]
+            ms_list.append(endpoint)
+
     # MD!!!!! 我发现我代码里出现致命错误，我一开始先入为主认为 anomaly 就是 fault 然后计算累加结果，那肯定是 anomaly 的分数最高啊
-    for node in ['adservice', 'shippingservice', 'cartservice', 'paymentservice', 'recommendationservice','emailservice', 'checkoutservice', 'redis-cart', 'currencyservice', 'frontend']:
+    for node in ms_list:
         foo[node] = 0
         for i in index:
             if 'Unnamed' not in i:
