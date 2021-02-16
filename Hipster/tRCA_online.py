@@ -492,7 +492,7 @@ def calc_score(faults_name):
     # 加和 destination
     latency_df_destination.loc['all'] = latency_df_destination.apply(lambda x:x.sum())
 
-    # 获取 locust 数据
+    # 获取 locust 数据 =》 平均响应时间
 
     locust_filename = 'example_stats_history.csv'
 

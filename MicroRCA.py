@@ -32,15 +32,13 @@ def birch_ad_with_smoothing(latency_df, threshold):
             count = count + 1
 
             # 这段代码对 latency 的影响好像几乎可以不计
-            # 
             # latency 片段是这样：（取前3行，共30行）
-            # 
             # Name: front-end_user, dtype: float64
             # 0      12.101140
             # 1       7.617647
             # 2      11.812500
             # 3      17.202381
-            # 
+
             latency = latency.rolling(window=smoothing_window, min_periods=1).mean()
             
             # x 就是把 latency 中 Name、dtype 等信息抹掉，并转为一个 array 形式的数据
@@ -68,7 +66,7 @@ def birch_ad_with_smoothing(latency_df, threshold):
 
             labels = brc.labels_
             
-#            centroids = brc.subcluster_centers_
+#           centroids = brc.subcluster_centers_
 
             # np.unique 的作用是去除数组中重复的元素
 

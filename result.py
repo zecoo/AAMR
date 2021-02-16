@@ -4,7 +4,7 @@ from _tkinter import _flatten
 
 
 f1_benchmarks = []
-for i in range(1,11):
+for i in range(1,4):
     f1_benchmarks.append('./Hipster/results/f1/%d/' % i)
 f2_benchmarks = ['./Hipster/results/f2/']
 rca_arr = ['Microscope', 'MicroRCA', 'tRCA']
@@ -66,6 +66,7 @@ def precision_k_f1(y_trues, y_preds, k=topK, digs=2):
             f1_score = 0
 
         current_label_result.append(precision)
+        current_label_result.append(f1_score)
         current_label_result.append(support)
         # 输出第一行
         results_dict[str(label)] = current_label_result
@@ -77,20 +78,18 @@ def precision_k_f1(y_trues, y_preds, k=topK, digs=2):
             continue
         else:
             current_line = str(
-                k) + '\t\t' + str(v[0]) + '\t\t' + str(v[1]) + '\n'
+                k) + '\t\t' + str(v[0]) + '\t\t' + str(v[1]) + '\t\t' + str(v[2]) + '\n'
             results += current_line
             svc_pr1 += v[0]
     sums = len(y_trues)
 
     s_map = round(svc_pr1 / num_classes, digs)
 
-
     weighted_avg_results = [(v[0]*v[1]) for k, v in sorted(results_dict.items())]
 
     # 计算weighted avg
     weighted_precision = 0
-    weighted_recall = 0
-    weighted_f1_score = 0
+
     for weighted_avg_result in weighted_avg_results:
         weighted_precision += weighted_avg_result
 
@@ -100,7 +99,7 @@ def precision_k_f1(y_trues, y_preds, k=topK, digs=2):
     weighted_avg_line = 'avg:' + '\t\t' + str(round(weighted_precision, digs)) + '\t\t' + str(sums) + '\n' + 'map:' + '\t\t' + str(s_map)
 
     results += weighted_avg_line
-    print(weighted_avg_line)
+    print(results)
     print()
 
     return weighted_precision, s_map

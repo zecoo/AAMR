@@ -13,9 +13,13 @@ import numpy as np
 import networkx as nx
 import argparse
 import csv
+import itertools
+import os
 
+from sklearn.decomposition import SparsePCA
 from sklearn.cluster import Birch
 from sklearn import preprocessing
+from numpy import mean
 #import seaborn as sns
 
 ## =========== Data collection ===========
@@ -25,14 +29,12 @@ smoothing_window = 12
 
 # kubectl get nodes -o wide | awk -F ' ' '{print $1 " : " $6":9100"}'
 node_dict = {
-                # 'kubernetes-minion-group-103j' : '10.166.0.21:9100',
-                # 'kubernetes-minion-group-k2nz' : '10.166.15.235:9100',
-                # 'kubernetes-minion-group-kvcr' : '10.166.0.13:9100',
-                # 'kubernetes-minion-group-r23j' : '10.166.0.14:9100',
                 'iz8vbhflpp3tuw05qfowaxz' : '39.100.0.61:9100'
         }
-        
 
+# 这里的所有 promQL 我做了修改：
+# 1. p50 做了修改
+# 2. irate 改成了 rate
 def latency_source_50(prom_url, start_time, end_time, faults_name):
 
     latency_df = pd.DataFrame()
@@ -41,7 +43,7 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
     # print(end_time)
 
     response = requests.get(prom_url,
-                            params={'query': 'histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", destination_workload_namespace=\"hipster\"}[1m])) by (destination_workload, source_workload, le))',
+                            params={'query': 'histogram_quantile(0.60, sum(rate(istio_request_duration_seconds_bucket{reporter=\"source\", destination_workload_namespace=\"hipster\"}[1m])) by (destination_workload, source_workload, le))',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -50,7 +52,6 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
     # 解读：value 的第一个值表示当前时间，第二个值表示真正的 value 也就是这一长串 promQL 的 value
     results = response.json()['data']['result']
     
-
     # print(results)
 
     for result in results:
@@ -82,7 +83,7 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
         dest_svc = result['metric']['destination_workload']
         src_svc = result['metric']['source_workload']
         name = src_svc + '_' + dest_svc
-#        print(svc)
+    #        print(svc)
         values = result['values']
 
         values = list(zip(*values))
@@ -104,13 +105,12 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
     latency_df.to_csv(filename)
     return latency_df
 
-
 def latency_destination_50(prom_url, start_time, end_time, faults_name):
 
     latency_df = pd.DataFrame()
 
     response = requests.get(prom_url,
-                            params={'query': 'histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", destination_workload_namespace=\"hipster\"}[1m])) by (destination_workload, source_workload, le))',
+                            params={'query': 'histogram_quantile(0.60, sum(rate(istio_request_duration_seconds_bucket{reporter=\"destination\", destination_workload_namespace=\"hipster\"}[1m])) by (destination_workload, source_workload, le))',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -143,7 +143,7 @@ def latency_destination_50(prom_url, start_time, end_time, faults_name):
         dest_svc = result['metric']['destination_workload']
         src_svc = result['metric']['source_workload']
         name = src_svc + '_' + dest_svc
-#        print(svc)
+    #        print(svc)
         values = result['values']
 
         values = list(zip(*values))
@@ -201,14 +201,14 @@ def svc_metrics(prom_url, start_time, end_time, faults_name):
         df['ctn_memory'] = ctn_memory(prom_url, start_time, end_time, pod_name)
         df['ctn_memory'] = df['ctn_memory'].astype('float64')
 
-#        response = requests.get('http://localhost:9090/api/v1/query',
-#                                params={'query': 'sum(node_uname_info{nodename="%s"}) by (instance)' % nodename
-#                                        })
-#        results = response.json()['data']['result']
-#
-#        print(results)
-#
-#        instance = results[0]['metric']['instance']
+    #        response = requests.get('http://localhost:9090/api/v1/query',
+    #                                params={'query': 'sum(node_uname_info{nodename="%s"}) by (instance)' % nodename
+    #                                        })
+    #        results = response.json()['data']['result']
+    #
+    #        print(results)
+    #
+    #        instance = results[0]['metric']['instance']
         instance = node_dict[nodename]
 
         # 这里用到了各种的系统层面 metric 
@@ -273,7 +273,7 @@ def node_network(prom_url, start_time, end_time, instance):
     df['timestamp'] = df['timestamp'].astype('datetime64[s]')
     df['node_network'] = pd.Series(values[1])
     df['node_network'] = df['node_network'].astype('float64')
-#    return metric
+    #    return metric
     return df
 
 def node_cpu(prom_url, start_time, end_time, instance):
@@ -287,15 +287,15 @@ def node_cpu(prom_url, start_time, end_time, instance):
     # print(results)
     values = results[0]['values']
     values = list(zip(*values))
-#    metric = values[1]
-#    print(instance, len(metric))
-#    print(values[0])
+    #    metric = values[1]
+    #    print(instance, len(metric))
+    #    print(values[0])
     df = pd.DataFrame()
     df['timestamp'] = values[0]
     df['timestamp'] = df['timestamp'].astype('datetime64[s]')
     df['node_cpu'] = pd.Series(values[1])
     df['node_cpu'] = df['node_cpu'].astype('float64')
-#    return metric
+    #    return metric
     return df
 
 def node_memory(prom_url, start_time, end_time, instance):
@@ -308,14 +308,14 @@ def node_memory(prom_url, start_time, end_time, instance):
     values = results[0]['values']
 
     values = list(zip(*values))
-#    metric = values[1]
-#    return metric
+    #    metric = values[1]
+    #    return metric
     df = pd.DataFrame()
     df['timestamp'] = values[0]
     df['timestamp'] = df['timestamp'].astype('datetime64[s]')
     df['node_memory'] = pd.Series(values[1])
     df['node_memory'] = df['node_memory'].astype('float64')
-#    return metric
+    #    return metric
     return df
 
 # Create Graph
@@ -336,7 +336,7 @@ def mpg(prom_url, faults_name):
         metric = result['metric']
         source = metric['source_workload']
         destination = metric['destination_workload']
-#        print(metric['source_workload'] , metric['destination_workload'] )
+    #        print(metric['source_workload'] , metric['destination_workload'] )
         df = df.append({'source':source, 'destination': destination}, ignore_index=True)
         DG.add_edge(source, destination)
         
@@ -353,7 +353,7 @@ def mpg(prom_url, faults_name):
         
         source = metric['source_workload']
         destination = metric['destination_workload']
-#        print(metric['source_workload'] , metric['destination_workload'] )
+    #        print(metric['source_workload'] , metric['destination_workload'] )
         df = df.append({'source':source, 'destination': destination}, ignore_index=True)
         DG.add_edge(source, destination)
         
@@ -376,43 +376,136 @@ def mpg(prom_url, faults_name):
             DG.node[destination]['type'] = 'host'
 
     filename = faults_name + '_mpg.csv'
-##    df.set_index('timestamp')
+    ##    df.set_index('timestamp')
     df.to_csv(filename)
     return DG
 
+def attributed_graph(faults_name):
+    # build the attributed graph 
+    # input: prefix of the file
+    # output: attributed graph
+
+    filename = faults_name + '_mpg.csv'
+    df = pd.read_csv(filename)
+
+    DG = nx.DiGraph()    
+    for index, row in df.iterrows():
+        source = row['source']
+        destination = row['destination']
+        if 'rabbitmq' not in source and 'rabbitmq' not in destination and 'db' not in destination and 'db' not in source:
+            DG.add_edge(source, destination)
+
+    for node in DG.nodes():
+        if 'kubernetes' in node: 
+            DG.nodes[node]['type'] = 'host'
+        else:
+            DG.nodes[node]['type'] = 'service'
+            
+    # plt.figure(figsize=(9,9))
+    # nx.draw(DG, with_labels=True, font_weight='bold')
+    # pos = nx.spring_layout(DG)
+    # nx.draw(DG, pos, with_labels=True, cmap = plt.get_cmap('jet'), node_size=1500, arrows=True, )
+    # labels = nx.get_edge_attributes(DG,'weight')
+    # nx.draw_networkx_edge_labels(DG,pos,edge_labels=labels)
+    # plt.show()
+                
+    return DG 
 
 # Anomaly Detection
-def birch_ad_with_smoothing(latency_df, threshold):
-    # anomaly detection on response time of service invocation. 
-    # input: response times of service invocations, threshold for birch clustering
-    # output: anomalous service invocation
-    
+def birch_ad_with_smoothing(latency_df, threshold):    
     anomalies = []
     for svc, latency in latency_df.iteritems():
         # No anomaly detection in db
         if svc != 'timestamp' and 'Unnamed' not in svc and 'rabbitmq' not in svc and 'db' not in svc:
             latency = latency.rolling(window=smoothing_window, min_periods=1).mean()
             x = np.array(latency)
-
-            # print(x)
             x = np.where(np.isnan(x), 0, x)
 
             normalized_x = preprocessing.normalize([x])
 
             X = normalized_x.reshape(-1,1)
-
-#            threshold = 0.05
-
             brc = Birch(branching_factor=50, n_clusters=None, threshold=threshold, compute_labels=True)
             brc.fit(X)
             brc.predict(X)
 
             labels = brc.labels_
-#            centroids = brc.subcluster_centers_
+            # print(labels)
+          # centroids = brc.subcluster_centers_
             n_clusters = np.unique(labels).size
             if n_clusters > 1:
                 anomalies.append(svc)
     return anomalies
+
+def birch_ad_with_cluster_nums(latency_df, threshold):    
+    cluster_nums = {}
+    for svc, latency in latency_df.iteritems():
+        # No anomaly detection in db
+        if svc != 'timestamp' and 'Unnamed' not in svc and 'rabbitmq' not in svc and 'db' not in svc:
+            latency = latency.rolling(window=smoothing_window, min_periods=1).mean()
+            x = np.array(latency)
+            x = np.where(np.isnan(x), 0, x)
+
+            normalized_x = preprocessing.normalize([x])
+
+            X = normalized_x.reshape(-1,1)
+            brc = Birch(branching_factor=50, n_clusters=None, threshold=threshold, compute_labels=True)
+            brc.fit(X)
+            brc.predict(X)
+
+            labels = brc.labels_
+            # print(labels)
+          # centroids = brc.subcluster_centers_
+            n_clusters = np.unique(labels).size
+            cluster_nums[svc] = n_clusters
+    return cluster_nums
+
+def Z_Score(data):
+    lenth = len(data)
+    total = sum(data)
+    ave = float(total)/lenth
+    tempsum = sum([pow(data[i] - ave,2) for i in range(lenth)])
+    tempsum = pow(float(tempsum)/lenth,0.5)
+    for i in range(lenth):
+        data[i] = (data[i] - ave)/tempsum
+    return data
+
+def PCA(latency_df):    
+    latency = latency_df.T
+    l1 = latency.iloc[:, :1]
+    # new1 = np.array(l1)
+    index = latency.index.values
+    latency = latency.iloc[:, 1:].fillna(0)
+    X = np.array(latency)
+    pca = SparsePCA(n_components=1)
+    pca.fit(X)    
+    newX=pca.fit_transform(X)
+    max_abs_scaler = preprocessing.MinMaxScaler()
+    newX = max_abs_scaler.fit_transform(newX)
+    pca_df = pd.DataFrame(newX)
+    df1= pca_df.set_index(index)
+    return df1
+
+def calc_score(latency_df, faults_name, cluster_nums):
+
+    foo = {}
+
+    DG = attributed_graph(faults_name)
+    df_pca = PCA(latency_df)
+    index = df_pca.index.values    
+    # MD!!!!! 我发现我代码里出现致命错误，我一开始先入为主认为 anomaly 就是 fault 然后计算累加结果，那肯定是 anomaly 的分数最高啊
+    for node in ['adservice', 'shippingservice', 'cartservice', 'paymentservice', 'recommendationservice','emailservice', 'checkoutservice', 'redis-cart', 'currencyservice', 'frontend']:
+        foo[node] = 0
+        for i in index:
+            if 'Unnamed' not in i:
+                p_score = 1 - (df_pca.loc[i,0])
+                endpoint = str(i).split('_')[1]
+                if (node == endpoint):
+                    foo[node] = foo[node] + (p_score * cluster_nums[i])              
+
+        degree = DG.out_degree[node] + 1
+        foo[node] = foo[node] / degree
+    
+    return foo
 
 
 def node_weight(svc, anomaly_graph, baseline_df, faults_name):
@@ -421,7 +514,7 @@ def node_weight(svc, anomaly_graph, baseline_df, faults_name):
     in_edges_weight_avg = 0.0
     num = 0
     for u, v, data in anomaly_graph.in_edges(svc, data=True):
-#        print(u, v)
+        #print(u, v)
         num = num + 1
         in_edges_weight_avg = in_edges_weight_avg + data['weight']
     if num > 0:
@@ -472,14 +565,14 @@ def svc_personalization(svc, anomaly_graph, baseline_df, faults_name):
 
     edges_weight_avg  = edges_weight_avg / num
 
-#    print('\navg: ', edges_weight_avg)
-#    print('\ncorr: ', max_corr)
+    #print('\navg: ', edges_weight_avg)
+    #print('\ncorr: ', max_corr)
 
     personalization = edges_weight_avg * max_corr
 
     return personalization, metric
 
-def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
+def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha, cluster_nums):
     # Get the anomalous subgraph and rank the anomalous services
     # input: 
     #   DG: attributed graph
@@ -494,19 +587,19 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
     # Get reported anomalous nodes
     edges = []
     nodes = []
-#    print(DG.nodes())
+    #print(DG.nodes())
     baseline_df = pd.DataFrame()
     edge_df = {}
     for anomaly in anomalies:
         edge = anomaly.split('_')
         edges.append(tuple(edge))
-#        nodes.append(edge[0])
+        # nodes.append(edge[0])
         svc = edge[1]
         nodes.append(svc)
         baseline_df[svc] = latency_df[anomaly]
         edge_df[svc] = anomaly
 
-#    print('edge df:', edge_df)
+    #    print('edge df:', edge_df)
     nodes = set(nodes)
     # print('\nnodes: ', nodes)
 
@@ -518,10 +611,10 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
     # Get the subgraph of anomaly
     anomaly_graph = nx.DiGraph()
     for node in nodes:
-#        print(node)
+    #        print(node)
         for u, v, data in DG.in_edges(node, data=True):
             edge = (u,v)
-#            print(edge)
+    #            print(edge)
             if edge in edges:
                 data = alpha
             else:
@@ -555,13 +648,12 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
         # 这里用到了 系统层面的 metric
         print(node)
         max_corr, col = svc_personalization(node, anomaly_graph, baseline_df, faults_name)
-        # 看到了吧，其实也把 degree 给考虑进去了
         personalization[node] = max_corr / anomaly_graph.degree(node)
-#        print(node, personalization[node])
+    #        print(node, personalization[node])
 
     anomaly_graph = anomaly_graph.reverse(copy=True)
     # print('\nanomaly_graph: ', anomaly_graph.nodes)
-#
+
     edges = list(anomaly_graph.edges(data=True))
 
     for u, v, d in edges:
@@ -569,23 +661,23 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
             anomaly_graph.remove_edge(u,v)
             anomaly_graph.add_edge(v,u,weight=d['weight'])
 
-#    plt.figure(figsize=(9,9))
-##    nx.draw(DG, with_labels=True, font_weight='bold')
-#    pos = nx.spring_layout(anomaly_graph)
-#    nx.draw(anomaly_graph, pos, with_labels=True, cmap = plt.get_cmap('jet'), node_size=1500, arrows=True, )
-#    labels = nx.get_edge_attributes(anomaly_graph,'weight')
-#    nx.draw_networkx_edge_labels(anomaly_graph,pos,edge_labels=labels)
-#    plt.show()
-#
-##    personalization['shipping'] = 2
+    #    plt.figure(figsize=(9,9))
+    ##    nx.draw(DG, with_labels=True, font_weight='bold')
+    #    pos = nx.spring_layout(anomaly_graph)
+    #    nx.draw(anomaly_graph, pos, with_labels=True, cmap = plt.get_cmap('jet'), node_size=1500, arrows=True, )
+    #    labels = nx.get_edge_attributes(anomaly_graph,'weight')
+    #    nx.draw_networkx_edge_labels(anomaly_graph,pos,edge_labels=labels)
+    #    plt.show()
+    #
+    ##    personalization['shipping'] = 2
     
     # print('Personalization:', personalization)
-
+    personalization = calc_score(latency_df, faults_name, cluster_nums)
     anomaly_score = nx.pagerank(DG, alpha=0.85, personalization=personalization, max_iter=10000)
 
     anomaly_score = sorted(anomaly_score.items(), key=lambda x: x[1], reverse=True)
 
-#    return anomaly_graph
+   #return anomaly_graph
     return anomaly_score
 
 
@@ -637,20 +729,21 @@ if __name__ == "__main__":
 
     latency_df_source = latency_source_50(prom_url, start_time, end_time, faults_name)
     latency_df_destination = latency_destination_50(prom_url, start_time, end_time, faults_name)
-    latency_df = latency_df_destination.add(latency_df_source)
-
-    # print(latency_df)
+    # 这里加上了 fill_value=0 这个参数，这计算的是两个df的交集，不然add的结果是两个df的并集
+    latency_df = latency_df_destination.add(latency_df_source, fill_value = 0)
+    latency_df.to_csv('latency.csv')
 
     svc_metrics(prom_url, start_time, end_time, faults_name)
     DG = mpg(prom_url_no_range, faults_name)
 
     # anomaly detection on response time of service invocation
     anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
+    cluster_nums = birch_ad_with_cluster_nums(latency_df, ad_threshold)
 
     print("==== Anomlies: =====")
 
     if len(anomalies) != 0:     
-        anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
+        anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha, cluster_nums)
         # print(anomaly_score)
 
         anomaly_score_new = []

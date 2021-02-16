@@ -1,0 +1,5 @@
+type,paymentservice,currencyservice,cartservice,productcatalogservice,checkoutservice,recommendationservice,frontend
+RS,0.12,0.19,0.42,0.08,0.23,0.46,0.36
+mRCA,0.77,0.75,1.00,0.72,0.75,0.86,0.83
+ms,0.64,0.75,0.83,0.80,0.68,0.59,0.76
+tRCA,0.81,0.78,1,0.89,0.88,0.93,0.84

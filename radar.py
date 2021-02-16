@@ -36,18 +36,19 @@ def result_pic(result):
     # 画线
     for i in range(len(kinds)):
         ax.plot(angle, centers[i], linewidth=2, label=kinds[i])
-        ax.fill(angle, centers[i], alpha=0.25) # 填充颜色
+        ax.fill(angle, centers[i], alpha=0.20) # 填充颜色
         # ax.fill(angle, centers[i])  # 填充底色
 
     # 添加属性标签
     ax.set_thetagrids(angle * 180 / np.pi, new_labels)
 
-    plt.title('PR@1 CPU Hog')
-    plt.legend(loc='lower right')
+    plt.title('PR@2 Container Pause')
+    # plt.legend(loc='lower right')
+    # !!!!!!!! 图例hiiiiiiin重要
+    plt.legend( bbox_to_anchor=(1, 0.20), loc=2, borderaxespad=0, numpoints=4)
     plt.show()
 
 
 if __name__ == '__main__':
-    result = pd.read_csv('radar.csv', sep=',')
+    result = pd.read_csv('radar2.csv', sep=',')
     result_pic(result)
-

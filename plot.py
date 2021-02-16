@@ -16,25 +16,27 @@ def get_line_plot():
     fig, ax1 = plt.subplots()
 
     dataset = pd.read_csv("./Hipster/results/f1/replicas.csv")
-    dataset.columns = ['rca', 'replicas', '1fPR@1', '1fMAP@2', '1fPR@2', '1fMAP@2']
+    dataset.columns = ['rca', 'replicas', '1fPR@1', '1fMAP@1', '2fPR@2', '2fMAP@2']
 
     print(dataset)
-    ax1 = sns.lineplot(y="1fPR@2", x="replicas", hue="rca", style='rca', markers=True, linewidth=2, data=dataset)
+    ax1 = sns.lineplot(y="1fMAP@1", x="replicas", hue="rca", style='rca', markers=True, linewidth=2, data=dataset)
     box = ax1.get_position()
+    my_y_ticks = np.arange(0, 1.01, 0.1)
+    plt.yticks(my_y_ticks)
     # ax1.set_position([box.x0, box.y0, box.width , box.width* 0.8])
     # ax1.legend(loc='center left', bbox_to_anchor=(0.2, 1.12),ncol=3)
-    ax1.legend( bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0, numpoints=1)
+    ax1.legend( bbox_to_anchor=(0.75, 0.98), loc=2, borderaxespad=0, numpoints=1)
     fig.subplots_adjust(right=0.8)
     plt.show()
 
 def get_bar_plot():
     fig, ax1 = plt.subplots()
 
-    dataset = pd.read_csv("results/test.csv")
-    dataset.columns = ['rca', 'value', 'type']
+    dataset = pd.read_csv("results/test1.csv")
+    dataset.columns = ['method', 'value', 'type']
 
     print(dataset)
-    ax1 = sns.barplot(y="value", x="rca", hue="type", data=dataset)
+    ax1 = sns.barplot(y="value", x="type", hue="method", data=dataset)
     box = ax1.get_position()
     # ax1.set_position([box.x0, box.y0, box.width , box.width* 0.8])
     # ax1.legend(loc='center left', bbox_to_anchor=(0.2, 1.12),ncol=3)
@@ -43,7 +45,10 @@ def get_bar_plot():
     plt.show()
 
 def get_box_plot():
+    
     fig, ax1 = plt.subplots()
+
+    plt.figure(figsize=(10, 5))
 
     time_df = pd.read_csv("THipster/results/test.csv")
     time_df.columns = ['time', 'svc', 'value', 'rca']
@@ -57,11 +62,13 @@ def get_box_plot():
 
     print(time_df)
     ax1 = sns.boxplot(x='svc' , y='value' , hue='rca', data=time_df)
-    box = ax1.get_position()
+    # box = ax1.get_position()
     # ax1.set_position([box.x0, box.y0, box.width , box.width* 0.8])
     # ax1.legend(loc='center left', bbox_to_anchor=(0.2, 1.12),ncol=3)
-    ax1.legend( bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0, numpoints=1)
-    fig.subplots_adjust(right=0.8)
+
+    # 这两个
+    # ax1.legend( bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0, numpoints=1)
+    # fig.subplots_adjust(right=0.8)
     plt.show()
 
 if __name__ == "__main__":
