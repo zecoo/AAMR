@@ -2,6 +2,7 @@ import os
 import time
 import pandas as pd
 import threading
+import random
 from itertools import combinations
 
 # rca_arr = ['Microscope_online.py']
@@ -10,6 +11,7 @@ from itertools import combinations
 # rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
 rca_arr = ['PCA_online.py']
 svc_arr = ['paymentservice', 'currencyservice', 'cartservice', 'productcatalogservice', 'checkoutservice', 'recommendationservice', 'frontend']
+random.shuffle(svc_arr)
 down_time = 180
 fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/hipster/'
 fault_delete_path = 'kubectl delete -f /root/zik/fault-injection/hipster/'

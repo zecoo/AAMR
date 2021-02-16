@@ -3,13 +3,13 @@ import csv
 from _tkinter import _flatten
 
 
-f1_benchmarks = []
-for i in range(1,4):
-    f1_benchmarks.append('./Hipster/results/f1/%d/' % i)
+f1_benchmarks = ['./Hipster/results/f1/1/']
+# for i in range(1,4):
+#     f1_benchmarks.append('./Hipster/results/f1/%d/' % i)
 f2_benchmarks = ['./Hipster/results/f2/']
-rca_arr = ['Microscope', 'MicroRCA', 'tRCA']
+rca_arr = ['Microscope', 'MicroRCA', 'tRCA', 'PCA']
 
-topK = 2
+topK = 1
 
 # 统计所有的类别
 def get_unique_labels(y_true, y_pred):
@@ -221,31 +221,31 @@ if __name__ == '__main__':
             pr1_list.append(pr1)
             map1_list.append(map1)
 
-    stat_df.loc[len(stat_df)] = pr1_list
-    stat_df.loc[len(stat_df)] = map1_list
+        print('\n', pr1_list)
+        print('\n', map1_list)
 
-    for ben in f2_benchmarks:
+    # for ben in f2_benchmarks:
         
-        pr1_list = ['PR@2']
-        map1_list = ['MAP@2']
-        print('==== ' + ben + ' ====')
-        for rca in rca_arr:
-            print(rca)
-            res_df = pd.read_csv(ben + rca + '_results.csv')
-            new_col = ['time', 'fault', 'type', 'pred']
-            res_df.columns = new_col
+    #     pr1_list = ['PR@2']
+    #     map1_list = ['MAP@2']
+    #     print('==== ' + ben + ' ====')
+    #     for rca in rca_arr:
+    #         print(rca)
+    #         res_df = pd.read_csv(ben + rca + '_results.csv')
+    #         new_col = ['time', 'fault', 'type', 'pred']
+    #         res_df.columns = new_col
             
-            test_k = 50
-            y_true = res_df['fault'][:test_k].tolist()
-            y_pred = getPredictions(res_df['pred'][:test_k].tolist())
+    #         test_k = 50
+    #         y_true = res_df['fault'][:test_k].tolist()
+    #         y_pred = getPredictions(res_df['pred'][:test_k].tolist())
 
-            pr1, map1 = precision_k_f2(y_true, y_pred, k=topK, digs=2)
+    #         pr1, map1 = precision_k_f2(y_true, y_pred, k=topK, digs=2)
 
-            pr1_list.append(pr1)
-            map1_list.append(map1)
+    #         pr1_list.append(pr1)
+    #         map1_list.append(map1)
 
-    stat_df.loc[len(stat_df)] = pr1_list
-    stat_df.loc[len(stat_df)] = map1_list
+    # stat_df.loc[len(stat_df)] = pr1_list
+    # stat_df.loc[len(stat_df)] = map1_list
     
     print(stat_df)
     stat_df.to_csv('results/pr1_map1_stat.csv', index=None)
