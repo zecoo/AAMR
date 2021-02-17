@@ -1,17 +1,17 @@
-Unnamed: 0,465.0
-cartservice_redis-cart,4.379310326148146
-checkoutservice_cartservice,62.5
-checkoutservice_currencyservice,62.5
-checkoutservice_emailservice,
-checkoutservice_paymentservice,62.5
-checkoutservice_productcatalogservice,62.5
-checkoutservice_shippingservice,62.5
-frontend_adservice,79.00162313780248
-frontend_cartservice,84.9257058577107
-frontend_checkoutservice,1012.5000000000001
-frontend_currencyservice,77.82375240353178
-frontend_productcatalogservice,77.69526149418601
-frontend_recommendationservice,128.96139230415534
-frontend_shippingservice,77.5
-loadgenerator_frontend,45904.67270334213
-recommendationservice_productcatalogservice,77.96938004032259
+Unnamed: 0,39.11804613297151
+cartservice_redis-cart,0.32631782351429023
+checkoutservice_cartservice,6.589778380823158
+checkoutservice_currencyservice,6.678256445047491
+checkoutservice_emailservice,6.519674355495251
+checkoutservice_paymentservice,6.519674355495251
+checkoutservice_productcatalogservice,5.047489823609227
+checkoutservice_shippingservice,6.519674355495251
+frontend_adservice,6.534013815221414
+frontend_cartservice,7.211238172868869
+frontend_checkoutservice,67.1421302578019
+frontend_currencyservice,6.591313119344124
+frontend_productcatalogservice,6.5220346559304785
+frontend_recommendationservice,7.587427211627216
+frontend_shippingservice,6.519674355495251
+recommendationservice_productcatalogservice,6.525861308952772
+unknown_frontend,
