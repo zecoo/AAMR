@@ -8,11 +8,11 @@ from itertools import combinations
 # rca_arr = ['Microscope_online.py']
 # svc_arr = ['cartservice', 'productcatalogservice']
 
-# rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
-rca_arr = ['PCA_online.py']
-# svc_arr = ['paymentservice', 'currencyservice', 'cartservice', 'productcatalogservice', 'checkoutservice', 'recommendationservice', 'frontend']
-svc_arr = ['emailservice', 'adservice', 'shippingservice']
-# random.shuffle(svc_arr)
+rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
+# rca_arr = ['PCA_online.py']
+svc_arr = ['shippingservice', 'paymentservice', 'currencyservice', 'cartservice', 'productcatalogservice', 'checkoutservice', 'recommendationservice', 'frontend']
+# svc_arr = ['emailservice', 'adservice', 'shippingservice'] 这几个都是没用的
+random.shuffle(svc_arr)
 down_time = 180
 fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/hipster/'
 fault_delete_path = 'kubectl delete -f /root/zik/fault-injection/hipster/'
