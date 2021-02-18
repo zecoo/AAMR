@@ -1,1 +1,1 @@
-locust --host="http://39.100.0.61:30001" -u 20 -r 5
+locust --host="http://39.100.0.61:30001" -u 2 -r 2

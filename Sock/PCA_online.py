@@ -43,7 +43,7 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
     # print(end_time)
 
     response = requests.get(prom_url,
-                            params={'query': 'histogram_quantile(0.60, sum(rate(istio_request_duration_seconds_bucket{reporter=\"source\", destination_workload_namespace=\"hipster\"}[1m])) by (destination_workload, source_workload, le))',
+                            params={'query': 'histogram_quantile(0.60, sum(rate(istio_request_duration_seconds_bucket{reporter=\"source\", destination_workload_namespace=\"sock-shop\"}[1m])) by (destination_workload, source_workload, le))',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -73,7 +73,7 @@ def latency_source_50(prom_url, start_time, end_time, faults_name):
         latency_df[name] = latency_df[name].astype('float64')  * 1000
 
     response = requests.get(prom_url,
-                            params={'query': 'sum(irate(istio_tcp_sent_bytes_total{reporter=\"source\",destination_workload_namespace=\"hipster\"}[1m])) by (destination_workload, source_workload) / 1000',
+                            params={'query': 'sum(irate(istio_tcp_sent_bytes_total{reporter=\"source\",destination_workload_namespace=\"sock-shop\"}[1m])) by (destination_workload, source_workload) / 1000',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -110,7 +110,7 @@ def latency_destination_50(prom_url, start_time, end_time, faults_name):
     latency_df = pd.DataFrame()
 
     response = requests.get(prom_url,
-                            params={'query': 'histogram_quantile(0.60, sum(rate(istio_request_duration_seconds_bucket{reporter=\"destination\", destination_workload_namespace=\"hipster\"}[1m])) by (destination_workload, source_workload, le))',
+                            params={'query': 'histogram_quantile(0.60, sum(rate(istio_request_duration_seconds_bucket{reporter=\"destination\", destination_workload_namespace=\"sock-shop\"}[1m])) by (destination_workload, source_workload, le))',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -133,7 +133,7 @@ def latency_destination_50(prom_url, start_time, end_time, faults_name):
 
 
     response = requests.get(prom_url,
-                            params={'query': 'sum(irate(istio_tcp_sent_bytes_total{reporter=\"destination\",destination_workload_namespace=\"hipster\"}[1m])) by (destination_workload, source_workload) / 1000',
+                            params={'query': 'sum(irate(istio_tcp_sent_bytes_total{reporter=\"destination\",destination_workload_namespace=\"sock-shop\"}[1m])) by (destination_workload, source_workload) / 1000',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -164,7 +164,7 @@ def latency_destination_50(prom_url, start_time, end_time, faults_name):
 # 但是感觉后面没有用到系统层面的 scv 文件啊
 def svc_metrics(prom_url, start_time, end_time, faults_name):
     response = requests.get(prom_url,
-                            params={'query': 'sum(rate(container_cpu_usage_seconds_total{namespace="hipster", container_name!~\'POD|istio-proxy|\'}[1m])) by (pod_name, instance, container_name)',
+                            params={'query': 'sum(rate(container_cpu_usage_seconds_total{namespace="sock-shop", container_name!~\'POD|istio-proxy|\'}[1m])) by (pod_name, instance, container_name)',
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -230,7 +230,7 @@ def svc_metrics(prom_url, start_time, end_time, faults_name):
 # ctn: container
 def ctn_network(prom_url, start_time, end_time, pod_name):
     response = requests.get(prom_url,
-                            params={'query': 'sum(rate(container_network_transmit_packets_total{namespace="hipster", pod_name="%s"}[1m])) / 1000 * sum(rate(container_network_transmit_packets_total{namespace="hipster", pod_name="%s"}[1m])) / 1000' % (pod_name, pod_name),
+                            params={'query': 'sum(rate(container_network_transmit_packets_total{namespace="sock-shop", pod_name="%s"}[1m])) / 1000 * sum(rate(container_network_transmit_packets_total{namespace="sock-shop", pod_name="%s"}[1m])) / 1000' % (pod_name, pod_name),
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -245,7 +245,7 @@ def ctn_network(prom_url, start_time, end_time, pod_name):
 
 def ctn_memory(prom_url, start_time, end_time, pod_name):
     response = requests.get(prom_url,
-                            params={'query': 'sum(rate(container_memory_working_set_bytes{namespace="hipster", pod_name="%s"}[1m])) / 1000 ' % pod_name,
+                            params={'query': 'sum(rate(container_memory_working_set_bytes{namespace="sock-shop", pod_name="%s"}[1m])) / 1000 ' % pod_name,
                                     'start': start_time,
                                     'end': end_time,
                                     'step': metric_step})
@@ -325,7 +325,7 @@ def mpg(prom_url, faults_name):
     DG = nx.DiGraph()
     df = pd.DataFrame(columns=['source', 'destination'])
     response = requests.get(prom_url,
-                            params={'query': 'sum(istio_tcp_received_bytes_total{destination_workload_namespace=\"hipster\"}) by (source_workload, destination_workload)'
+                            params={'query': 'sum(istio_tcp_received_bytes_total{destination_workload_namespace=\"sock-shop\"}) by (source_workload, destination_workload)'
                                     })
     
     results = response.json()['data']['result']
@@ -344,7 +344,7 @@ def mpg(prom_url, faults_name):
         DG.nodes[destination]['type'] = 'service'
 
     response = requests.get(prom_url,
-                            params={'query': 'sum(istio_requests_total{destination_workload_namespace=\'hipster\'}) by (source_workload, destination_workload)'
+                            params={'query': 'sum(istio_requests_total{destination_workload_namespace=\'sock-shop\'}) by (source_workload, destination_workload)'
                                     })
     results = response.json()['data']['result']
 
@@ -361,7 +361,7 @@ def mpg(prom_url, faults_name):
         DG.nodes[destination]['type'] = 'service'
 
     response = requests.get(prom_url,
-                            params={'query': 'sum(container_cpu_usage_seconds_total{namespace="hipster", container_name!~\'POD|istio-proxy\'}) by (instance, container)'
+                            params={'query': 'sum(container_cpu_usage_seconds_total{namespace="sock-shop", container_name!~\'POD|istio-proxy\'}) by (instance, container)'
                                     })
     results = response.json()['data']['result']
     for result in results:
@@ -495,7 +495,7 @@ def calc_score(latency_df, faults_name, cluster_nums):
     index = df_pca.index.values
 
     for i in index:
-        if 'Unnamed' not in i:
+        if 'db' not in i and 'mq' not in i:
             endpoint = str(i).split('_')[1]
             ms_list.append(endpoint)
 
@@ -696,9 +696,9 @@ def parse_args():
                         default='adservice',
                         help='folder name to store csv file')
     
-    parser.add_argument('--replicas', type=str, required=False,
-                        default='1',
-                        help='folder name to store csv file')
+    # parser.add_argument('--replicas', type=str, required=False,
+    #                     default='1',
+    #                     help='folder name to store csv file')
     
     # 150s 每隔 5s 取一次数据 所以 csv 文件里一共有 30 行
     # parser.add_argument('--length', type=int, required=False,
@@ -715,13 +715,6 @@ if __name__ == "__main__":
 
     args = parse_args()
     faults_name = './data/' + args.fault
-    filename = ''
-
-    if '+' in faults_name:
-        filename = './results/f2/%s/PCA_results.csv' % args.replicas
-    else:
-        filename = './results/f1/%s/PCA_results.csv' % args.replicas
-    
     len_second = 150
     prom_url = 'http://39.100.0.61:31423/api/v1/query_range'
     prom_url_no_range = 'http://39.100.0.61:31423/api/v1/query'
@@ -758,6 +751,7 @@ if __name__ == "__main__":
                 anomaly_score_new.append(anomaly_target)
         print('\nPCA score:', anomaly_score_new)
 
+        filename = './results/PCA_results.csv'
         fault = faults_name.replace('./data/', '')                      
         with open(filename,'a') as f:
             writer = csv.writer(f)

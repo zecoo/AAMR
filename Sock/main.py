@@ -2,13 +2,15 @@ import os
 import time
 import pandas as pd
 import threading
+import random
 from itertools import combinations
 
-# rca_arr = ['Microscope_online.py']
+
 # svc_arr = ['user', 'catalogue']
 
-rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py']
+rca_arr = ['Microscope_online.py', 'MicroRCA_online.py', 'tRCA_online.py', 'PCA_online.py']
 svc_arr = ['carts', 'shipping', 'user', 'catalogue', 'orders', 'payment']
+random.shuffle(svc_arr)
 down_time = 180
 fault_apply_path = 'kubectl apply -f /root/zik/fault-injection/sock-shop/'
 fault_delete_path = 'kubectl delete -f /root/zik/fault-injection/sock-shop/'
@@ -41,7 +43,7 @@ def countdown(t):
 
 
 if __name__ == '__main__':
-    case = 2
+    case = 1
 #    os.system('./headless_locust.sh &')
     print('==== RCA will be started in 3min ... ====')
     if case == 1:
