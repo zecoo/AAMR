@@ -1,0 +1,5 @@
+type,payment,currency,cart,productcatalog,checkout,recommendation,frontend
+RS,0.15,0.19,0.32,0.08,0.23,0.16,0.19
+MicroRCA,0.91,0.82,0.78,0.73,0.95,0.97,0.73
+MicroScope,0.84,0.71,0.70,0.59,0.88,0.89,0.66
+AAMR,0.87,0.83,0.86,0.76,0.96,0.94,0.84

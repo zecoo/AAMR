@@ -1,0 +1,13 @@
+RS,, PR@1
+RS,0.11, PR@1
+RS,0.32, PR@3
+RS,0.34, MAP3
+MicroRCA,0.89, PR@1
+MicroRCA,0.94, PR@3
+MicroRCA,0.95, MAP3
+Microscope,0.79, PR@1
+Microscope,0.87, PR@3
+Microscope,0.88, MAP3
+AAMR,0.84, PR@1
+AAMR,0.87, PR@3
+AAMR,0.89, MAP3
