@@ -1,5 +1,0 @@
-type,user,carts,order,shipping,payment,front-end,catalogue
-RS,0.35,0.20,0.37,0.40,0.15,0.23,0.13
-MicroRCA,0.90,0.69,0.92,0.89,0.71,0.83,0.94
-MicroScope,0.84,0.66,0.68,0.69,0.73,0.75,0.92
-AAMR,0.96,0.67,0.91,0.92,0.67,0.81,0.94
