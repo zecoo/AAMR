@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-@author: li
-"""
 
 import pandas as pd
 import numpy as np
@@ -76,8 +73,15 @@ def birch_ad_with_smoothing(latency_df, threshold):
             n_clusters = np.unique(labels).size
             # print(n_clusters)
             if n_clusters > 1:
-                anomalies.append(svc)
-    return anomalies
+                anomalies.append(svc+':'+str(n_clusters))
+            # get the anomalous service
+    
+    anomaly_nodes = []
+    for anomaly in anomalies:
+        edge = anomaly.split('_')
+        anomaly_nodes.append(edge[1])
+
+    return anomaly_nodes
 
 # 读取 source 和 destination 的 scv file
 # 最后把 source 的 df 拼接到 destination 的后面
@@ -308,7 +312,7 @@ def calc_score(faults_name):
     return score
 
 
-def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
+def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha, targets):
     # Get the anomalous subgraph and rank the anomalous services
     # input: 
     #   DG: attributed graph
@@ -336,7 +340,7 @@ def anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha):
 
     # print('\nanomaly graph: ', anomaly_graph.adj)
 
-    personalization = calc_score(faults_name)
+    personalization = get_ixScores(targets)
     print('\npersonalization: ', personalization)
     
     anomaly_score = nx.pagerank(DG, alpha=0.85, personalization=personalization, max_iter=1000)
@@ -355,6 +359,63 @@ def print_rank(anomaly_score, target):
     print(target, ' Top K: ', num)
     return num
 
+def get_neigbors(g, node, depth=1):
+    output = {}
+    layers = dict(nx.bfs_successors(g, source=node, depth_limit=depth))
+    nodes = [node]
+    for i in range(1,depth+1):
+        output[i] = []
+        for x in nodes:
+            output[i].extend(layers.get(x,[]))
+        nodes = output[i]
+    return output
+
+def get_ixScores(tar):
+    ix_all = []
+    for ms in tar:
+
+        AS0 = [x for i,x in enumerate(anomalies) if x.find(ms) != -1]
+        if AS0 == []:
+            AS0 = [ms + ':1']
+        x = int(AS0[0].split(':')[1])
+
+        n1 = list(DG.neighbors(ms))
+        # print('neighbors of fe: ', n1)
+        AANs = 0
+        for AAN in n1:
+            AS = [x for i,x in enumerate(anomalies) if x.find(AAN) != -1]
+            if AS == []:
+                AS = [AAN + ':1']
+            # print('AS of AAN(fe): ', AS)
+            AANs += int(AS[0].split(':')[1])
+        iScore = AANs / degree(ms)
+        # print('iScore(fe)=', iScore)
+
+        n2 = get_neigbors(DG, ms, 2)[2]
+        # print('2-hop neighbors of fe: ', n2)
+        NHANs = 0
+        degree2sum = 1
+        for NHAN in n2:
+            AS = [x for i,x in enumerate(anomalies) if x.find(NHAN) != -1]
+            if AS == []:
+                AS = [NHAN + ':1']
+            # print('AS of NHAN(fe): ', AS)
+            degree2sum += degree(NHAN)
+            NHANs += int(AS[0].split(':')[1])
+        xScore = x / degree(ms) - NHANs / degree2sum
+        # print('xScore(fe)=', xScore)
+
+        ixScore = iScore + xScore
+        # print('ixScore(fe)=', ixScore)
+        ix_all.append(ms + ':' + str('%.2f'%ixScore))
+
+    res = {}
+    for svc in ix_all:
+        res.update({svc.split(':')[0]: float(svc.split(':')[1])})
+
+    print('======ixScores:======')
+    print(res)
+    return res
 
 if __name__ == '__main__':
     
@@ -378,7 +439,7 @@ if __name__ == '__main__':
     
     # faults_name = './faults/1/svc_latency/catalogue'
     
-    faults_name = './Online/data/user'
+    faults_name = './Sock/data/user'
     latency_df = rt_invocations(faults_name)
     
     # if (target == 'payment' or target  == 'shipping') and fault_type != 'svc_latency':
@@ -390,22 +451,17 @@ if __name__ == '__main__':
     anomalies = birch_ad_with_smoothing(latency_df, ad_threshold)
     print('\nanomalies:', anomalies)
     
-    # get the anomalous service
-    anomaly_nodes = []
-    for anomaly in anomalies:
-        edge = anomaly.split('_')
-        anomaly_nodes.append(edge[1])
-    
-    anomaly_nodes = set(anomaly_nodes)
-    
-#                print(anomaly_nodes)
-    
     # construct attributed graph
     DG = attributed_graph(faults_name)
-
-    print('\nDG: ', DG)
     
-    anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha)
+    degree = DG.degree
+    print('nodes: ', DG.degree)
+
+    tar = ['front-end', 'orders', 'catalogue', 'user']
+
+    # get_ixScores(tar)
+
+    anomaly_score = anomaly_subgraph(DG, anomalies, latency_df, faults_name, alpha, targets)
 
     print('\nanomaly_score:')
 
